@@ -1,0 +1,110 @@
+
+.inbox > .list {
+  margin-top: 0.5rem; min-height: 300px;
+}
+
+.inbox > .no-messages,
+.inbox > .loading-spinner {
+  display: block; 
+  text-align: center;
+  padding: 20px;
+}
+
+.inbox > .list > .item {
+  display: block; 
+  clear: left;
+  color: #222; text-decoration: none;
+  margin: 0; padding: 2rem; padding-right: 0;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+
+}
+
+.inbox > .list > .item:last-child {
+  border-bottom: 0;
+}
+
+.inbox > .list > .item > .userpic {
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  display: block; 
+  float: left;
+  overflow: hidden;
+  width: 50px; height: 50px; 
+}
+
+.inbox > .list > .item > .userpic > img {
+  border: 0;
+  width: inherit; height: inherit; 
+}
+
+.inbox > .list > .item > :not(.userpic) {
+  margin: 0;
+}
+
+.inbox > .list > .item > .username {
+  display: inline;
+  color: #c60;
+  text-decoration: none;
+  margin-left: 40px;
+}
+
+.inbox > .list > .item > .asl {
+  display: inline;
+  color: #999;
+}
+
+.inbox > .list > .item > .asl > span:not(:first-child) {
+}
+
+.inbox > .list > .item > .timestamp {
+  color: #999;
+  display: block;
+  float: right;
+  font-size: 0.85rem;
+  margin-right: 16px;
+}
+
+.inbox > .list > .item.unread > .timestamp {
+  color: #c33;
+  font-weight: bold;
+}
+
+.inbox > .list > .item > .text {
+  display: block;
+  line-height: 1.5em;
+  margin-top: 0.5rem;
+  margin-left: 90px;
+  overflow: hidden;
+}
+
+.inbox > .list > .item .mark-read,
+.inbox > .list > .item .mark-unread {
+  color: #999;
+  font-size: 0.85rem;
+  float: right;
+}
+
+.inbox > .list > .item.is-read .mark-read,
+.inbox > .list > .item.is-unread .mark-unread {
+  display: none;
+}
+
+.inbox > .list > .item.is-unread .mark-read,
+.inbox > .list > .item.is-read .mark-unread {
+  display: block;
+}
+
+.inbox > .list > .item.is-unread {
+  background-color: #eef;
+}
+
+.inbox > .list > .item.user-deleted {
+}
+
+.inbox > .list > .item.user-deleted .userpic {
+  display: none;
+}
+.inbox > .list > .item.user-deleted .username {
+  color: #ccc;
+  margin-left: 60px;
+}

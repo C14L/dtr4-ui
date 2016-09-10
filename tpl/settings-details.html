@@ -1,0 +1,75 @@
+
+<div class="settings settings-details content-wrapper">
+  <nav class="sub box"><ul><ng-include src="'/static/tpl/settings-nav.html'"></ng-include></ul></nav>
+  <form class="box" name="settingsDetailsForm">
+
+    <section class="attributes-stuff">
+      <span ng-bind="tr('appearence stuff')"></span>
+      <select name="weight" ng-model="authuser.weight" ng-options="opt[0] as opt[1] for opt in translations['WEIGHT_CHOICE']"><option value="" ng-bind="tr('weight')"></option></select>
+      <select name="height" ng-model="authuser.height" ng-options="opt[0] as opt[1] for opt in translations['HEIGHT_CHOICE']"><option value="" ng-bind="tr('height')"></option></select>
+      <select name="eyecolor" ng-model="authuser.eyecolor" ng-options="opt[0] as opt[1] for opt in translations['EYECOLOR_CHOICE']"><option value="" ng-bind="tr('eyecolor')"></option></select>
+      <select name="haircolor" ng-model="authuser.haircolor" ng-options="opt[0] as opt[1] for opt in translations['HAIRCOLOR_CHOICE']"><option value="" ng-bind="tr('haircolor')"></option></select>
+      <select name="looks" ng-model="authuser.looks" ng-options="opt[0] as opt[1] for opt in translations['LOOKS_CHOICE']"><option value="" ng-bind="tr('looks')"></option></select>
+    </section>
+
+    <section class="relationaship-stuff">
+      <span ng-bind="tr('relationship stuff')"></span>
+      <select name="relationship_status" ng-model="authuser.relationship_status" ng-options="opt[0] as opt[1] for opt in translations['RELATIONSHIP_STATUS_CHOICE']"><option value="" ng-bind="tr('relationship status')"></option></select>
+      <select name="longest_relationship" ng-model="authuser.longest_relationship" ng-options="opt[0] as opt[1] for opt in translations['LONGEST_RELATIONSHIP_CHOICE']"><option value="" ng-bind="tr('longest relationship')"></option></select>
+      <select name="lookingfor" ng-model="authuser.lookingfor" ng-options="opt[0] as opt[1] for opt in translations['LOOKINGFOR_CHOICE']"><option value="" ng-bind="tr('looking for')"></option></select>
+    </section>
+
+    <section class="believes-stuff">
+      <span ng-bind="tr('believes stuff')"></span>
+      <select name="religion" ng-model="authuser.religion" ng-options="opt[0] as opt[1] for opt in translations['RELIGION_CHOICE']"><option value="" ng-bind="tr('religion')"></option></select>
+      <select name="religiosity" ng-model="authuser.religiosity" ng-options="opt[0] as opt[1] for opt in translations['RELIGIOSITY_CHOICE']"><option value="" ng-bind="tr('religiosity')"></option></select>
+      <select name="spirituality" ng-model="authuser.spirituality" ng-options="opt[0] as opt[1] for opt in translations['SPIRITUALITY_CHOICE']"><option value="" ng-bind="tr('spirituality')"></option></select>
+    </section>
+
+    <section class="lifesituation-stuff">
+      <span ng-bind="tr('life stuff')"></span>
+      <select name="would_relocate" ng-model="authuser.would_relocate" ng-options="opt[0] as opt[1] for opt in translations['WOULD_RELOCATE_CHOICE']"><option value="" ng-bind="tr('would you relocate')"></option></select>
+      <select name="has_children" ng-model="authuser.has_children" ng-options="opt[0] as opt[1] for opt in translations['HAS_CHILDREN_CHOICE']"><option value="" ng-bind="tr('do you have children')"></option></select>
+      <select name="want_children" ng-model="authuser.want_children" ng-options="opt[0] as opt[1] for opt in translations['WANT_CHILDREN_CHOICE']"><option value="" ng-bind="tr('do you want (more) children')"></option></select>
+    </section>
+    
+    <section class="professional-stuff">
+      <span ng-bind="tr('professional stuff')"></span>
+      <select name="education" ng-model="authuser.education" ng-options="opt[0] as opt[1] for opt in translations['EDUCATION_CHOICE']"><option value="" ng-bind="tr('education')"></option></select>
+      <select name="jobfield" ng-model="authuser.jobfield" ng-options="opt[0] as opt[1] for opt in translations['JOBFIELD_CHOICE']"><option value="" ng-bind="tr('jobfield')"></option></select>
+      <select name="income" ng-model="authuser.income" ng-options="opt[0] as opt[1] for opt in translations['INCOME_CHOICE']"><option value="" ng-bind="tr('income')"></option></select>
+    </section>
+    
+    <section class="health-stuff">
+      <span ng-bind="tr('health stuff')"></span>
+      <select name="sports" ng-model="authuser.sports" ng-options="opt[0] as opt[1] for opt in translations['SPORTS_CHOICE']"><option value="" ng-bind="tr('sports')"></option></select>
+      <select name="fitness" ng-model="authuser.fitness" ng-options="opt[0] as opt[1] for opt in translations['FITNESS_CHOICE']"><option value="" ng-bind="tr('fitness')"></option></select>
+    </section>
+
+    <section class="drugs-stuff">
+      <span ng-bind="tr('drugs stuff')"></span>
+      <select name="drink" ng-model="authuser.drink" ng-options="opt[0] as opt[1] for opt in translations['DRINK_CHOICE']"><option value="" ng-bind="tr('alcohol')"></option></select>
+      <select name="smoke" ng-model="authuser.smoke" ng-options="opt[0] as opt[1] for opt in translations['SMOKE_CHOICE']"><option value="" ng-bind="tr('tobacco')"></option></select>
+      <select name="pot" ng-model="authuser.pot" ng-options="opt[0] as opt[1] for opt in translations['POT_CHOICE']"><option value="" ng-bind="tr('marijuana (where legal)')"></option></select>
+    </section>
+
+    <section class="about-stuff">
+      <textarea name="aboutme" placeholder="{{ tr('tell people about yourself') }}..." class="aboutme" ng-model="authuser.aboutme"></textarea>
+      <textarea name="aboutbooks" placeholder="{{ tr('your favourite books') }}..." class="aboutbooks" ng-model="authuser.aboutbooks"></textarea>
+      <textarea name="aboutmovies" placeholder="{{ tr('your favourite movies') }}..." class="aboutmovies" ng-model="authuser.aboutmovies"></textarea>
+      <textarea name="aboutmusic" placeholder="{{ tr('your favourite music') }}..." class="aboutmusic" ng-model="authuser.aboutmusic"></textarea>
+      <textarea name="aboutarts" placeholder="{{ tr('your favourite arts') }}..." class="aboutarts" ng-model="authuser.aboutarts"></textarea>
+      <textarea name="abouttravel" placeholder="{{ tr('your favourite travel') }}..." class="abouttravel" ng-model="authuser.abouttravel"></textarea>
+      <textarea name="aboutfood" placeholder="{{ tr('your favourite food') }}..." class="aboutfood" ng-model="authuser.aboutfood"></textarea>
+      <textarea name="aboutquotes" placeholder="{{ tr('your favourite quotes') }}..." class="aboutquotes" ng-model="authuser.aboutquotes"></textarea>
+      <textarea name="aboutsports" placeholder="{{ tr('your favourite sports') }}..." class="aboutsports" ng-model="authuser.aboutsports"></textarea>
+    </section>
+
+    <section class="submit-stuff">
+      <button ng-hide="isSubmitting" class="btn submit-btn primary-btn" ng-click="submitForm()" ng-bind="tr('publish changes')"></button>
+      <span ng-show="isSubmitSuccess" class="success-symbol"></span>
+      <div ng-show="isSubmitting" class="loading-spinner"><span></span><span></span><span></span></div>
+
+    </section> 
+  </form>
+</div>

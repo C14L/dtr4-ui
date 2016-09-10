@@ -1,0 +1,262 @@
+
+.settings > .box {
+  margin: 0; padding: 0;
+}
+.settings > .box section {
+  border-bottom: 0;
+  padding: 10px;
+}
+.settings > .box section:last-child {
+  border-bottom: 0;
+}
+
+/* profile basics settings */
+
+.settings-profile > .box > .leftside {
+  width: 370px;
+  float: left;
+  overflow: hidden;
+}
+.settings-profile > .box > .rightside {
+  width: 430px;
+  float: left;
+  overflow: hidden;
+  padding-top: 10px;
+}
+
+/* profile basics settings: leftside */
+
+.settings-profile > .box > .leftside > .pics {
+}
+.settings-profile > .box > .leftside > .pics > img.profile-pic {
+  width: 350px;
+}
+.settings-profile > .box > .leftside > .pics > .uploader-button {
+  margin: 0; padding: 10px;
+  text-align: center;
+}
+.settings-profile > .box > .leftside > .pics > .uploader-button > .upload-btn {
+}
+.settings-profile > .box > .leftside > .pics > .uploader-button > .uploader-success {
+}
+.settings-profile > .box > .leftside > .pics > .uploader-button > .uploader-error {
+}
+.settings-profile > .box > .leftside > .pics > .uploader-button > .uploader-uploading {
+}
+.settings-profile > .box > .leftside > .pics > .pic-counter {
+  background-color: #CCCCCC;
+  padding: 5px 10px;
+}
+.settings-profile > .box > .leftside > .pics > .picslist {
+  font-size: 0;
+  display: block;
+  margin: 0; padding: 4px;
+  border: 1px solid #CCCCCC;
+}
+.settings-profile > .box > .leftside > .pics > .picslist > .item {
+  font-size: 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  display: inline-block;
+  margin: 5px 5px 0 5px; padding: 0;
+  overflow: hidden;
+  transition: 0.3s;
+  width: 58px; height: 58px;
+}
+.settings-profile > .box > .leftside > .pics > .picslist > .item > img {
+  width: inherit; height: inherit;
+  transition: 0.3s;
+}
+.settings-profile > .box > .leftside > .pics > .picslist > .item > .opts {
+  display:none; z-index: 1;
+  margin: 0; padding: 0;
+  width: 200px; 
+  margin-top: -10px;
+  margin-left: -120px;
+  background-color: #fff;
+  position: absolute;
+  list-style: none;
+  box-shadow: 0 0 6px 0 rgba(0,0,0,0.8);
+  border-radius: 3px;
+  transition: 0.3s;
+  opacity: 0.8;
+}
+.settings-profile > .box > .leftside > .pics > .picslist > .item:hover > .opts {
+  display: block;
+  transition: 0.3s;
+}
+.settings-profile > .box > .leftside > .pics > .picslist > .item > .opts > li {
+  margin: 0; padding: 0.5rem 1rem;
+  border-top: 1px solid #ccc;
+  cursor: pointer;
+  color: #000;
+}
+
+/* profile basics settings: rightside */
+
+.settings-profile > .box > .rightside > .submit {
+  text-align: center;
+}
+
+/* profile details settings */
+
+.settings-details > .box > section {
+  padding: 20px;
+}
+.settings-details > .box > .some-pics {
+}
+.settings-details > .box > .some-pics > a {
+  text-decoration: none;
+}
+.settings-details > .box > .some-pics > a > img {
+  width: 50px; height: 50px; 
+  margin-right: 5px;
+  vertical-align: middle;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+}
+.settings-details > .box > .gender {
+  text-align: center;
+  font-size: 1.25rem;
+  padding-top: 25px; padding-bottom: 25px;
+}
+.settings-details > .box > .dob {
+  text-align: center;
+}
+.settings-details > .box > .gender select {
+  font-size: inherit;
+}
+.settings-details > .box > .geoname {
+  overflow: hidden;
+  padding: 0;
+}
+.settings-details > .box > .geoname > .latlng {
+  float: left;
+  width: 350px;
+  padding: 10px; padding-top: 20px;
+  text-align: center;
+}
+.settings-details > .box > .geoname > .manually {
+  float: left;
+  width: 380px; 
+  padding: 10px;
+  border-left: 2px dashed #ccc;
+  text-align: center;
+}
+.settings-details > .box > .geoname > .manually select {
+  margin: 10px 0;
+  max-width: 350px;
+}
+.settings-details > .box > .about-stuff {
+  font-size: 0;
+  vertical-align: middle;
+  padding-right: 0;
+}
+.settings-details > .box > .about-stuff > textarea {
+  font-size: 1rem;
+  display: inline-block;
+  width: calc(50% - 20px); height: 4rem;
+  margin-right: 10px;
+}
+.settings-details > .box > .about-stuff > textarea.aboutme {
+  width: calc(100% - 25px); height: 8rem;
+  font-size: 1rem;
+}
+.settings-details > .box > .submit-stuff {
+  position: fixed; 
+  left: calc( 50vw - 410px ); bottom: 0;
+  width: 764px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 0 3px 0 rgba(0,0,0,0.6);
+  text-align: center;
+}
+
+/* photos settings */
+
+.settings-photos > .box > .pics {
+  overflow: hidden;
+}
+.settings-photos > .box > .pics > img {
+  float: left;
+  width: 300px; height: 300px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+}
+.settings-photos > .box > .pics > .uploader {
+  display: block; overflow: hidden;
+  width: 450px;
+  margin: 0; margin-left: 320px; padding: 0;
+}
+.settings-photos > .box > .pics > .uploader > .uploader-button {
+  border: 1px solid rgba(0,0,0,0.12);
+  margin: 0; padding: 10px;
+}
+.settings-photos > .box > .pics > .uploader > .uploader-button > .pic-counter {
+  float: right;
+  color: #999;
+  line-height: 1.5rem;
+}
+.settings-photos > .box > .pics > .uploader > .picslist {
+  display: block;
+  font-size: 0;
+  float: left;
+  margin: 0; padding: 10px 0;
+}
+.settings-photos > .box > .pics > .uploader > .picslist > .item {
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 5px; padding: 0;
+  overflow: hidden;
+  transition: 0.3s;
+  width: 50px; height: 50px;
+}
+.settings-photos > .box > .pics > .uploader > .picslist > .item > img {
+  width: 50px; height: 50px;
+  transition: 0.3s;
+}
+.settings-photos > .box > .pics > .uploader > .picslist > .item > .opts {
+  display:none; z-index: 1;
+  margin: 0; padding: 0;
+  width: 200px; 
+  margin-top: -10px;
+  margin-left: -120px;
+  background-color: #fff;
+  position: absolute;
+  list-style: none;
+  box-shadow: 0 0 6px 0 rgba(0,0,0,0.8);
+  border-radius: 3px;
+  transition: 0.3s;
+  opacity: 0.8;
+}
+.settings-photos > .box > .pics > .uploader > .picslist > .item:hover > .opts {
+  display: block;
+  transition: 0.3s;
+}
+.settings-photos > .box > .pics > .uploader > .picslist > .item > .opts > li {
+  margin: 0; padding: 0.5rem 1rem;
+  border-top: 1px solid #ccc;
+  cursor: pointer;
+  color: #000;
+}
+
+
+/* account settings (not used yet) */
+
+.settings-account > .box {
+}
+.settings-account .submit-stuff {
+  text-align: center;
+}
+
+/* design settings */
+
+.settings-design textarea {
+  width: 758px; height: 16rem;
+  padding: 10px;
+}
+.settings-design .submit-stuff {
+  text-align: center;
+}

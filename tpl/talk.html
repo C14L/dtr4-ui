@@ -1,0 +1,74 @@
+<div class="talk content-wrapper">
+  <div class="right-col">
+    <div class="box hashtag-list">
+      <h3 ng-bind="tr('current topics')"></h3>
+      <a ng-repeat="x in popularHashtags track by $index" 
+       href="{{URLS.BASE}}talk/topic/{{ x }}" ng-bind="x"></a>
+    </div>
+    <div class="box username-list">
+      <h3 ng-bind="tr('recently mentioned')"></h3>
+      <a ng-repeat="x in popularUsernames track by $index"
+       href="{{URLS.BASE}}talk/people/{{ x }}" ng-bind="x"></a>
+    </div>
+  </div>
+  <div class="main-col">
+    <div ng-if="!hashtag && !username" class="select box">
+      <a href="{{URLS.BASE}}talk" ng-class="{ 'selected': group=='all' }" ng-bind="groupNames.all"></a>
+      <a href="{{URLS.BASE}}talk/matches" ng-class="{ 'selected': group=='matches' }" ng-bind="groupNames.matches"></a>
+      <a href="{{URLS.BASE}}talk/friends" ng-class="{ 'selected': group=='friends' }" ng-bind="groupNames.friends"></a>
+      <a href="{{URLS.BASE}}talk/people/{{ authuser.username }}" ng-class="{ 'selected': group=='own' }" ng-bind="groupNames.own"></a>
+    </div>
+    <div ng-if="hashtag" class="infobox box">
+      <a href="{{URLS.BASE}}talk" class="talk-all btn ti-close"></a> 
+      <span ng-bind="tr('posts tagged')"></span> 
+      <span class="hashtag">#<span ng-bind="hashtag"></span></span>
+    </div>
+    <div ng-if="username" class="infobox box">
+      <a href="{{URLS.BASE}}talk" class="talk-all btn ti-close"></a> 
+      <span ng-bind="tr('posts about')"></span> 
+      <a href="{{URLS.BASE}}people/{{ username }}" class="username">@<span ng-bind="username"></span></a>
+    </div>
+    <form class="addpost box" ng-submit="addPost()">
+      <img src="{{authuser.pic_url.medium}}">
+      <textarea ng-required="true" ng-model="posttext" maxlength="500" placeholder="{{ tr('write a public post') }}..."></textarea>
+      <input ng-hide="statusMsg == 'submitting'" type="submit" value="{{ tr('publish') }}" class="btn submit-btn primary-btn">
+      <div ng-show="statusMsg == 'submitting'" class="loading-spinner"><span></span><span></span><span></span></div>
+      <span class="charcount" ng-bind="500 - posttext.length"></span>
+    </form>
+    <div class="post-list list box">
+      <div style="text-align:center;padding:50px 0;" ng-if="posts.length < 1 && !isLoadingMore" ng-bind="tr('no messages')"></div>
+      <div class="loading-spinner" ng-if="statusMsg=='submitting'"><span></span><span></span><span></span></div>
+      
+      <div class="item" ng-class="{ hide: post.hidden }" ng-repeat="post in posts track by post.id">
+        <a ng-if="!post.block" href="{{URLS.BASE}}profile/{{ post.user.username }}" class="userpic"><img ng-src="{{ post.user.pic_url.small }}"></a>
+        <div ng-if="!post.block" class="wrapper">
+          <div class="timestamp" title="{{ post.created }}" ng-bind="post.created_delta"></div>
+          <div class="header-line">
+            <a href="{{URLS.BASE}}profile/{{ post.user.username }}" class="username" ng-bind="post.user.username"></a>
+            <span class="asl">
+              <span class="age" ng-bind="post.user.age"></span> 
+              <span class="gender" ng-bind="post.user.gender_choice_symbol"></span>
+              <span class="crc" ng-bind="post.user.city_name"></span>
+            </span>
+          </div>
+          <nav class="overflow" ng-if="authuser.username == post.user.username || authuser.is_staff">
+            <span class="ti-more-alt"></span>
+            <input type="checkbox">
+            <ul class="opts">
+              <li ng-click="delPost(post.id)"><span><span class="ti-trash"></span> <span ng-bind="tr('delete')"></span></span></li>
+            </ul>
+          </nav>
+          <div class="content" ng-bind-html="post.html"></div>
+        </div>
+        <div ng-if="post.block" class="post-blocked">
+          <a href="#" ng-href="{{URLS.BASE}}lists/blocked" ng-bind="tr('blocked')"></a>
+        </div>
+      </div>
+      
+    </div>
+    <div class="load-more">
+      <button class="load-more ti-download" ng-click="getOlderPosts()" ng-show="!isLoadingMore && posts.length > 8"></button>
+      <div ng-show="isLoadingMore" class="loading-spinner"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</div>

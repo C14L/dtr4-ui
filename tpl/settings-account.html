@@ -1,0 +1,43 @@
+
+<!-- ### CUUENTLY UNUSED! TODO: enable I-contact-first choices, etc. ### -->
+<!-- 2015-07-26 cst -->
+
+<div class="settings settings-account content-wrapper">
+  <nav class="sub box"><ul><ng-include src="'/static/tpl/settings-nav.html'"></ng-include></ul></nav>
+  <div class="box">
+    <section>
+      <p>Who can send you messages?</p>
+      <label><input type="radio" name="allowmsgsfrom" value="1"><span>everybody always</span></label>
+      <label><input type="radio" name="allowmsgsfrom" value="2"><span>everybody once, and then only if I answered them</span></label>
+      <label><input type="radio" name="allowmsgsfrom" value="3"><span>only friends and people I like</span></label>
+    </section>
+
+    <section>
+      <p>Language:</p>
+      <label><input type="radio" name="language" value="en"><span>English</span></label>
+      <label><input type="radio" name="language" value="es"><span>Español</span></label>
+    </section>
+
+    <section>
+      <p>account emails</p>
+NOTIFICATION_EMAILS = (
+(0, 'never'),
+(1, 'once a months'),
+(2, 'once a week'),
+(3, 'once a day'),
+(4, 'always'), # when ever something happens (received message, friend request, etc.)
+)
+    </section>
+
+    <section>
+      Disable account
+    </section>
+  
+    <section class="submit-stuff">
+      <button ng-hide="isSubmitting" class="btn submit-btn primary-btn" ng-click="submitForm()">publish changes</button>
+      <span ng-show="isSubmitSuccess" class="success-symbol"></span>
+      <div ng-show="isSubmitting" class="loading-spinner"><span></span><span></span><span></span></div>
+    </section> 
+
+  </div>
+</div>

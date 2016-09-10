@@ -1,0 +1,55 @@
+<div class="lists content-wrapper">
+
+  <nav class="sub box">
+    <ul ng-if="listname == 'matches' || listname == 'like_me' || listname == 'likes'">
+      <li><a href="{{URLS.BASE}}lists/matches" ng-class="{'selected':listname == 'matches'}"><span class="ti-heart"></span> <span ng-bind="tr('matches')"></span></a></li>
+      <li><a href="{{URLS.BASE}}lists/like_me" ng-class="{'selected':listname == 'like_me'}"><span class="ti-import"></span> <span ng-bind="tr('interested in you')"></span></a></li>
+      <li><a href="{{URLS.BASE}}lists/likes" ng-class="{'selected':listname == 'likes'}"><span class="ti-layout-media-right"></span> <span ng-bind="tr('interest sent')"></span></a></li>
+    </ul>
+    
+    <ul ng-if="listname == 'friends' || listname == 'friend_recv' || listname == 'friend_sent'">
+      <li><a href="{{URLS.BASE}}lists/friends" ng-class="{'selected':listname == 'friends'}"><span class="ti-face-smile"></span> <span ng-bind="tr('friends')"></span></a></li>
+      <li><a href="{{URLS.BASE}}lists/friend_recv" ng-class="{'selected':listname == 'friend_recv'}"><span class="ti-import"></span> <span ng-bind="tr('friend invites received')"></span></a></li>
+      <li><a href="{{URLS.BASE}}lists/friend_sent" ng-class="{'selected':listname == 'friend_sent'}"><span class="ti-layout-media-right"></span> <span ng-bind="tr('friend requests sent')"></span></a></li>
+    </ul>
+  </nav>
+
+  <div ng-if="listname == 'matches'" class="box list-helptext" style="padding:1rem;text-align:center;">
+    <a href="/app/talk/matches" ng-bind="tr('see what your matches are talking about')"></a>
+  </div>
+  <!-- <div ng-if="listname == 'like_me'" class="box list-helptext">
+    {{ tr('they are interested in you') }}.
+  </div> -->
+  <!-- <div ng-if="listname == 'likes'" class="box list-helptext">
+    {{ tr('people you are interested in, wait for them to answer') }}.
+  </div> -->
+  
+  <div ng-if="listname == 'friends'" class="box list-helptext" style="padding:1rem;text-align:center;">
+    <a href="/app/talk/friends" ng-bind="tr('see what your friends are talking about')"></a>
+  </div>
+  <!-- <div ng-if="listname == 'friend_recv'" class="box list-helptext">
+    {{ tr('answer these friend invites and make new friends') }}.
+  </div> -->
+  <!-- <div ng-if="listname == 'friend_sent'" class="box list-helptext">
+    {{ tr('friend requests you sent that have not yet been answered') }}.
+  </div> -->
+
+  <div class="userlist">
+    <div class="status-msg loading-spinner" ng-if="statusMsg=='loading'"><span></span><span></span><span></span></div>
+    <div class="status-msg err" ng-if="statusMsg=='offline'">offline? <a href="" ng-click="showList()" ng-bind="tr('try checking for new messages again')">.</a></div>
+    <div class="status-msg empty" ng-if="statusMsg=='empty'" ng-bind="tr('nobody here')"></div>
+
+    <div class="item box" ng-repeat="user in userlist track by user.id">
+      <div class="is-online ti-bolt" ng-if="user.is_online"></div>
+      <div class="is-idle ti-alarm-clock" ng-if="user.is_idle"></div>
+      <a ng-if="user.pic" class="userpic" href="{{ user.profile_url }}" style="background-image:url({{ user.pic_url.medium }})"></a>
+      <a ng-if="!user.pic" class="userpic" href="{{ user.profile_url }}"></a>
+      <a class="username" href="{{ user.profile_url }}" ng-bind="user.username"></a>
+      <div class="asl">
+        <span class="age" ng-bind="user.age"></span>
+        <span class="gender" ng-bind="user.gender_choice_symbol"></span>
+        <span class="crc" ng-bind="user.city_name"></span>
+      </div>
+    </div>
+  </div>
+</div>

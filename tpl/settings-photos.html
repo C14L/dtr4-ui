@@ -1,0 +1,37 @@
+
+<!-- ### UNUSED! See "settings-profile.html" for pic upload ### -->
+<!-- 2015-07-26 cst -->
+
+<div class="settings settings-photos content-wrapper">
+  <nav class="sub box"><ul><ng-include src="'/static/tpl/settings-nav.html'"></ng-include></ul></nav>
+  <div class="box">
+    <section class="pics">
+      <img ng-src="{{ authuser.pic_url.medium }}" src="/static/placeholder.jpg">
+      <div class="uploader">
+        <div class="uploader-button">
+          <div class="pic-counter">{{ authuser.pics.length }} / {{ maxPics }}</div>
+          <div upload-button ng-if="showImageButton" class="file-field upload-btn" url="/api/v1/authuser/pics.json" param="file" data="formData" accept="image/jpeg" required="true" on-upload="onUpload(files)" on-success="onSuccess(response)" on-error="onError(response)" on-complete="onComplete(response)">
+          </div>
+          <div ng-show="showImageSuccess" class="uploader-success">
+            Success!
+          </div>
+          <div ng-show="showImageError" class="uploader-error">
+            Error!
+          </div>
+          <div ng-show="showImageUploading" class="uploader-uploading">
+            <div class="loading-spinner"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="picslist">
+          <div class="item" ng-repeat="url in authuser.pics_url">
+            <img ng-src="{{ url.small }}" src="/static/placeholder.jpg">
+            <ul class="opts">
+              <li ng-click="setProfilePic()">set as main picture</li>
+              <li ng-click="deletePic()">delete picture</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

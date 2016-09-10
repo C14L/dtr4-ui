@@ -1,0 +1,87 @@
+
+<div class="search content-wrapper">
+  <div class="search-opts box">
+    <form name="searchform" class="search-form" method="get" action="">
+      <button class="btn btn-submit ti-search" ng-click="clearResults();updateResults(1)"></button>
+      <div class="icon ti-package"></div>
+      <div class="gender"><select ng-model="search.selected.gender" ng-options="opt[0] as opt[1] for opt in search.options.gender"></select></div>
+      <!--
+      <div class="age">
+        age <span class="minage"><input type="number" min="18" max="80" ng-model="search.selected.minage"></span>
+        to <span class="maxage"><input type="number" min="19" max="99" ng-model="search.selected.maxage"></span>
+      </div> in
+      -->
+      <div class="icon ti-location-pin" style="margin-left:16px"></div>
+      <div class="city-wrapper">
+        <div class="city">{{ search.crc }}</div>
+        <div class="city-opts hidden">
+          <div><select ng-model="search.selected.dist" ng-options="opt[0] as opt[1] for opt in search.options.dist"></select></div>
+          <div><select ng-model="search.selected.country" ng-options="opt[0] as opt[1] for opt in search.options.country" ng-change="updateCities(search.selected.country, 0)"></select></div>
+          <div><select ng-model="search.selected.city" ng-options="opt[0] as opt[1] for opt in search.options.city" ng-change="updateCrc(search.selected.city)"></select></div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="search-results">
+
+    <div class="userlist" ng-show="userlist.length > 0">
+      <div class="item box" ng-repeat="user in userlist track by user.id">
+        <div class="is-online ti-bolt" ng-if="user.is_online"></div>
+        <div class="is-idle ti-alarm-clock" ng-if="user.is_idle"></div>
+        <a ng-show="user.pic_url.medium" class="userpic" href="{{user.profile_url}}" style="background-image:url({{ user.pic_url.medium }})"></a>
+        <a ng-hide="user.pic_url.medium" class="userpic" href="{{user.profile_url}}" style="background-image:url(/static/placeholder.jpg)"></a>
+        <a class="username" href="{{user.profile_url}}">{{user.username}}</a>
+        <div class="asl">
+          <span class="age">{{ user.age }}</span> 
+          <span class="gender">{{ user.gender_choice_symbol }}</span> 
+          <span class="crc">{{ user.city_name }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="userlist" ng-show="!statusMsg && userlist.length == 0">
+
+      <div class="item box placeholder">
+        <a class="userpic" href="#" style=""></a>
+        <div class="loading-spinner"><span></span><span></span><span></span></div>
+      </div>
+      <div class="item box placeholder">
+        <a class="userpic" href="#" style=""></a>
+        <div class="loading-spinner"><span></span><span></span><span></span></div>
+      </div>
+      <div class="item box placeholder">
+        <a class="userpic" href="#" style=""></a>
+        <div class="loading-spinner"><span></span><span></span><span></span></div>
+      </div>
+      <div class="item box placeholder">
+        <a class="userpic" href="#" style=""></a>
+        <div class="loading-spinner"><span></span><span></span><span></span></div>
+      </div>
+      <div class="item box placeholder">
+        <a class="userpic" href="#" style=""></a>
+        <div class="loading-spinner"><span></span><span></span><span></span></div>
+      </div>
+      <div class="item box placeholder">
+        <a class="userpic" href="#" style=""></a>
+        <div class="loading-spinner"><span></span><span></span><span></span></div>
+      </div>
+      <div class="item box placeholder">
+        <a class="userpic" href="#" style=""></a>
+        <div class="loading-spinner"><span></span><span></span><span></span></div>
+      </div>
+      <div class="item box placeholder">
+        <a class="userpic" href="#" style=""></a>
+        <div class="loading-spinner"><span></span><span></span><span></span></div>
+      </div>
+
+    </div><!-- /placeholderlist -->
+
+    <div class="load-more">
+      <button class="btn load-more ti-download" ng-click="updateResults(nextPage)" ng-if="!isLoadingMore && userlist.length > 0"></button>
+      <div ng-if="isLoadingMore" class="loading-spinner"><span></span><span></span><span></span></div>
+    </div>
+    
+    <div ng-if="statusMsg == 'empty'">{{ tr('nobody there') }}</div>
+
+  </div>
+</div>

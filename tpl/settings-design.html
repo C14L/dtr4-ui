@@ -1,0 +1,15 @@
+<div class="settings settings-design content-wrapper">
+  <nav class="sub box"><ul><ng-include src="'/static/tpl/settings-nav.html'"></ng-include></ul></nav>
+    <div class="box">
+    <section>
+      <p ng-bind="tr('Add you own CSS style to change the looks of your profile page.')"></p>
+      <textarea ng-model="authuser.style"></textarea>
+    </section>
+    <section class="submit-stuff">
+      <button ng-hide="isSubmitting" class="btn submit-btn primary-btn" ng-click="submitForm()" ng-bind="tr('publish changes')"></button>
+      <span ng-show="isSubmitSuccess" class="success-symbol"></span>
+      <div ng-show="isSubmitting" class="loading-spinner"><span></span><span></span><span></span></div>
+    </section> 
+
+  </div>
+</div>

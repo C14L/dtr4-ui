@@ -1,0 +1,657 @@
+
+/* --- definitions -------------------------------------------------------------
+see: http://www.google.com/design/spec/style/color.html#color-color-palette
+
+Primary colors:
+  RED 100 -- #FFCDD2
+  RED 500 -- #F44336 (main color)
+  RED 800 -- #C62828
+
+Accent colors:
+  LIME A100 --- #F4FF81
+  LIME A400 --- #C6FF00
+
+*/
+
+/* --- some common stuff ---------------------------------------------------- */
+
+body {
+    font: normal 16px/1em Arial,sans-serif; /* Tahoma,Verdana, */
+    background-color: #EAEAEA; /* #f9f9f9; */
+    margin: 0; padding: 0; padding-top: 70px;
+    min-height: 101vh;
+}
+
+img { border: 0; } /* really, ie?! */
+textarea, select, option, button, input[type="text"], input[type="password"], input[type="date"], input[type="email"] { font: inherit; }
+.clearfix { clear: both; }
+.hidden { display: none !important; }
+
+.success-symbol {
+    vertical-align: middle;
+    display: inline-block;
+    width: 2rem; height: 2rem;
+    border-radius: 1rem;
+    background-color: green;
+    background-image: url(/static/themify-icons/SVG/check.svg);
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.helptext {
+  color: #999; font-size: 0.85rem;
+}
+
+.form-error-msg {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #C62828;
+}
+
+a.username {
+    color: #F44336;
+    text-decoration: none;
+}
+a.hashtag {
+    color: #3333CC;
+    text-decoration: none;
+}
+.username-talk-link { /* Link @username --> "@username + Talkstrem" inline links. */
+  white-space: nowrap;
+}
+.username-talk-link > a.username {
+}
+.username-talk-link > .icon-box {
+}
+.username-talk-link > .icon-box > a.usertalk {
+  transition: 0.2s ease-out;
+  display: inline-block;
+  margin: 0 4px; padding: 6px 7px 6px 5px;
+  border-radius: 50%;
+  font-size: 0.9em;
+  text-decoration: none;
+  color: #F44336;
+}
+.username-talk-link > .icon-box > a.usertalk:hover {
+  transition: 0.2s ease-out;
+  background-color: #F44336;
+  color: #FFFFFF;
+}
+.username-talk-link > .icon-box > a.userprofile {
+  display: none;
+}
+
+/* --- main nav (appbar) ---------------------------------------------------- */
+
+nav.main {
+    background-color: #F44336;
+    box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
+    font-size: 0;
+    height: 64px;
+    position: fixed; top: 0; right: 0; left: 0; 
+    vertical-align: top; 
+    z-index: 101;
+}
+nav.main > .wrapper {
+  margin: 0 auto; padding: 0; padding-left: 16px; padding-right: 16px;
+  min-width: 800px; 
+}
+nav.main a.home {
+  color: rgba(255,255,255,1);
+  display: block;
+  float: left;
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  font-style: normal;
+  line-height: 64px;
+  margin: 0; padding: 0;
+  text-decoration: none;
+}
+nav.main a.home > .primary {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+nav.main a.home > .secondary {
+}
+nav.main a.home > .secondary:before {
+  content: "\e649";
+  font-family: 'themify';
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+nav.main .nav-menu {
+  float: left;
+  display: block;
+  font-size: 1.5rem;
+  line-height: 64px;
+  width: 2rem;
+  padding: 0 0.5rem;
+  color: rgba(0,0,0,0.82);
+  font-weight: normal;
+  cursor: pointer;
+}
+
+nav.main > .sidebar-left {
+  font-size: 1rem;
+}
+nav.main > .sidebar-left > input[type="checkbox"] {
+  position: fixed; left: -100px; top: -100px;
+}
+nav.main > .sidebar-left > .wrapper {
+  background-color: #FFFFFF;
+  position: fixed; left: -280px; top: 0; bottom: 0; width: 230px;
+  box-shadow: 4px 0 16px 0 rgba(0,0,0,0.5);
+  transition: 0.5s ease-in;
+  z-index: 500;
+}
+nav.main > .sidebar-left input[type="checkbox"]:checked + .wrapper {
+  left: 0;
+  transition: 0.5s ease-out;
+}
+nav.main > .sidebar-left > .wrapper > .header {
+  background-color: #F9F9F9;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  height: 64px;
+  margin: 0; padding: 0; padding-left: 16px; 
+}
+nav.main > .sidebar-left > .wrapper > .header > label {
+  float: left;
+  display: block;
+  font-size: 1.5rem;
+  line-height: 64px;
+  width: 2rem;
+  padding: 0 0.5rem;
+  color: rgba(0,0,0,0.82);
+  font-weight: normal;
+  cursor: pointer;
+}
+nav.main > .sidebar-left > .wrapper > .header > .home {
+  color: #C62828;
+  display: block;
+  float: left;
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 64px;
+  margin: 0; padding: 0;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+nav.main > .sidebar-left > .wrapper > .authuser-info {
+  margin: 0; padding: 0;
+}
+nav.main > .sidebar-left > .wrapper > .authuser-info > a {
+  display: block; 
+  overflow: hidden;
+  margin: 0; padding: 16px 8px;
+  background-color: #C62828;
+  color: rgba(255,255,255,0.82);
+  text-decoration: none;
+}
+nav.main > .sidebar-left > .wrapper > .authuser-info > a > img {
+  float: left;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  margin: 0; padding: 0;
+  width: 64px; height: 64px;
+}
+nav.main > .sidebar-left > .wrapper > .authuser-info > a > .userdata {
+  margin: 0 0 0 80px; padding: 0;
+  vertical-align: middle;
+}
+nav.main > .sidebar-left > .wrapper > .authuser-info > a > .userdata > .username {
+  display: block;
+  font-weight: bold;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+nav.main > .sidebar-left > .wrapper > .authuser-info > a > .userdata > .asl {
+  display: block;
+}
+nav.main > .sidebar-left > .wrapper > .opts {
+  background-color: #fff;
+  color: rgba(0,0,0,1);
+  font-size: 1rem; 
+  line-height: 1rem;
+  list-style: none;
+  margin: 0; padding: 0;
+  text-align: left;
+}
+nav.main > .sidebar-left > .wrapper > .opts li { /* see: nav.overflow .opts */
+  border-bottom: 1px solid #CCCCCC;
+  margin: 0; padding: 0;
+  transition: 0.3s;
+}
+nav.main > .sidebar-left > .wrapper > .opts li:hover {
+  background-color: #F4FF81;
+  transition: 0.3s;
+}
+nav.main > .sidebar-left > .wrapper > .opts li > span,
+nav.main > .sidebar-left > .wrapper > .opts li > a {
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  font-weight: normal;
+  margin: 0; padding: 1rem;
+  text-decoration: inherit;
+}
+nav.main > .sidebar-left > .wrapper > .opts li > span > span,
+nav.main > .sidebar-left > .wrapper > .opts li > a > span {
+  margin-right: 0.75rem;
+}
+
+nav.main .nav-link-list {
+  float: right;
+  line-height: 64px;
+}
+nav.main .nav-link-list > .nav-link {
+  color: rgba(255,255,255,1);
+  display: inline-block;
+  font-size: 1.25rem; 
+  font-weight: bold;
+  line-height: 64px;
+  margin: 0; padding: 0;
+  opacity: 1;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: 0.5s;
+  width: 64px; height: 64px;
+}
+nav.main .nav-link-list > a.nav-link:hover {
+  opacity: 1;
+  transition: 0.2s;
+}
+nav.main .nav-link-list > a.nav-link > .status {
+  background-color: #F4FF81;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+  color: #000;
+  display: block;
+  font-size: 0.85rem;
+  line-height: 24px; 
+  position: absolute; top: 8px; right: 8px;
+  text-align: center;
+  width: 24px; height: 24px;
+}
+nav.main .nav-link-list > a.nav-link.matches > .status {}
+nav.main .nav-link-list > a.nav-link.talk > .status {}
+nav.main .nav-link-list > a.nav-link.inbox > .status {}
+
+/* --- sub navs ------------------------------------------------------------- */
+
+nav.sub {
+  display: block;
+  font-size: 1rem; line-height: 3.5rem;
+  padding: 0; margin: 0;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  vertical-align: top; 
+  text-align: center;
+}
+nav.sub > ul {
+  display: inline-block;
+  list-style: none;
+  margin: 0; padding: 0;
+  white-space: nowrap;
+}
+nav.sub > ul li {
+  margin: 0; padding: 0;
+  display: inline-block;
+}
+nav.sub > ul li a {
+  display: inline-block;
+  padding: 0 1rem; margin: 0;
+  text-decoration: none;
+  color: #000;
+}
+nav.sub > ul li a.selected, 
+nav.sub > ul li a.active {
+  font-weight: bold;
+  box-shadow: inset 0 -0.25rem 0 0 #F44336;
+}
+nav.sub > ul li a > span {
+  vertical-align: middle;
+  margin-right: 0.25rem;
+}
+
+nav.overflow { /* standard overflow menu */
+  cursor: pointer;
+  display: block; width: 3.5rem; height: 3.5rem;
+  float: right;
+  font-family: 'themify';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1rem; 
+  line-height: 3.5rem;
+  opacity: 1;
+  padding: 0; margin: 0;
+  position: relative;
+  text-align: center; 
+}
+nav.overflow:hover {
+  transform: 0.1s;
+  background-color: rgba(0,0,0,0.12);
+}
+nav.overflow > .opts {
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 6px 0 rgba(0,0,0,0.6);
+  color: rgba(0,0,0,1);
+  display:none; 
+  font-size: 1rem; 
+  line-height: 1rem;
+  list-style: none;
+  margin: 0; padding: 0;
+  position: absolute; right: 5px; top: 3rem;
+  text-align: left;
+  width: 220px; 
+  z-index: 50;
+}
+nav.overflow > input {
+  display: block; width: 3.5rem; height: 3.5rem;
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  opacity: 0; cursor: pointer;
+}
+nav.overflow > input:checked + .opts {
+  display: block;
+}
+nav.overflow > .opts > li {
+  border-top: 1px solid #ccc;
+  margin: 0; padding: 0;
+  transition: 0.3s ease-in;
+}
+nav.overflow > .opts > li:hover {
+  background-color: #F4FF81;
+  transition: 0.3s ease-out;
+}
+nav.overflow > .opts > li:first-child {
+  border-top: 0;
+}
+nav.overflow > .opts > li > span,
+nav.overflow > .opts > li > a {
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  font-weight: normal;
+  margin: 0; padding: 1rem;
+  text-decoration: inherit;
+}
+nav.overflow > .opts > li > span > span,
+nav.overflow > .opts > li > a > span {
+  margin-right: 0.75rem;
+}
+nav.overflow > .opts > li.sep {
+  height: 8px;
+  background-color: #FFCDD2;
+}
+
+footer {
+    clear: both;
+    font-size: 0.9rem; color: #999;
+    display: block;
+    text-align: left;
+    margin-top: 0; padding: 25px 25px 15px 25px;
+}
+footer a {
+  text-decoration: inherit;
+  color: inherit;
+}
+
+/* ========================================================================== */
+
+.content-wrapper {
+  width: 800px; min-height: 400px;
+  margin: 0 auto; padding: 0;
+  box-sizing: border-box;
+}
+.box { /* Standard "card" style content area. */
+  background-color: #FFFFFF;
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+.box-message { /* Usually placed above the .box, a system message for authuser. */
+  background-color: #C6FF00;
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+  border-radius: 3px;
+  margin: 0; padding: 20px;
+  text-align: center;
+  color: #C62828;
+}
+
+/* ========================================================================== */
+
+.overlay { /* standard 500px wide overlay div */
+    z-index:10000;
+    position:fixed; top:0; left:0; right:0; bottom:0;
+    background:rgba(0,0,0,0.8);
+    display: none;
+}
+.overlay > .box {
+    width:450px; 
+    margin:50px auto 0 auto; padding:20px 25px;
+    background:#fff;
+    border-radius:3px;
+    box-shadow:0 0 10px rgba(0,0,0,0.9);
+}
+
+.killapp-overlay {
+    z-index:10000;
+    position:fixed; top:0; left:0; right:0; bottom:0;
+    background:rgba(0,0,0,0.8);
+    display: none;
+}
+.killapp-box {
+    width:300px; 
+    margin:50px auto; padding:20px 50px;
+    background:#fff; 
+    border-radius:3px;
+    box-shadow:0 0 10px rgba(0,0,0,0.9);
+}
+.killapp-error {
+}
+.killapp-suggest {
+    color:#933;
+    font-weight:bold;
+    font-style:italic;
+}
+
+/* ========================================================================== */
+/* ========================================================================== */
+/* ========================================================================== */
+
+/* round hover buttons */
+.hover-btn,
+.floating-btn {
+  width: 50px; height: 50px;
+  line-height: 50px;
+  font-size: 42px; 
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.btn {
+  transition: 0.2s;
+  opacity: 1;
+  border: 0; outline: 0;
+  text-align: center;
+  font-weight: normal;
+  font-size: 1rem;
+}
+.btn:focus,
+.btn:hover {
+  transition: 0.2s;
+  cursor: pointer;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.3);
+}
+.btn:active {
+  box-shadow: inset 0 3px 4px 0 rgba(0,0,0,0.6);
+}
+
+.primary-btn {
+  background-color: #F44336;
+  color: rgba(255,255,255,0.86);
+  margin: 10px 0 0 0; padding: 0.5rem 1rem;
+  min-width: 118px;
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Three Dots*/
+.loading-spinner {
+  display:inline-block;
+  font-size:0px;
+  padding:0px;
+}
+.loading-spinner span {
+    vertical-align:middle;
+    border-radius:100%;
+    background:#999;
+    display:inline-block;
+    width:10px;
+    height:10px;
+    margin:3px 2px;
+    -webkit-animation:kf-loading-spinner 0.8s linear infinite alternate;
+    animation:kf-loading-spinner 0.8s linear infinite alternate;
+}
+.loading-spinner span:nth-child(1) {
+    -webkit-animation-delay:-0.8;
+    animation-delay:-0.8s;
+}
+.loading-spinner span:nth-child(2) {
+    -webkit-animation-delay:-0.53333s;
+    animation-delay:-0.53333s;
+}
+.loading-spinner span:nth-child(3) {
+    -webkit-animation-delay:-0.26666s;
+    animation-delay:-0.26666s;
+}
+@keyframes kf-loading-spinner {
+    from {transform: scale(0, 0);}
+    to {transform: scale(1, 1);}
+}
+@-webkit-keyframes kf-loading-spinner {
+    from {-webkit-transform: scale(0, 0);}
+    to {-webkit-transform: scale(1, 1);}
+}
+
+
+/* standard "load more" button */
+.load-more > .load-more {
+  background-color: #F44336;
+  border: 0; outline: 0;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
+  clear: both;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: block;
+  margin: 10px auto; padding: 0;
+  width: 60px; height: 60px;
+}
+/* the loading spinner next to the standard "load more" button */
+.load-more > .loading-spinner {
+  display: block;
+  text-align: center;
+  margin: 10px; padding: 20px 0; height: 20px;
+}
+
+/* ========================================================================== */
+/* === standard user card in list =========================================== */
+/* ========================================================================== */
+
+.userlist {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.userlist > .item {
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  padding: 0; margin: 5px 0;
+  overflow: hidden;
+  width: 192px; 
+  position: relative;
+}
+
+.userlist > .item > .is-like {
+  display: block;
+  position: absolute; 
+  padding: 0 0.5rem;
+  margin-top: calc(192px - 2rem); margin-left: 0;
+  background-color: #fff;
+  color: #c33;
+  font-size: 2rem;
+  line-height: 1em;
+  opacity: 0;
+  transition: 0.5s;
+  cursor: pointer;
+  border-radius: 0 3px 0 0;
+}
+
+.userlist > .item > a.userpic {
+  display: block; 
+  width: 192px; height: 192px;
+  background-color: #ccc;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url( /static/placeholder.jpg );
+}
+
+.userlist > .item > a.username {
+  display: block;
+  font-size: 1rem;
+  line-height: 1rem;
+  margin-left: 10px;
+  padding-top: 0.5rem;
+}
+
+.userlist > .item .asl {
+  display: block;
+  font-size: .85rem;
+  line-height: 1rem;
+  color: #333;
+  margin-left: 10px;
+  white-space: nowrap;
+  padding-bottom: 0.5rem;
+}
+
+.userlist > .item .asl .crc {
+}
+
+.userlist > .item .last-active {
+  display: none;
+  float: right;
+  color: #333;
+  background-color: #fff;
+  font-size: 0.9rem;
+}
+
+.userlist > .item .is-online,
+.userlist > .item .is-idle {
+  display: block; margin: 0; padding: 0;
+  line-height: 2rem; font-size: 1.5rem;
+  text-align: center;
+  color: #FFFFFF;
+  background-color: #C6FF00;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
+  width: 2rem; 
+  position: absolute; bottom: 10px; right: 5px;
+}
+.userlist > .item .is-idle {
+  font-size: 1.25rem;
+}
+
+.userlist > .item.placeholder > .userpic {
+   text-align:center;
+   background-image:url(/static/img/placeholder.jpg);
+   background-size:cover;
+ }
+
+/* -------------------------------------------------------------------------- */

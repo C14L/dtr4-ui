@@ -1,0 +1,87 @@
+
+.search-opts {
+  margin: 0; margin-bottom: 5px; padding: 0;
+  white-space: nowrap;
+  background-color: #FFCDD2;
+}
+
+.search-form {
+  margin: 0; padding: 0;
+  text-align: center;
+}
+
+.search-form > div {
+  display: inline-block;
+  margin: 0; padding: 15px 0;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.search-form input[type="number"] {
+  border: 0;
+  font-size: 1rem;
+  line-height: 1rem;
+  padding: 5px;
+  width: 2.5rem;
+  background-color: #FFFFFF;
+}
+
+.search-form input[type="number"]:hover {
+}
+
+.search-form > .gender > select {
+  font-size: 1rem;
+  line-height: 1rem;
+  padding: 5px;
+  background: #FFFFFF;
+  border: 0; outline: 0;
+}
+
+.search-form .options-box {
+    width: 400px;
+    position: absolute;
+    background-color: #fff; 
+    box-shadow: 0 0 10px #000;
+    margin: 0; padding: 0; 
+}
+
+
+.search-form > .city-wrapper {
+}
+
+.search-form > .city-wrapper > .city {
+  overflow: hidden;
+  font-size: 1rem;
+  line-height: 1rem;
+  padding: 5px;
+  background: #FFFFFF;
+  border: 0; outline: 0;
+  min-width: 300px; min-height: 1rem;
+}
+
+.search-form > .city-wrapper > .city-opts {
+  margin: 0; padding: 10px;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.6);
+  z-index: 99;
+}
+
+.search-form > .city-wrapper > .city-opts > div {
+  padding: 10px;
+}
+
+.search-form > .city-wrapper > .city-opts > div > select {
+  font-size: 1rem;
+  width: 300px;
+}
+
+.search-form .btn-submit {
+  float: right;
+  width: 60px; height: 60px;
+  margin: 0; padding: 0;
+  background-color: #F44336;
+  color: #FFFFFF;
+  font-size: 1.5rem;
+}
+

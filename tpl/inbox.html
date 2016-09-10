@@ -1,0 +1,45 @@
+<div class="inbox content-wrapper">
+  <nav class="sub box">
+    <ul>
+      <li><a href="{{URLS.BASE}}inbox/unread" ng-class="{'selected':currBox=='unread'}"><span class="ti-email"></span> {{ tr('unread') }}</a></li>
+      <li><a href="{{URLS.BASE}}inbox" ng-class="{'selected':currBox=='inbox'}"><span class="ti-import"></span> {{ tr('inbox') }}</a></li>
+      <li><a href="{{URLS.BASE}}inbox/sent" ng-class="{'selected':currBox=='sent'}"><span class="ti-layout-media-right"></span> {{ tr('sent') }}</a></li>
+    </ul>
+    <nav class="overflow" ng-if="currBox!='sent'">
+      <span class="ti-more-alt"></span>
+      <input type="checkbox">
+      <ul class="opts">
+        <li ng-click="setAllRead()"><span><span class="ti-check-box"></span> <span ng-bind="tr('mark all as read')"></span></span></li>
+      </ul>
+    </nav>
+  </nav>
+  <div class="loading-spinner" ng-show="isLoading"><span></span><span></span><span></span></div>
+  <div class="status-msg no-messages" ng-show="msgs.length<1 && !isLoading" ng-bind="tr('no messages')"></div>
+  <div class="box list" ng-show="msgs.length>0 && !isLoading">
+    <div bindonce class="item" ng-show="msgs" ng-repeat="msg in msgs track by msg.id">
+      <nav class="overflow" ng-if="currBox!='sent'">
+        <span class="ti-more-alt"></span>
+        <input type="checkbox">
+        <ul class="opts">
+          <li ng-if="msg.is_read" ng-click="setUnread(msg.id)"><span><span class="ti-check-box"></span> <span bo-bind="tr('mark unread')"></span></span></li>
+          <li ng-if="!msg.is_read" ng-click="setRead(msg.id)"><span><span class="ti-check-box"></span> <span bo-bind="tr('mark as read')"></span></span></li>
+          <li ng-click="blockUser(msg.other_user.username)"><span><span class="ti-na"></span> <span bo-bind="tr('block {0}', [msg.other_user.username])"></span></span></li>
+        </ul>
+      </nav>
+      <a bo-href="msg.other_user.profile_url" class="userpic">
+        <img bo-src="msg.other_user.pic_url.medium" src="/static/placeholder.jpg">
+      </a>
+      <div class="unread ti-email" ng-if="!msg.is_read"></div>
+      <div class="timestamp" bo-title="msg.created" bo-text="msg.created_delta"></div>
+      <a bo-href="msg.other_user.profile_url" class="username" bo-bind="msg.other_user.username"></a>
+      <div class="asl">
+        <span class="age" bo-text="msg.other_user.age"></span>
+        <span class="gender" bo-title="msg.other_user.gender_choice" bo-text="msg.other_user.gender_choice_symbol"></span>
+        <span class="city" bo-text="msg.other_user.crc"></span>
+      </div>
+      <div class="text" bo-text="msg.text"></div>
+    </div><!-- item -->
+  </div>
+  <button ng-if="!isLoadingMore && msgs.length>8" ng-click="loadBefore()" class="load-more ti-download"></button>
+  <div ng-if="isLoadingMore" class="loading-spinner"><span></span><span></span><span></span></div>
+</div>

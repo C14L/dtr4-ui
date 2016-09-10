@@ -1,0 +1,238 @@
+
+.talk.content-wrapper {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.talk .list .loading-spinner { /* the spinner inside the blank list canvas */
+  display: block; 
+  text-align: center;
+  padding: 30px 0 30px 0;
+}
+
+.talk.content-wrapper > .right-col {
+    width: 190px;
+    float: right;
+    margin: 0 0 0 10px; padding: 0;
+}
+
+.talk.content-wrapper > .right-col > .box {
+    margin: 0 0 10px 0; padding: 15px;
+    color: #999;
+    overflow: hidden;
+}
+
+.talk.content-wrapper > .right-col > .box > h3 {
+    margin: 0 0 10px 0; padding: 0; 
+}
+
+.talk.content-wrapper > .right-col > .box > a {
+    display: block;
+    text-decoration: none;
+    line-height: 1.5em;
+    color: inherit;
+}
+
+.talk.content-wrapper > .right-col > .box > a:hover {
+    color: #55f;
+}
+
+.talk.content-wrapper > .right-col > .hashtag-list > a:before {
+    content: '#';
+}
+
+.talk.content-wrapper > .right-col > .username-list > a:before {
+    content: '@';
+}
+
+.talk.content-wrapper > .main-col {
+    width: 600px; min-height: 600px;
+    margin: 0; padding: 0;
+}
+.talk.content-wrapper > .main-col > .box {
+}
+
+.talk.content-wrapper > .main-col > form.addpost {
+    background-color: #D0D0D0;
+    overflow: hidden;
+    padding: 10px; margin: 0;
+    transition: 0.3s;
+}
+
+.talk.content-wrapper > .main-col > form.addpost img {
+    float: left;
+    width: 100px; height: 100px;
+    border-radius: 7px 0 0 7px;
+}
+
+.talk.content-wrapper > .main-col > form.addpost textarea {
+    border-radius: 0 7px 7px 0;
+    resize: none;
+    float: left;
+    display: block; 
+    width: calc(100% - 120px); /* 100% - 100px image - 2*10px padding */
+    height: 90px; /* 100px - 2*5px padding */
+    border: 0; outline: 0; padding: 5px 10px;
+    font-size: 1.15rem; 
+    font-weight: normal;
+    line-height: 1.25em;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-size: 64px 64px;
+    background-position: 10px 10px;
+}
+
+.talk.content-wrapper > .main-col > form.addpost span.charcount {
+    color: #999;
+    margin: 10px 0 0 0; padding: 0.5rem 1.5rem;
+    float: right;
+}
+
+.talk.content-wrapper > .main-col > form.addpost .loading-spinner {
+    width: 150px;
+    float: right;
+    margin: 10px 0 0 0; padding: 0.5rem 0;
+    text-align: center;
+}
+.talk.content-wrapper > .main-col > form.addpost input[type="submit"] {
+    float: right;
+}
+
+.talk.content-wrapper > .main-col > .select {
+    background-color: #FFFFFF;
+    font-size: 0rem; /* remove annoying 1 char space in some browsers */
+    margin: 0; padding: 0; margin-bottom: 10px;
+}
+
+.talk.content-wrapper > .main-col > .infobox { /* only shown when posts are filtered by username or hashtag */
+    font-size: 1.25rem;
+    line-height: 3.5rem;
+    background-color: #FFCDD2;
+    margin: 10px 0; padding: 0; padding-left: 15px;
+}
+.talk.content-wrapper > .main-col > .infobox > .hashtag {
+    color: #00F;
+}
+.talk.content-wrapper > .main-col > .infobox > a.talk-all {
+    color: #FFFFFF;
+    background-color: #F44336;
+    float: right;
+    line-height: 3.5rem;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    width: 3.5rem;
+}
+
+.talk.content-wrapper > .main-col > .select > a,
+.talk.content-wrapper > .main-col > .select > span {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1rem; line-height: 1.5rem;
+    margin: 0; padding: 1rem 0;
+    white-space: nowrap;
+    text-align: center;
+    transition: 0.3s;
+    width: 25%;
+    color: #000000;
+    text-decoration: none;
+}
+
+.talk.content-wrapper > .main-col > .select > a.selected,
+.talk.content-wrapper > .main-col > .select > span.selected {
+    box-shadow: inset 0 -0.25rem 0 0 #F44336;
+}
+
+.talk.content-wrapper > .main-col > .list {
+}
+.talk.content-wrapper > .main-col > .list > .item {
+    margin: 0; padding: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    clear: left;
+}
+.talk.content-wrapper > .main-col > .list > .item.hide {
+    overflow: hidden; 
+    height: 0px;
+    padding: 0;
+    opacity: 0;
+    transition: 0.5s;
+}
+.talk.content-wrapper > .main-col > .list > .item .userpic { 
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+    border-radius: 7px;
+    display: block;
+    float: left; 
+    margin: 0;
+    overflow: hidden;
+    width: 50px; height: 50px;
+}
+.talk.content-wrapper > .main-col > .list > .item .userpic img { 
+    width: inherit; height: inherit;
+}
+.talk.content-wrapper > .main-col > .list > .item > .wrapper {
+    margin-left: 70px;
+}
+.talk.content-wrapper > .main-col > .list > .item > .wrapper > .header-line {
+    color: #999;
+}
+.talk.content-wrapper > .main-col > .list > .item > .wrapper > .header-line > .username {
+    display: inline;
+    font-weight: bold;
+    margin-right: .75rem;
+}
+
+.talk.content-wrapper > .main-col > .list > .item .timestamp {
+  color: #999;
+  display: block;
+  float: right;
+  font-size: 0.85rem;
+}
+
+.talk.content-wrapper > .main-col > .list > .item .content {
+    display: block;
+    margin: 10px 20px 10px 0;
+    line-height: 1.25em;
+    font-size: 1.15rem;
+    color: #222;
+}
+
+.talk.content-wrapper > .main-col > .list > .item .content a {
+}
+
+.talk.content-wrapper > .main-col > .list > .item .content:hover a {
+}
+
+.talk.content-wrapper > .main-col > .list > .item .overflow {
+    display: block;
+    float: right;
+    margin-right: -10px;
+}
+.talk.content-wrapper > .main-col > .list > .item:hover .overflow {
+}
+.talk.content-wrapper > .main-col > .list > .item > .overflow:before {
+    width: 1.5rem; height: 3rem;
+    transition: 0.3s;
+}
+.talk.content-wrapper > .main-col > .list > .item > .overflow:hover {
+    transition: 0.3s;
+}
+.talk.content-wrapper > .main-col > .list > .item > .overflow .opts {
+    font-size: 1rem;
+}
+
+.talk.content-wrapper > .main-col > .list > .item .post-blocked a {
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: #CCCCCC;
+}
+
+.talk .embedded.video.youtube {
+  width: 400px;
+  height: 300px;
+}
+.talk .embedded.image {
+  max-width: 600px;
+  max-height: 400px;
+}
+
+

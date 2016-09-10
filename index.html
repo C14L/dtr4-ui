@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html ng-app="dtr4">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <base href="/app/">
+    <title>El Ligue</title>
+    <link href="/static/themify-icons/themify-icons.css" type="text/css" rel="stylesheet">
+    <link href="/static/dtr-base.css" type="text/css" rel="stylesheet">
+    <link href="/static/dtr-profile.css" type="text/css" rel="stylesheet">
+    <link href="/static/dtr-inbox.css" type="text/css" rel="stylesheet">
+    <link href="/static/dtr-lists.css" type="text/css" rel="stylesheet">
+    <link href="/static/dtr-search.css" type="text/css" rel="stylesheet">
+    <link href="/static/dtr-talk.css" type="text/css" rel="stylesheet">
+    <link href="/static/dtr-settings.css" type="text/css" rel="stylesheet">
+    <link href="/static/libs/picviewer.css" type="text/css" rel="stylesheet">
+    <script>
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-273063-2', 'elligue.com'); /* DO IN NG__ga('send','pageview') */
+
+    </script>
+    <!--
+    <Xscript src="/static/libs/angularjs/angular.js"></script>
+    <Xscript src="/static/libs/angularjs/angular-route.js"></script>
+    <Xscript src="/static/libs/angularjs/angular-resource.js"></script>
+    <Xscript src="/static/libs/angularjs/angular-sanitize.js"></script>
+    -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-sanitize.min.js"></script>
+    <!-- https://github.com/leon/angular-upload -->
+    <script type="text/javascript" src="/static/libs/angular-upload.min.js"></script>
+    <!-- https://github.com/Pasvaz/bindonce -->
+    <script src="/static/libs/angular-bindonce.min.js"></script>
+    <script src="/static/libs/markdownjs.min.js"></script>
+    <script src="/static/libs/picviewer.js"></script>
+    <script src="/static/utils.js"></script>
+    <script src="/static/textfilter.js"></script>
+    <!-- "choice" translations -->
+    <script> document.write('<script type="text/javascript" src="/static/tr-choices-' + (get_cookie('lg')||'es') + '.js"></scri' + 'pt>'); </script>
+    <!-- UI translations -->
+    <script> document.write('<script type="text/javascript" src="/static/tr-language-' + (get_cookie('lg')||'es') + '.js"></scri' + 'pt>'); </script>
+    <!-- App -->
+    <script src="/static/dtr-app.js"></script>
+    <script src="/static/dtr-services.js"></script>
+    <script src="/static/dtr-controllers.js"></script>
+    <script src="/static/dtr-filters.js"></script>
+    <script src="/static/dtr-directives.js"></script>
+  </head>
+  <body>
+    <nav class="main" ng-controller="IndicatorController">
+      <div class="wrapper">
+        <!-- <label class="nav-link nav-menu ti-menu" for="id-sidebar-left-ctrl"></label> -->
+        <a href="{{URLS.BASE}}" ng-href="{{ appBarTitle.href }}" class="home">
+          <span class="primary" ng-bind="appBarTitle.primary"></span>
+          <span class="secondary" ng-show="appBarTitle.secondary" ng-bind="appBarTitle.secondary"></span>
+        </a>
+        <div class="nav-link-list">
+          
+          <!-- search -->
+          <a href="{{URLS.BASE}}search" class="nav-link nav-search" title="{{ tr('find people') }}">
+            <span class="ti-search"></span>
+          </a>
+
+          <!-- talk -->
+          <a href="{{URLS.BASE}}talk" class="nav-link nav-talk" title="{{ tr('talk') }}">
+            <span class="ti-announcement"></span> 
+            <span class="status" ng-show="talkItemCounter > 0" ng-click="talkResetItemCounter()">
+              <span class="new" ng-bind="talkItemCounter"></span>
+            </span>
+          </a>
+
+          <!-- inbox -->
+          <a ng-if="inboxUnreadCounter < 1" href="{{URLS.BASE}}inbox" class="nav-link nav-inbox" title="{{ tr('inbox messages') }}">
+            <span class="ti-email"></span>
+          </a>
+          <a ng-if="inboxUnreadCounter > 0" href="{{URLS.BASE}}inbox/unread" class="nav-link nav-inbox" title="{{ tr('new inbox messages') }}">
+            <span class="ti-email"></span>
+            <span class="status"><span class="unread" ng-bind="inboxUnreadCounter"></span></span>
+          </a>
+
+          <!-- lists -->
+          <nav class="overflow nav-link">
+            <span class="ti-list"></span>
+            <input type="checkbox">
+            <ul class="opts">
+              <li><a href="{{URLS.BASE}}lists/matches" class="nav-link nav-matches"><span class="ti-heart"></span> {{ tr('matches') }} <span ng-if="matchItemCounter > 0" class="status match-counter" ng-bind="matchItemCounter"></span></a></li>
+              
+              <li ng-if="likeMeItemCounter > 0"><a href="{{URLS.BASE}}lists/like_me" class="nav-link nav-matches"><span class="ti-heart"></span> <span ng-bind="tr('matches')"></span> <span class="status like-me-counter" ng-bind="likeMeItemCounter"></span></a></li>
+
+              <li><a href="{{URLS.BASE}}lists/friends" class="nav-link nav-friends"><span class="ti-face-smile"></span> <span ng-bind="tr('friends')"></span> <span class="status" ng-show="friendsItemCounter > 0" ng-bind="friendsItemCounter"></span></a>
+
+              <li><a href="{{URLS.BASE}}lists/viewed_me" class="sub-link sub-myviews"><span class="ti-gift"></span> <span ng-bind="tr('viewed you')"></span></a></li>
+
+              <li><a href="{{URLS.BASE}}lists/favorites" class="sub-link sub-myfavs"><span class="ti-crown"></span> <span ng-bind="tr('your favorites')"></span></a></li>
+              
+              <li><a href="{{URLS.BASE}}lists/blocked" class="sub-link sub-blocked"><span class="ti-na"></span> <span ng-bind="tr('blocked')"></span></a></li>
+
+              <li ng-if="authuser.is_staff"><a href="{{URLS.BASE}}pics" class="sub-link sub-pictures"><span class="ti-gallery"></span> <span ng-bind="tr('pictures')"></span></a></li>
+            </ul>
+          </nav>
+
+          <!-- authuser -->
+          <a href="{{URLS.BASE}}profile/{{authuser.username}}" class="nav-link nav-profile" title="{{ tr('view profile') }}: {{ authuser.username }}"><span class="ti-user"></span></a>
+        </div><!-- /nav-link-list -->
+      </div><!-- /.wrapper -->
+
+      <!-- NOT USED CURRENTLY............
+      <div class="sidebar-left">
+        <input type="checkbox" id="id-sidebar-left-ctrl">
+        <div class="wrapper">
+          <div class="header">
+            <label class="nav-link nav-menu ti-menu" for="id-sidebar-left-ctrl"></label>
+            <span class="home">El Ligue</span>
+          </div>
+          <div class="authuser-info">
+            <a href="{{URLS.BASE}}profile/{{ authuser.username }}" ng-controller="AuthuserInfoController">
+              <img ng-src="{{ authuser.pic_url.small }}" src="/static/placeholder.jpg" title="{{ authuser.username }} [{{ authuser.id }}]">
+              <div class="userdata">
+                <span class="username">{{ authuser.username }}</span>
+                <span class="asl">
+                  <span class="age">{{ authuser.age }}</span>
+                  <span class="gender">{{ authuser.gender_choice_symbol }}</span>
+                  <span class="location">{{ authuser.city_name }}</span>
+                </span>
+              </div>
+            </a>
+          </div>
+          <div>n o t h i n g . . .</div>
+        </div>
+      </div> --><!-- /.sidebar-left -->
+
+    </nav><!-- /nav.main /IndicatorController scope -->
+    
+    <main class="main wrapper" id="main" ng-view="main"></main>
+
+    <footer ng-controller="FooterController">
+      © 2015 <span ng-bind="tr('All rights reserved.')"></span> |
+      <a href="/static/rules.html" ng-bind="tr('site rules')"></a> |
+      <a href="/static/privacy.html" ng-bind="tr('privacy')"></a> | 
+      <a href="#" ng-click="setLanguage('en')">English</a> | 
+      <a href="#" ng-click="setLanguage('es')">Español</a>
+    </footer>
+    <span class="loading-bar" ng-show="loading">Loading...</span>
+
+    <div id="pic-viewer">
+      <div id="pic-viewer-data">
+        <div id="pic-viewer-picslist"></div>
+      </div>
+      <div id="pic-viewer-close" class="close"></div>
+      <div id="pic-viewer-pic">
+        <div class="img"></div>
+        <div class="prev">&lt;</div>
+        <div class="next">&gt;</div>
+      </div>
+    </div>
+
+    <div class="killapp-overlay" ng-if="killapp.show">
+      <div class="killapp-box">
+        <h2>ERROR:</h2>
+        <p class="killapp-error" ng-bind="killapp.msg"></p>
+        <p class="killapp-suggest">Please press the [F5] key to reload the app or try to <a href="/accounts/logout/?next=/accounts/login/">login again</a>.</p>
+      </div>
+    </div>
+
+  </body>
+  <script>
+
+/* hackadihack: make overflow menues close on click anywhere. */
+(function(){document.getElementsByTagName('body')[0].addEventListener('click',function(ev){
+var els=document.querySelectorAll('nav.overflow input[type="checkbox"]');
+for(var i=0;i<els.length;i++) if(els[i]!=ev.target && els[i].checked) els[i].checked=false;});})();
+
+  </script>
+</html>

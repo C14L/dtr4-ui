@@ -1,0 +1,356 @@
+
+<div ng-if="profileuser.style" style="position:fixed; bottom:0; right:0; padding:10px; background-color:#999;">
+  <input type="checkbox" ng-model="profileuser.style_active">
+</div>
+<style ng-if="profileuser.style_active && profileuser.style" type="text/css" ng-bind="profileuser.style"></style>
+
+<div class="profilelinks" ng-if="!userlist">
+  <div class="loading-spinner"><span></span><span></span><span></span></div>
+</div>
+<div class="profilelinks" ng-if="userlist">
+  <div class="item" ng-repeat="user in userlist">
+    <div class="last-active">
+      online <span class="timestamp" data-timestamp="{{user.last_active}}"></span> ago
+    </div>
+    <a class="userpic" ng-href="{{user.profile_url}}" style="background-image:url({{user.pic_url.medium}})"></a>
+    <a class="username" ng-href="{{user.profile_url}}" ng-bind="user.username"></a>
+    <div class="asl">
+      <span class="age" ng-bind="user.age"></span>
+      <span class="gender" ng-bind="user.gender_choice_symbol"></span>
+      <span class="crc" ng-bind="user.city_name"></span>
+    </div>
+  </div>
+</div>
+
+<div ng-if="profileuser.flags.block_received || profileuser.doesNotExist" class="profile content-wrapper box">
+  <p style="text-align:center;padding-top:50px;">{{ tr('not found') }} :(</p>
+</div>
+
+<div ng-if="!profileuser.flags.block_received && !profileuser.doesNotExist" class="profile content-wrapper box">
+
+  <div class="profile header" ng-hide="profileuser.id && authuser.id">
+    <div class="loading-spinner"><span></span><span></span><span></span></div>
+  </div>
+  
+  <div class="profile header" ng-show="profileuser.id && authuser.id">
+
+    <div class="like-btn" ng-click="addFlag('like')" ng-class="{ 'is-like':profileuser.flags.like, 'is-like-received': profileuser.flags.like_received }" ng-if="profileuser.id != authuser.id && !profileuser.flags.block"></div>
+
+    <nav class="overflow" ng-if="profileuser.id != authuser.id && !profileuser.flags.block">
+      <span class="ti-more-alt"></span>
+      <input type="checkbox">
+      <ul class="opts">
+        <li ng-if="!profileuser.flags.like" class="rel-like-btn" ng-click="addFlag('like')"><span><span class="ti-heart"></span> {{ tr('show interest') }}</span></li>
+        <li ng-if="profileuser.flags.like" class="rel-like-btn" ng-click="deleteFlag('like')"><span><span class="ti-heart-broken"></span> {{ tr('remove interest') }}</span></li>
+
+        <li ng-if="!profileuser.flags.friend && !profileuser.flags.friend_received" class="rel-friend-btn" ng-click="addFlag('friend')"><span><span class="ti-face-smile"></span> {{ tr('ask to be friends') }}</span></li>
+        <li ng-if="profileuser.flags.friend && profileuser.flags.friend_received" class="rel-friend-btn" ng-click="deleteFlag('friend')"><span><span class="ti-face-sad"></span> {{ tr('cancel friendship') }}</span></li>
+        <li ng-if="profileuser.flags.friend && !profileuser.flags.friend_received" class="rel-friend-btn" ng-click="deleteFlag('friend')"><span><span class="ti-face-sad"></span> {{ tr('cancel friend request') }}</span></li>
+        <li ng-if="!profileuser.flags.friend && profileuser.flags.friend_received" class="rel-friend-btn" ng-click="addFlag('friend')"><span><span class="ti-face-smile"></span> {{ tr('confirm friend request') }}</span></li>
+
+        <li ng-if="!profileuser.flags.favorite" class="rel-favorite-btn" ng-click="addFlag('favorite')"><span><span class="ti-crown"></span> {{ tr('add to favorites') }}</span></li>
+        <li ng-if="profileuser.flags.favorite" class="rel-favorite-btn" ng-click="deleteFlag('favorite')"><span><span class="ti-crown"></span> {{ tr('remove from favorites') }}</span></li>
+
+        <li><a href="{{URLS.BASE}}talk/people/{{ profileuser.username }}"><span class="ti-announcement"></span> {{ tr('talk messages') }}</a></li>
+
+        <li class="sep"></li>
+
+        <li ng-if="!profileuser.flags.block" ng-click="addFlag('block')"><span><span class="ti-na"></span> {{ tr('block') }}</span></li>
+
+        <!--
+        <li ng-click="reportUser()"><span>{{ tr('report') }}</span></li>
+        -->
+        
+        <li ng-if="authuser.is_staff && !profileuser.is_staff" ng-click="deleteUser()"><span>{{ tr('mod: delete user') }}</span></li>
+      </ul>
+    </nav>
+
+    <div class="first-line">
+      <a class="username" href="{{URLS.BASE}}profile/{{ profileuser.username }}">{{ profileuser.username }}</a>
+      <span class="userstatus">
+        <span ng-if="profileuser.is_online" class="status is-online">{{ tr('online now!') }}</span>
+        <span ng-if="profileuser.is_idle" class="status is-idle">{{ tr('away') }}</span>
+        <span ng-if="profileuser.is_offline" class="status is-offline">{{ tr('offline') }}</span>
+        
+        <a href="{{URLS.BASE}}lists/friends"
+           ng-if="profileuser.flags.friend && profileuser.flags.friend_received"
+           class="status is-friend">{{ tr('friends') }}</a>
+        <a href="{{URLS.BASE}}lists/friend_sent"
+           ng-if="profileuser.flags.friend && !profileuser.flags.friend_received" 
+           class="status is-friend-sent">{{ tr('friend request sent') }}</a>
+        <a href="{{URLS.BASE}}lists/friend_recv"
+           ng-if="!profileuser.flags.friend && profileuser.flags.friend_received" 
+           class="status is-friend-recv">{{ tr('friend request received') }}</a>
+
+        <a href="{{URLS.BASE}}lists/matches" 
+           ng-if="profileuser.flags.like && profileuser.flags.like_received" 
+           class="status is-match">{{ tr('match') }}!</a>
+        <a href="{{URLS.BASE}}lists/likes" 
+           ng-if="profileuser.flags.like && !profileuser.flags.like_received"
+           class="status is-like-sent">{{ tr('you are interested') }}</a>
+        <a href="{{URLS.BASE}}lists/like_me"
+           ng-if="!profileuser.flags.like && profileuser.flags.like_received"
+           class="status is-like-recv">{{ tr('{0} is interested in you', [profileuser.username]) }}!</a>
+
+        <a href="{{URLS.BASE}}lists/favorites"
+           ng-if="profileuser.flags.favorite" 
+           class="status is-favorite">{{ tr('favorite') }}!</a>
+      </span>
+    </div>
+    <div class="second-line asl">
+      <span class="age">{{ profileuser.age }}</span> / 
+      <span class="gender">{{ profileuser.gender_choice }}</span> / 
+      <span class="crc">{{profileuser.crc}}</span>
+    </div>
+  </div><!--/.profile.header-->
+
+  <div class="profile left">
+
+    <div class="profile picdata">
+      <span ng-if="!profileuser.pic" class="userpic large"></span>
+      <span ng-if="profileuser.pic" class="userpic large" style="background-image:url({{profileuser.pic_url.large}})" ng-click="open_picviewer(profileuser.pic_url.large)"></span>
+
+      <span ng-if="!profileuser.pics[0]" class="userpic small"></span>
+      <span ng-if="profileuser.pics[0]" class="userpic small" style="background-image:url({{profileuser.pics_url[0].medium}})" ng-click="open_picviewer(profileuser.pics_url[0].large)"></span>
+
+      <span ng-if="!profileuser.pics[1]" class="userpic small"></span>
+      <span ng-if="profileuser.pics[1]" class="userpic small" style="background-image:url({{profileuser.pics_url[1].medium}})" ng-click="open_picviewer(profileuser.pics_url[1].large)"></span>
+
+      <span ng-if="!profileuser.pics[2]" class="userpic small"></span>
+      <span ng-if="profileuser.pics[2]" class="userpic small" style="background-image:url({{profileuser.pics_url[2].medium}})" ng-click="open_picviewer(profileuser.pics_url[2].large)"></span>
+
+      <span ng-if="!profileuser.pics[3]" class="userpic small"></span>
+      <span ng-if="profileuser.pics[3]" class="userpic small" style="background-image:url({{profileuser.pics_url[3].medium}})" ng-click="open_picviewer(profileuser.pics_url[3].large)"></span>
+
+      <span ng-if="!profileuser.pics[4]" class="userpic small"></span>
+      <span ng-if="profileuser.pics[4]" class="userpic small" style="background-image:url({{profileuser.pics_url[4].medium}})" ng-click="open_picviewer(profileuser.pics_url[4].large)"></span>
+
+      <span ng-if="!profileuser.pics[5]" class="userpic small"></span>
+      <span ng-if="profileuser.pics[5]" class="userpic small" style="background-image:url({{profileuser.pics_url[5].medium}})" ng-click="open_picviewer(profileuser.pics_url[5].large)"></span>
+
+      <span ng-if="!profileuser.pics[6]" class="userpic small"></span>
+      <span ng-if="profileuser.pics[6]" class="userpic small" style="background-image:url({{profileuser.pics_url[6].medium}})" ng-click="open_picviewer(profileuser.pics_url[6].large)"></span>
+
+      <span ng-if="!profileuser.pics[7]" class="userpic small"></span>
+      <span ng-if="profileuser.pics[7]" class="userpic small" style="background-image:url({{profileuser.pics_url[7].medium}})" ng-click="open_picviewer(profileuser.pics_url[7].large)"></span>
+
+      <span ng-if="!profileuser.pics[8]" class="userpic small"></span>
+      <span ng-if="profileuser.pics[8]" class="userpic small" style="background-image:url({{profileuser.pics_url[8].medium}})" ng-click="open_picviewer(profileuser.pics_url[8].large)"></span>
+    </div><!--/.profile.picdata-->
+
+    <div ng-show="profileuser.aboutme" class="profile abouttext aboutme">
+      <div ng-bind-html="profileuser.aboutme_html"></div>
+    </div>
+
+    <div class="profile datalist">
+      <h2>{{ tr('details') }}</h2>
+      <div>
+        <dl>
+          <dt>{{ tr('account created') }}</dt>
+          <dd>{{profileuser.created_delta}}</dd>
+        </dl>
+        <dl>
+          <dt>{{ tr('last active') }}</dt>
+          <dd>{{profileuser.last_active_delta}}</dd>
+        </dl>
+        <dl ng-if="profileuser.pk != authuser.pk">
+          <dt>{{ tr('viewed you') }}</dt>
+          <dd ng-if="profileuser.last_viewed_delta">{{profileuser.last_viewed_delta}}</dd>
+          <dd ng-if="!profileuser.last_viewed_delta">{{ tr('never') }}</dd>
+        </dl>
+        <dl>
+          <dt>{{ tr('profile views') }}</dt>
+          <dd>{{profileuser.views_counter}}</dd>
+        </dl>
+
+        <dl ng-show="profileuser.lookingfor_choice">
+          <dt>{{ tr('looking for') }}</dt>
+          <dd>{{profileuser.lookingfor_choice}}</dd>
+        </dl>
+        <dl>
+          <dt>{{ tr('gender') }}</dt>
+          <dd>{{profileuser.gender_choice}}</dd>
+        </dl>
+        <dl>
+          <dt>{{ tr('city') }}</dt>
+          <dd>{{profileuser.crc}}</dd>
+        </dl>
+        <dl>
+          <dt>{{ tr('age') }}</dt>
+          <dd>{{profileuser.age}}</dd>
+        </dl>
+
+        <dl ng-show="profileuser.height">
+          <dt>{{ tr('height') }}</dt>
+          <dd>{{profileuser.height_choice}}</dd>
+        </dl>
+        <dl ng-show="profileuser.weight">
+          <dt>{{ tr('weight') }}</dt>
+          <dd>{{profileuser.weight_choice}}</dd>
+        </dl>
+
+        <dl ng-show="profileuser.education">
+          <dt>{{ tr('education') }}</dt>
+          <dd>{{profileuser.education_choice}}</dd>
+        </dl>
+        <dl ng-show="profileuser.income">
+          <dt>{{ tr('income') }}</dt>
+          <dd>{{profileuser.income_choice}}</dd>
+        </dl>
+        <dl ng-show="profileuser.jobfield">
+          <dt>{{ tr('occupation') }}</dt>
+          <dd>{{profileuser.jobfield_choice}}</dd>
+        </dl>
+        <dl ng-show="profileuser.relationship_status">
+          <dt>{{ tr('relationship status') }}</dt>
+          <dd>{{profileuser.relationship_status_choice}}</dd>
+        </dl>
+        <dl ng-show="profileuser.has_children">
+          <dt>{{ tr('has children') }}</dt>
+          <dd>{{profileuser.has_children_choice}}</dd>
+        </dl>
+        <dl ng-show="profileuser.want_children">
+          <dt>{{ tr('wants more children') }}</dt>
+          <dd>{{profileuser.want_children_choice}}</dd>
+        </dl>
+
+        <dl ng-show="profileuser.religion">
+          <dt>{{ tr('religion') }}</dt>
+          <dd>{{profileuser.religion_choice}}</dd>
+        </dl>
+        <dl ng-show="profileuser.spirituality">
+          <dt>{{ tr('spirituality') }}</dt>
+          <dd>{{profileuser.spirituality_choice}}</dd>
+        </dl>
+        <dl ng-show="profileuser.age">
+          <dt>{{ tr('western zodiac') }}</dt>
+          <dd>{{profileuser.western_zodiac_choice}} {{profileuser.western_zodiac_symbol}}</dd>
+        </dl>
+        <dl ng-show="profileuser.age">
+          <dt>{{ tr('eastern zodiac') }}</dt>
+          <dd>{{profileuser.eastern_zodiac_choice}} {{profileuser.eastern_zodiac_symbol}}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div ng-show="profileuser.aboutbooks" class="profile abouttext aboutbooks">
+      <h2>{{ tr('books') }}</h2>
+      <div ng-bind-html="profileuser.aboutbooks_html"></div>
+    </div>
+
+    <div ng-show="profileuser.aboutmovies" class="profile abouttext aboutmovies">
+      <h2>{{ tr('movies') }}</h2>
+      <div ng-bind-html="profileuser.aboutmovies_html"></div>
+    </div>
+
+    <div ng-show="profileuser.aboutmusic" class="profile abouttext aboutmusic">
+      <h2>{{ tr('music') }}</h2>
+      <div ng-bind-html="profileuser.aboutmusic_html"></div>
+    </div>
+
+    <div ng-show="profileuser.aboutarts" class="profile abouttext aboutarts">
+      <h2>{{ tr('arts') }}</h2>
+      <div ng-bind-html="profileuser.aboutarts_html"></div>
+    </div>
+
+    <div ng-show="profileuser.abouttravel" class="profile abouttext abouttravel">
+      <h2>{{ tr('travel') }}</h2>
+      <div ng-bind-html="profileuser.abouttravel_html"></div>
+    </div>
+
+    <div ng-show="profileuser.aboutfood" class="profile abouttext aboutfood">
+      <h2>{{ tr('food') }}</h2>
+      <div ng-bind-html="profileuser.aboutfood_html"></div>
+    </div>
+
+    <div ng-show="profileuser.aboutquotes" class="profile abouttext aboutquotes">
+      <h2>{{ tr('quotes') }}</h2>
+      <div ng-bind-html="profileuser.aboutquotes_html"></div>
+    </div>
+
+    <div ng-show="profileuser.aboutsports" class="profile abouttext aboutsports">
+      <h2>{{ tr('sports') }}</h2>
+      <div ng-show="profileuser.aboutsports" ng-bind-html="profileuser.aboutsports_html"></div>
+    </div>
+
+  </div>
+
+<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+
+  <div class="profile right">
+
+    <nav class="profile edit-options" ng-if="profileuser.id == authuser.id">
+      <ul class="opts" ng-include src="'/static/tpl/settings-nav.html'"></ul>
+    </nav>
+
+    <div ng-if="profileuser.flags.block && profileuser.id != authuser.id" class="profile is-blocked" ng-click="deleteFlag('block')">
+      <p>{{ tr('you blocked {0}!', [profileuser.username]) }}</p>
+      <button class="btn primary-btn"><span class="ti-comments-smiley"></span> {{ tr('unblock') }}</button>
+    </div>
+
+    <div ng-if="!profileuser.flags.block && profileuser.id != authuser.id" class="profile messages" ng-controller="ProfileMsgsController">
+
+      <!-- Form to send private message from authuser to profileuser: -->
+      <form class="form" ng-submit="sendMsg()">
+        <textarea ng-model="msgtext" placeholder="{{ tr('write a private message...') }}" style="background-image:url({{ authuser.pic_url.small }});"></textarea>
+        <input type="submit" value="send" ng-show="profileuser.id">
+      </form>
+
+      <!-- Show private msgs list between profileuser and authuser: -->
+      <div class="content">
+
+        <div class="err" ng-if="statusMsg == 'offline'">
+          <a href="" ng-click="checkMsgRegularly()">
+            {{ tr('Offline? Try checking for new messages again...') }}
+          </a>
+        </div>
+
+        <div class="err" ng-if="statusMsg == 'send-error'">
+          {{ tr('Error trying to send message.') }} :( 
+          {{ tr('Please try again.') }}
+        </div>
+
+        <div class="list" ng-show="profileuser.id && authuser.id">
+          <div class="item sent placeholder" ng-if="isSendingNewMsg">
+            <img class="userpic small" ng-src="{{ authuser.pic_url.small }}">
+            <div class="loading-spinner"><span></span><span></span><span></span></div>
+          </div>
+
+          <div ng-if="msgs.length < 1" class="profile-message-ad">
+            <!-- No msgs yet! Use the empty space for an ad -->
+            <div class="ad"><a rel="nofollow" href="https://www.privateinternetaccess.com/pages/buy-vpn/CHINA9001"><img src="/static/img/pia_banner1b_300x250.png" alt=""></a></div>
+          </div>
+
+          <div class="item" bindonce
+           ng-class="{ sent:(msg.from_user==authuser.id), recv:(msg.from_user==profileuser.id) }"
+           ng-repeat="msg in msgs.slice() track by msg.id">
+            <img class="userpic small" ng-src="{{ msg.pic_url.small }}">
+            <span class="text" bo-text="msg.text"></span>
+            <span class="timestamp created" ng-bind="msg.created_delta"></span>
+          </div>
+        </div>
+
+      </div>
+    </div><!--/.profile.messages-->
+
+    <div class="profile friendslist" ng-if="profileuser.friends.length > 0">
+      <h2>{{ tr('{1} friends of {0}', [profileuser.username, profileuser.friends.length]) }}</h2>
+      <div class="list">
+        <a href="{{URLS.BASE}}people/{{ friend.username }}" class="item" ng-repeat="friend in profileuser.friends | limitTo: 60 track by friend.id">
+          <img ng-src="{{ friend.pic_url.small }}" src="/static/placeholder.jpg">
+          <span class="username" ng-bind="friend.username"></span>
+          <span class="asl">
+            <span class="age" ng-bind="friend.age"></span>
+            <span class="gender" ng-bind="friend.gender_choice_symbol"></span>
+            <span class="city" ng-bind="friend.city_name"></span>
+          </span>
+        </a>
+      </div>
+    </div>
+    <div class="profile friendslist" ng-if="profileuser.friends.length < 1">
+      <h2>{{ tr('no friends') }}</h2>
+      <p>{{ tr('{0} does not have any friends yet.', [profileuser.username]) }}</p>
+    </div>
+
+  </div>
+</div><!--/.profile.main-->

@@ -1,0 +1,581 @@
+
+/* Profile layout structure: a wrapper around two columns. Also, set the
+style for headers. */
+
+.profile.content-wrapper {
+  margin: 95px auto 15px auto;
+  overflow: hidden;
+}
+.profile.content-wrapper > .profile.left {
+  width: 390px; float: left;
+  margin-right: 10px;
+}
+.profile.content-wrapper > .profile.right {
+  width: 400px; float: left;
+}
+.profile.left h2, 
+.profile.right h2 {
+  color: #C62828;
+  font-size: 1.25rem;
+  line-height: 1em;
+  margin: 0; padding: 1rem 0.5rem 0.25rem 0.5rem;
+  border-radius: 7px;
+}
+.profile.left h2 {
+  margin-left: 10px;
+}
+.profile.right h2 {
+  margin-right: 10px;
+}
+
+/* On authuser profile only, where usually the chat messages are: a list 
+of links to edit profile */
+
+.profile.edit-options {
+  margin-bottom: 1rem;
+}
+.profile.edit-options ul.opts {
+  list-style: none;
+  margin: 0 10px 0 0; padding: 0;
+  border: 1px solid #CCCCCC;
+  overflow: hidden;
+  border-radius: 7px;
+}
+.profile.edit-options ul.opts li {
+}
+.profile.edit-options ul.opts li a {
+  border-top: 1px solid #ccc;
+  font-size: 1rem;
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  font-weight: normal;
+  margin: 0; padding: 1rem;
+  text-decoration: inherit;
+}
+.profile.edit-options ul.opts li:first-child a {
+  border-top: 0;
+}
+
+/* Chat messages and input form to send private messages between 
+profileuser and authuser. */
+
+.profile.messages {
+  width: 400px; 
+  overflow: hidden;
+  margin: 0 10px 0 0; padding: 0;
+}
+.profile.messages .profile-message-ad {
+  border-top: 1px solid #CCCCCC;
+  border-bottom: 1px solid #CCCCCC;
+  margin: 30px 10px 0 0; padding: 20px 0;
+  background-color: #F3F3F3;
+}
+.profile.messages .profile-message-ad div {
+  width:300px; height: 250px;
+  background-color: #eee; 
+  margin: 0 auto; padding: 0;
+  position: relative;
+}
+.profile.messages .profile-message-ad div:after {
+  content: 'Ad';
+  font-size: 13px; line-height: 13px;
+  margin: 0; padding: 1px 3px;
+  border-radius: 1px;
+  color: #FFFFFF;
+  background-color: #EFC439; /* same as goog's */
+  position: absolute; top: 2px; right: 2px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+.profile.messages > .form {
+  border: 1px solid #FFCDD2;
+  overflow: hidden;
+  width: 390px; height: 70px;
+  border-radius: 7px;
+}
+.profile.messages > .form > textarea {
+  display: block; 
+  width: 310px; height: 70px;
+  border: 0; outline: 0; 
+  margin: 0; padding: 5px 70px 5px 10px;
+  font-size: 1.15rem; 
+  font-weight: normal;
+  line-height: 1.25em;
+  box-shadow: 0 0 5px rgba(255,255,255,.7);
+  background-color: #fff;
+  background-size: 70px 70px;
+  background-repeat: no-repeat;
+  background-position: top right;
+  float: left;
+  resize: none;
+}
+.profile.messages > .form > input[type="submit"] {
+  float: left;
+  width: 100px;
+  margin-left: -105px;
+  margin-top: 45px;
+  opacity: 0.75;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.profile.messages > .form > input[type="submit"]:hover,
+.profile.messages > .form > input[type="submit"]:focus {
+  opacity: 1;
+  transition: 0.2s;
+}
+.profile.messages > .content {
+  width: 400px; min-height: 300px; max-height: 1500px;
+  overflow-x: hidden; 
+  overflow-y: auto;
+}
+.profile.messages > .content::-webkit-scrollbar{
+  width: 2px; height: 2px;
+}
+.profile.messages > .content::-webkit-scrollbar-track-piece {
+  background: #ccc; border-radius: 0px;
+}
+.profile.messages > .content::-webkit-scrollbar-thumb:vertical {
+  background-color: rgba(0,0,0,.3); border-radius: 0px;
+}
+.profile.messages .err {
+  background-color: #ccc;
+  color: #c33;
+  text-align: center;
+  padding: 0.5rem;
+}
+.profile.messages .list {
+  vertical-align: bottom;
+  margin: 0; padding: 0;
+}
+.profile.messages .list > .item {
+  margin: 10px 10px 10px 0; padding: 0;
+  background-color: #FFFFFF;
+  overflow: hidden;
+  min-height: 70px;
+  border-bottom: 1px dotted #CCCCCC;
+}
+.profile.messages .list > .item > .text {
+  display: block;
+  line-height: 1.5rem;
+  font-size: 1rem;
+  overflow: hidden;
+  margin: 0; padding: 0 10px;
+}
+.profile.messages .list > .item > .userpic {
+  width: 60px; height: 60px;
+  margin: 0; padding: 0;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  opacity: 0.8;
+}
+.profile.messages .list > .item.sent {
+  text-align: right;
+}
+.profile.messages .list > .item.sent > .text {
+  color: #888888;
+  margin-right: 50px;
+}
+.profile.messages .list > .item.sent > .userpic {
+  float: right; 
+}
+.profile.messages .list > .item.sent.placeholder > .loading-spinner {
+  margin: 0; padding: 10px 10px 0 0;
+}
+.profile.messages .list > .item.recv {
+  text-align: left;
+}
+.profile.messages .list > .item.recv > .text {
+  color: #000000;
+  margin-left: 50px;
+}
+.profile.messages .list > .item.recv > .userpic {
+  float: left;
+}
+.profile.messages .list > .item > .created {
+  display: block;
+  font-size: 0.85rem;
+  text-align: center;
+}
+.profile.messages .list > .item.sent > .created {
+  color: rgba(0,0,0,0.26);
+}
+.profile.messages .list > .item.recv > .created {
+  color: rgba(0,0,0,0.26);
+}
+
+/* The profile pictures at the top left, with one large primary profile 
+photo and several smaller photos. Clickable to open the picviewer 
+overlay. */
+
+.profile.picdata {
+  display: block; width: 375px; height: 375px;
+  margin: 0 0 10px 10px; 
+  overflow: hidden;
+  position: relative;
+}
+.profile.picdata > .userpic.large {
+  float: left;
+  width: 300px; height: 300px; 
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-image:url(/static/placeholder.jpg);
+  font-size: 0px;
+  cursor: pointer;
+  display: block;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+}
+.profile.picdata > .userpic.small {
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  display: inline-block; width: 74px; height: 74px; 
+  vertical-align: top;
+  cursor: pointer;
+  border-bottom: 1px solid #fff;
+  border-left: 1px solid #fff;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-image:url(/static/placeholder.jpg);
+  font-size: 75px; /* what the ...? */
+}
+.profile.picdata > .userpic.small:nth-child(5) {
+  width: 150px; height: 150px;
+  border-bottom: 0;
+  position: absolute; bottom: 0; right: 0;
+}
+.profile.picdata > .userpic.small:nth-child(6),
+.profile.picdata > .userpic.small:nth-child(7),
+.profile.picdata > .userpic.small:nth-child(8),
+.profile.picdata > .userpic.small:nth-child(9),
+.profile.picdata > .userpic.small:nth-child(10) {
+  border: 0;
+  border-top: 1px solid #fff;
+  border-right: 1px solid #fff;
+  float: left;
+}
+.profile.picdata > .userpic.small:nth-child(9) {
+  width: 75px; height: 74px;
+}
+.profile.picdata > .userpic.small:nth-child(10) {
+  border-right: 0;
+}
+
+/* At the top of the profile, the line with username and PNASL data, a
+heard to click and "like" the profileuser, and an overflow menu with 
+other interactions between authuser and profileuser, such as "friend"
+or "block", etc. */
+
+.profile.header {
+  margin: 0; padding: 15px;
+  background-color: #fff; 
+}
+.profile.header .loading-spinner {
+  display: block;
+  margin: 0; padding: 0; padding-top: 20px; padding-bottom: 25px;
+  text-align: center;
+}
+.profile.header .like-btn {
+  float: right;
+  font-size: 3.5rem;
+  line-height: 1em;
+  padding: 5px 10px 0 0;
+  color: #c33;
+  opacity: 0.1;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.profile.header .like-btn:before {
+  content: '❤';
+}
+.profile.header .like-btn:hover {
+  opacity: 0.5;
+  transition: 0.3s;
+}
+.profile.header .like-btn:active {
+  opacity: 1;
+}
+.profile.header .like-btn.is-like {
+  opacity: 1;
+  transform: scale(1.25);
+}
+/*
+.profile.header .like-btn {
+  float: right;
+  font-size: 2.5rem;
+  line-height: 56px; width: 60px; text-align: center;
+  margin: -15px; padding: 15px;
+  color: #C62828;
+  opacity: 0.1;
+  cursor: pointer;
+  transition: 0.3s;
+  background-color: #F44336;
+}
+.profile.header .like-btn:before {
+  font-family: 'themify';
+  content: "\e634";
+}
+.profile.header .like-btn:hover {
+  opacity: 0.5;
+  transition: 0.3s;
+}
+.profile.header .like-btn:active {
+  opacity: 1;
+}
+.profile.header .like-btn.is-like {
+  opacity: 1;
+  font-size: 3.5rem;
+}
+.profile.header .like-btn.is-like-received:after {
+  position: absolute; margin-left: -2rem; margin-top: 0.5rem;
+  color: #933; text-shadow: 0 0 5px #fff;
+  content: '❤';
+  transform: scale(0.75);
+  opacity: 1;
+}
+*/
+.profile.header .like-btn.is-like-received:after {
+  position: absolute; margin-left: -2rem; margin-top: 0.5rem;
+  color: #933; text-shadow: 0 0 5px #fff;
+  content: '❤';
+  transform: scale(0.75);
+  opacity: 1;
+}
+.profile.header .first-line {
+  font-size: 2rem;
+  line-height: 1em;
+  margin-bottom: 0.5rem;
+}
+.profile.header .second-line {
+  font-size: 1.25rem;
+  line-height: 1em;
+  color: #333;
+}
+.profile.header > .first-line > .username {
+  vertical-align: middle;
+}
+.profile.header > .first-line > .userstatus {
+  font-size: 1rem;
+  vertical-align: middle;
+}
+.profile.header > .first-line > .userstatus > .status {
+  margin: 0; padding: 0.5rem 0.75rem;
+  background-color: #CCCCCC; color: #FFFFFF;
+  border-radius: 1rem;
+  text-decoration: none;
+}
+.profile.header > .first-line > .userstatus > .status.is-online {
+  background-color: rgba(46,204,113,1);
+  color: #FFFFFF;
+}
+.profile.header > .first-line > .userstatus > .status.is-idle {
+  background-color: rgba(38,194,129,1);
+  color: #FFFFFF;
+}
+.profile.header > .first-line > .userstatus > .status.is-offline {
+  background-color: #FFFFFF;
+  box-shadow: inset 0 0 1px 1px rgba(0,0,0,0.3);
+  color: rgba(0,0,0,0.3);
+}
+.profile.header > .first-line > .userstatus > .status.is-friend {
+  background-color: rgba(31,58,147,1);
+  color: #FFFFFF;
+}
+.profile.header > .first-line > .userstatus > .status.is-friend-recv {
+  background-color: rgba(31,58,147,0.6);
+  color: #FFFFFF;
+}
+.profile.header > .first-line > .userstatus > .status.is-friend-sent {
+  background-color: rgba(31,58,147,0.3);
+  color: #FFFFFF;
+}
+.profile.header > .first-line > .userstatus > .status.is-match {
+  background-color: rgba(153,51,51,1);
+  color: #FFFFFF;
+}
+.profile.header > .first-line > .userstatus > .status.is-like-recv {
+  background-color: rgba(153,51,51,0.6);
+  color: #FFFFFF;
+}
+.profile.header > .first-line > .userstatus > .status.is-like-sent {
+  background-color: rgba(153,51,51,0.3);
+  color: #FFFFFF;
+}
+.profile.header > .first-line > .userstatus > .status.is-favorite {
+  background-color: #FFFF33;
+  color: #FF3333;
+}
+.profile.header > .first-line > .userstatus > .status.is-block {
+}
+.profile.is-blocked {
+  display: block; 
+  margin: 0 10px 0 0; padding: 2rem;
+  background-color: #FFCDD2;
+  color: #000000;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* A table with profileuser data items. */
+
+.profile.datalist {
+  clear: both;
+  overflow: hidden;
+}
+.profile.datalist > div {
+  border: 1px solid #C62828;
+  margin: 10px; padding: 10px 0;
+  display: table;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+}
+.profile.datalist > div > dl {
+  display: table-row;
+  margin: 0; padding: 0;
+  clear: both;
+}
+.profile.datalist > div > dl > dt {
+  color: #999;
+  display: table-cell;
+  font-size: 0.9rem;
+  line-height: 1em;
+  vertical-align: top;
+  margin: 0; padding: 0.5rem;
+  text-align: right;
+  width: 40%;
+}
+.profile.datalist > div > dl > dd {
+  display: table-cell;
+  vertical-align: top;
+  line-height: 1em;
+  margin: 0; padding: 0.5rem;
+  width: 60%;
+}
+.profile.abouttext {
+  clear: both;
+  line-height: 1.25em;
+}
+.profile.abouttext > div {
+  margin: 0; padding: 10px;
+}
+
+/* A list of linked profile pics of friends of profileuser. */
+
+.profile.friendslist {
+  margin: 0; margin-bottom: 10px; padding: 0;
+  overflow: hidden;
+}
+.profile.friendslist > .header {
+}
+.profile.friendslist > .list {
+  padding: 10px 0;
+}
+.profile.friendslist > .list > .item {
+  display: inline-block; 
+  width: 75px; height: 75px; 
+  margin: 0; margin-right: 5px; margin-bottom: 5px; padding: 0;
+  overflow: hidden;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+}
+.profile.friendslist > .list > .item > img {
+  width: inherit; height: inherit;
+  border: 0; outline: 0;
+}
+
+/* Above the actual profile, a row of userpics that link to the profiles
+of other users. */
+
+.profilelinks {
+  display: block; width: 100%;
+  position: absolute;
+  margin: 0 auto; margin-top: -95px;
+  padding: 0; padding-top: 10px;
+  font-size: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 100;
+  text-align: center;
+  transition: 0.3s;
+}
+.profilelinks .loading-spinner {
+  display: block;
+  padding-top: 20px;
+  text-align: center;
+}
+.profilelinks > .item {
+  overflow: hidden;
+  background-color: #fff; 
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  display: inline-block;
+  vertical-align: top;
+  width: 50px; height: 50px;
+  margin: 5px; padding: 0px;
+  transition: 0.3s;
+}
+.profilelinks > .item > a.userpic {
+  display: block;
+  overflow: hidden;
+  width: 50px; height: 50px;
+  background-color: #ccc;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: 0.3s;
+}
+.profilelinks > .item > a.username,
+.profilelinks > .item > .asl {
+  display: block;
+  font-size: 0.8rem;
+  line-height: 1em;
+  padding: 0 5px; margin: 0;
+  overflow: hidden;
+  text-align: center;
+}
+.profilelinks > .item > a.username {
+  font-size: 1rem;
+  line-height: 1.15em;
+  padding: 5px;
+}
+.profilelinks > .item > .asl {
+  color: #333;
+}
+.profilelinks > .item > .last-active {
+  display: none;
+}
+.profilelinks:hover > .item {
+  transition: 0.2s;
+  left: -110px;
+}
+.profilelinks > .item:hover {
+  transition: 0.2s;
+  width: 150px; height: 200px;
+  border-radius: 0px;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
+  margin-top: -10px;
+}
+.profilelinks > .item:hover > .userpic {
+  transition: 0.2s;
+  width: 150px; height: 150px;
+}
+.profilelinks > .item:hover a.username,
+.profilelinks > .item:hover .asl {
+  display: block;
+}
+
+/* Set the max dimensions for embedded content in "about" texts. */
+
+.profile.abouttext .embedded.video.youtube {
+  width: 400px;
+  height: 300px;
+}
+.profile.abouttext .embedded.image {
+  max-width: 400px;
+  max-height: 400px;
+}
+
+
+

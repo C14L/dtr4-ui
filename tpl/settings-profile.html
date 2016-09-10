@@ -1,0 +1,82 @@
+<!--
+
+Profile basics: Pic, Name, Age, Sex, Location (PNASL)
+
+These are required. A user with any of these missing should always be
+redirected here.
+
+-->
+<div class="settings settings-profile content-wrapper">
+  <nav class="sub box"><ul><ng-include src="'/static/tpl/settings-nav.html'"></ng-include></ul></nav>
+  <div class="box-message" ng-if="!authuser.pnasl_ok" ng-bind="tr('Before you can see profile pages, please fill in the basic data for your own profile page.')"></div>
+  <div class="box">
+    <form class="leftside"><!-- Picture uploader goes here now! -->
+      <section class="pics">
+        <img class="profile-pic" ng-src="{{ authuser.pic_url.medium }}" src="/static/placeholder.jpg">
+        <div class="uploader-button">
+          <div upload-button ng-if="showImageButton" class="file-field upload-btn" url="/api/v1/authuser/pics.json" param="file" data="formData" accept="image/jpeg" required="true" on-upload="onUpload(files)" on-success="onSuccess(response)" on-error="onError(response)" on-complete="onComplete(response)"></div>
+          <div ng-show="showImageSuccess" class="uploader-success" ng-bind="tr('Success!')"></div>
+          <div ng-show="showImageError" class="uploader-error" ng-bind="tr('Error!')"></div>
+          <div ng-show="showImageUploading" class="uploader-uploading">
+            <div class="loading-spinner"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div ng-if="authuser.pics.length > 0" class="pic-counter">
+          {{ authuser.pics.length }} / {{ maxPics }}
+        </div>
+        <div ng-if="authuser.pics.length > 0" class="picslist">
+          <div class="item" ng-repeat="url in authuser.pics_url">
+            <img ng-src="{{ url.small }}" src="/static/placeholder.jpg">
+            <ul class="opts">
+              <li ng-click="setProfilePic()" ng-bind="tr('set as main picture')"></li>
+              <li ng-click="deletePic()" ng-bind="tr('delete picture')"></li>
+            </ul>
+          </div>
+        </div>
+        <div ng-if="authuser.pics.length < 1" class="picsrules">
+          <p><strong>{{ tr("Upload a picture you yourself!") }}</strong></p>
+          <p>{{ tr("You can upload up to 100 pictures of yourself.") }}</p>
+          <p>{{ tr("Some simple rules:") }}</p>
+          <ul>
+            <li>{{ tr("Please upload only pictures of you.") }}</li>
+            <li>{{ tr("Do not upload pictures of celebrities or other people.") }}</li>
+            <li>{{ tr("Do never upload pictures with violence or nudity.") }}</li>
+          </ul>
+        </div>
+      </section>
+    </form>
+    <form class="rightside" name="settingsProfileForm">
+      <section class="gender">
+        <span ng-bind="tr('I am a')"></span>
+        <select name="gender" ng-model="authuser.gender" ng-options="opt[0] as opt[1] for opt in translations['GENDER_CHOICE']"></select>
+      </section>
+      
+      <section class="dob">
+        <label for="id-dob">{{ tr("date of birth") }}</label>
+        <!-- TODO: Add some Angular magic to localize date input if browser ignores HTML5 date field -->
+        <input name="dob" type="date" ng-model="authuser.dob" id="id-dob" placeholder="YYYY-MM-DD">
+        <p class="helptext">{{ tr("Your birthdate is never shown in your profile! Only your age, and your occidental and oriental star signs are shown.") }}</p>
+      </section>
+
+      <section class="geoname">
+        <div class="latlng" ng-show="showLatLng">
+          <div><button ng-click="findCityByLatLng()" ng-bind="tr('Find my location')"></button><span ng-show="crcByLatLngLoading" class="loading-spinner"><span></span><span></span><span></span></span></div>
+          <p class="helptext">{{ tr('Click to automatically find the city closest to you, or manually select the city below.') }}</p><!-- <p ng-show="crcByLatLng">{{crcByLatLng}}</p> -->
+        </div>
+        <div class="manually">
+          <div><select name="country" ng-model="authuser.country" ng-options="opt[0] as opt[1] for opt in countries" ng-change="update_cities(authuser.country, 0)"><option value="" ng-bind="tr('your country')"></option></select></div>
+          <div><select name="city" ng-model="authuser.city" ng-options="opt[0] as opt[1] for opt in cities"><option value="" ng-bind="tr('your city')"></option></select></div>
+          <input type="hidden" name="lat" ng-model="authuser.lat">
+          <input type="hidden" name="lng" ng-model="authuser.lng">
+        </div>
+      </section>
+      
+      <section class="submit">
+        <button ng-hide="isSubmitting" class="btn submit-btn primary-btn" ng-click="submitForm()" ng-bind="tr('publish changes')"></button>
+        <span ng-show="isSubmitSuccess" class="success-symbol"></span>
+        <div ng-show="isSubmitting" class="loading-spinner"><span></span><span></span><span></span></div>
+      </section> 
+    </form>
+    <div class="clearfix"></div>
+  </div>
+</div>

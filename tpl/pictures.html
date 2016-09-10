@@ -1,0 +1,98 @@
+<style type="text/css">
+
+.pictures.content-wrapper {
+  text-align: center;
+}
+
+.pictures.content-wrapper > .content { }
+
+.pictures.content-wrapper > .content > .loading-spinner {
+  display: block;
+  padding: 20px;
+  text-align: center;
+}
+
+.pictures.content-wrapper > .content > .list > .item { 
+  background-color: rgba(0,0,0,0.3);
+  display: inline-block;
+  margin: 0 5px 5px 0; padding: 0;
+  overflow: hidden; 
+  position: relative;
+  vertical-align: middle;
+  width: 75px; height: 75px; 
+}
+
+.pictures.content-wrapper > .content > .list > .item > img {
+  width: inherit; height: inherit;
+  border: 0;
+}
+
+.pictures.content-wrapper > .content > .list > .item > .link {
+  /* overlay that links to profile, for not staff */
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+}
+
+.pictures.content-wrapper > .content > .list > .item > .infos {
+  color: #FFF;
+  background-color: rgba(0,0,0,0.4);
+  height: 100px;
+  margin: 0; padding: 0;
+  overflow: hidden;
+  position: absolute; top: -100px; left: 0; right: 0;
+  text-shadow: 0 0 3px #000;
+  transition: 0.3s;
+}
+
+.pictures.content-wrapper > .content > .list > .item:hover > .infos {
+  top: 0px;
+  transition: 0.3s;
+}
+
+.pictures.content-wrapper > .content > .list > .item > .infos > .username {
+  color: #FFFFFF;
+  display: block;
+  font-weight: bold;
+  padding: 5px;
+  text-decoration: none; 
+}
+
+.pictures.content-wrapper > .content > .list > .item > .infos > .created {
+  display: block;
+  padding: 5px; padding-top: 0;
+  font-size: 0.8rem;
+}
+
+.pictures.content-wrapper > .content > .list > .item > .infos > button {
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.pictures.content-wrapper > .content > .list > .item.is_deleted {
+  opacity: 0.2;
+  transition: 0.3s;
+}
+
+</style>
+<div class="pictures content-wrapper">
+  <div class="content">
+    <div class="list" ng-show="picslist.length > 0">
+      <div href="profile/{{ pic.username }}" class="item box" ng-class="{ 'is_deleted':pic.is_deleted }" ng-repeat="pic in picslist track by pic.id">
+        <img ng-src="{{ pic.urls.small }}" src="/static/placeholder.jpg">
+        <a href="profile/{{ pic.username }}" ng-if="!authuser.is_staff" class="link"></a>
+        <div ng-if="authuser.is_staff" class="infos">
+          <a href="profile/{{ pic.username }}" class="username">{{ pic.username }}</a>
+          <!-- <div class="created date">{{ pic.created_date }}</div>
+          <div class="created time">{{ pic.created_time }}</div> -->
+          <button ng-click="deletePicture(pic.id)">delete</button>
+        </div>
+      </div>
+    </div>
+    <div class="load-more">
+      <button class="btn load-more ti-download" ng-click="loadMore()" ng-if="statusMsg!='loading' && picslist.length>0"></button>    
+      <div ng-if="statusMsg=='loading'" class="loading-spinner"><span></span><span></span><span></span></div>
+    </div>
+
+    <div ng-if="statusMsg=='empty'">{{ tr('nobody there') }}</div>
+
+  </div>
+</div>
