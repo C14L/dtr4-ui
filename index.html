@@ -6,15 +6,19 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <base href="/app/">
     <title>El Ligue</title>
+
+    <!--build:css css/main.css -->
     <link href="/static/themify-icons/themify-icons.css" type="text/css" rel="stylesheet">
-    <link href="/static/dtr-base.css" type="text/css" rel="stylesheet">
-    <link href="/static/dtr-profile.css" type="text/css" rel="stylesheet">
-    <link href="/static/dtr-inbox.css" type="text/css" rel="stylesheet">
-    <link href="/static/dtr-lists.css" type="text/css" rel="stylesheet">
-    <link href="/static/dtr-search.css" type="text/css" rel="stylesheet">
-    <link href="/static/dtr-talk.css" type="text/css" rel="stylesheet">
-    <link href="/static/dtr-settings.css" type="text/css" rel="stylesheet">
+    <link href="/static/css/dtr-base.css" type="text/css" rel="stylesheet">
+    <link href="/static/css/dtr-profile.css" type="text/css" rel="stylesheet">
+    <link href="/static/css/dtr-inbox.css" type="text/css" rel="stylesheet">
+    <link href="/static/css/dtr-lists.css" type="text/css" rel="stylesheet">
+    <link href="/static/css/dtr-search.css" type="text/css" rel="stylesheet">
+    <link href="/static/css/dtr-talk.css" type="text/css" rel="stylesheet">
+    <link href="/static/css/dtr-settings.css" type="text/css" rel="stylesheet">
     <link href="/static/libs/picviewer.css" type="text/css" rel="stylesheet">
+    <!--endbuild-->
+
     <script>
 
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -24,34 +28,33 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', 'UA-273063-2', 'elligue.com'); /* DO IN NG__ga('send','pageview') */
 
     </script>
-    <!--
-    <Xscript src="/static/libs/angularjs/angular.js"></script>
-    <Xscript src="/static/libs/angularjs/angular-route.js"></script>
-    <Xscript src="/static/libs/angularjs/angular-resource.js"></script>
-    <Xscript src="/static/libs/angularjs/angular-sanitize.js"></script>
-    -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-sanitize.min.js"></script>
-    <!-- https://github.com/leon/angular-upload -->
-    <script type="text/javascript" src="/static/libs/angular-upload.min.js"></script>
-    <!-- https://github.com/Pasvaz/bindonce -->
-    <script src="/static/libs/angular-bindonce.min.js"></script>
+
+    <!--build:js js/libs.js-->
+    <script src="/static/node_modules/angular/angular.min.js"></script>
+    <script src="/static/node_modules/angular-route/angular-route.min.js"></script>
+    <script src="/static/node_modules/angular-resource/angular-resource.min.js"></script>
+    <script src="/static/node_modules/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="/static/node_modules/angular-upload/angular-upload.min.js"></script>
+    <script src="/static/node_modules/angular-bindonce/bindonce.min.js"></script>
     <script src="/static/libs/markdownjs.min.js"></script>
     <script src="/static/libs/picviewer.js"></script>
     <script src="/static/utils.js"></script>
     <script src="/static/textfilter.js"></script>
-    <!-- "choice" translations -->
-    <script> document.write('<script type="text/javascript" src="/static/tr-choices-' + (get_cookie('lg')||'es') + '.js"></scri' + 'pt>'); </script>
-    <!-- UI translations -->
-    <script> document.write('<script type="text/javascript" src="/static/tr-language-' + (get_cookie('lg')||'es') + '.js"></scri' + 'pt>'); </script>
-    <!-- App -->
-    <script src="/static/dtr-app.js"></script>
-    <script src="/static/dtr-services.js"></script>
-    <script src="/static/dtr-controllers.js"></script>
-    <script src="/static/dtr-filters.js"></script>
-    <script src="/static/dtr-directives.js"></script>
+    <!--endbuild-->
+    
+    <script>
+      var lg = get_cookie('lg') || 'es';
+      document.write('<sc'+'ript src="/static/tr-choices-'+lg+'.js"></scri'+'pt>'); //"choice" translations
+      document.write('<sc'+'ript src="/static/tr-language-'+lg+'.js"></scri'+'pt>'); //UI translations
+    </script>
+
+    <!--build:js js/app.js-->
+    <script src="/static/js/dtr-app.js"></script>
+    <script src="/static/js/dtr-services.js"></script>
+    <script src="/static/js/dtr-controllers.js"></script>
+    <script src="/static/js/dtr-filters.js"></script>
+    <script src="/static/js/dtr-directives.js"></script>
+    <!--endbuild-->
   </head>
   <body>
     <nav class="main" ng-controller="IndicatorController">
@@ -109,32 +112,8 @@ ga('create', 'UA-273063-2', 'elligue.com'); /* DO IN NG__ga('send','pageview') *
           <!-- authuser -->
           <a href="{{URLS.BASE}}profile/{{authuser.username}}" class="nav-link nav-profile" title="{{ tr('view profile') }}: {{ authuser.username }}"><span class="ti-user"></span></a>
         </div><!-- /nav-link-list -->
-      </div><!-- /.wrapper -->
 
-      <!-- NOT USED CURRENTLY............
-      <div class="sidebar-left">
-        <input type="checkbox" id="id-sidebar-left-ctrl">
-        <div class="wrapper">
-          <div class="header">
-            <label class="nav-link nav-menu ti-menu" for="id-sidebar-left-ctrl"></label>
-            <span class="home">El Ligue</span>
-          </div>
-          <div class="authuser-info">
-            <a href="{{URLS.BASE}}profile/{{ authuser.username }}" ng-controller="AuthuserInfoController">
-              <img ng-src="{{ authuser.pic_url.small }}" src="/static/placeholder.jpg" title="{{ authuser.username }} [{{ authuser.id }}]">
-              <div class="userdata">
-                <span class="username">{{ authuser.username }}</span>
-                <span class="asl">
-                  <span class="age">{{ authuser.age }}</span>
-                  <span class="gender">{{ authuser.gender_choice_symbol }}</span>
-                  <span class="location">{{ authuser.city_name }}</span>
-                </span>
-              </div>
-            </a>
-          </div>
-          <div>n o t h i n g . . .</div>
-        </div>
-      </div> --><!-- /.sidebar-left -->
+      </div><!-- /.wrapper -->
 
     </nav><!-- /nav.main /IndicatorController scope -->
     
@@ -172,10 +151,17 @@ ga('create', 'UA-273063-2', 'elligue.com'); /* DO IN NG__ga('send','pageview') *
   </body>
   <script>
 
-/* hackadihack: make overflow menues close on click anywhere. */
-(function(){document.getElementsByTagName('body')[0].addEventListener('click',function(ev){
-var els=document.querySelectorAll('nav.overflow input[type="checkbox"]');
-for(var i=0;i<els.length;i++) if(els[i]!=ev.target && els[i].checked) els[i].checked=false;});})();
+/* overflow menues close on click anywhere */
+(function() {
+  document.getElementsByTagName('body')[0].addEventListener('click', function(ev) {
+    var els = document.querySelectorAll('nav.overflow input[type="checkbox"]');
+    for (var i=0; i<els.length; i++) {
+      if (els[i] != ev.target && els[i].checked) {
+        els[i].checked = false;
+      }
+    }
+  });
+})();
 
   </script>
 </html>
