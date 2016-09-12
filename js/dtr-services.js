@@ -145,6 +145,10 @@ dtrServices.factory( 'Profile',
                 //       and rename that function into "complete_user_data()"
                 //       in utils.py, to be more DRY.
                 //
+                if(data['dob']) {
+                    data['dob'] = new Date(data['dob']);
+                }
+
                 data['pic_url'] = get_pic_urls( data['pic'] ); // main profile pic
                 data['pics_url'] = get_pics_urls( data['pics'] );
                 
@@ -210,34 +214,24 @@ dtrServices.factory( 'Profile',
                 var deferred = $q.defer();
                 var url = ( !!username ) ? '/api/v1/profile/'+username+'.json' : '/api/v1/authuser.json';
 
-                log( '--- ProfileFactory.getByUsername: holds '+profileBuffer.length+' profiles' )
                 if( username && profileBuffer[username] ){
-                    log( '--- ProfileFactory.profileBuffer: profile for "'+username+'" found in buffer!' )
                     deferred.resolve( profileBuffer[username] );
                 } else {
-                    log( '--- ProfileFactory.getByUsername: not found in buffer, fetching profile for "'+username+'"...' )
                     $http.get( url ).success( function( data, status ){
+
                         if( status == 200 && data['id'] ){
-                            log( '--- ProfileFactory.getByUsername: profile found:' ); log( data );
                             data = completeProfile( data );
-
-                            // add this user to the buffer for next time
                             profileBuffer[ data['username'] ] = data;
-
-                            log( '--- ProfileFactory.getByUsername: returned data from completeProfile() is:' ); log( data );
                             deferred.resolve( data );
                         } else {
-                            log('data received, but not a profile!');
                             deferred.reject( 'Could not load user profile.' );
                         }
                     } ).error( function( err ){
-                        log('profile NOOOOT found!');
                         deferred.reject( 'Could not load user profile.' );
                     } );
                 }
 
                 return deferred.promise
-
             }
 
             this.completeProfile = completeProfile;

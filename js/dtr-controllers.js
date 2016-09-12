@@ -428,18 +428,25 @@ app.controller( 'SettingsProfileController',
             $scope.showLatLng = ("geolocation" in navigator); // hide button if not supported
             $scope.crcByLatLngLoading = false;
             $scope.crcByLatLng = '';
+
             $scope.authuserPromise.then( function( ){ // make sure authuser data is there
+                
                 $scope.submitForm = function( ){
                     // submit profile data, same as in "SettingsDetailsController".
                     var data = {};
                     var url = '/api/v1/authuser.json';
+
                     angular.forEach( $scope.settingsProfileForm, function( v, k ){
-                        if( v.$dirty ){ 
-                            data[k] = $scope.authuser[k]
+                        if( k && (k[0] != '$') && v.$dirty ){
+                            if (k == 'dob') {
+                                data[k] = $scope.authuser[k].toISOString().substr(0, 10); // YYYY-MM-DD only.
+                            } else {
+                                data[k] = $scope.authuser[k];
+                            }
                         }
                     } );
-                    // TODO: Check if "dob" field has a valid "date" 
-                    // format. Expected: "YYYY-MM-DD".
+                    // TODO: Check if "dob" field has a valid format. 
+                    // Expected: "YYYY-MM-DD". Then convert to JS date.
                     if( $scope.settingsProfileForm.$dirty ){
                         $scope.isSubmitting = true;
                         $http.post( url, data ).success( function( data ){
@@ -604,8 +611,9 @@ app.controller( 'SettingsDetailsController',
                     // submit profile data, same as in "SettingsProfileController".
                     var data = {};
                     var url = '/api/v1/authuser.json';
+ 
                     angular.forEach( $scope.settingsDetailsForm, function( v, k ){
-                        if ( v.$dirty ) {
+                        if( k && (k[0] != '$') && v.$dirty ){
                             data[k] = $scope.authuser[k];
                             // Can't use "0" in the ng form for "no value", so 
                             // have to set it here manually. This enables the
