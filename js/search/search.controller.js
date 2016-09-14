@@ -6,7 +6,7 @@ angular.module( 'searchController', [ 'ngSanitize' ] ).controller(
   'SearchController', 
   
           [ '$scope', 'Authuser', 'Cities', 'Search', 'appBarTitle',
-  function( $scope,    Authuser,   Cities,   Search,   appBarTitle 
+  function(  $scope,   Authuser,   Cities,   Search,   appBarTitle 
 
 ) {
 
@@ -20,8 +20,6 @@ angular.module( 'searchController', [ 'ngSanitize' ] ).controller(
     'options': Search.getOptions( ), 
     'selected': Search.getParams( ),
   };
-
-  console.log('$scope.search.selected --> ', $scope.search.selected);
 
   $scope.updateCrc = function( city ){
     // load city options for given country and set city, if selected.
@@ -55,8 +53,6 @@ angular.module( 'searchController', [ 'ngSanitize' ] ).controller(
     $scope.isLoadingMore = true;
 
     var params = $scope.getParamsFromSearchForm( );
-    console.log('$scope.newSearch --> calling Search.getParams( ) here --> ', Search.getParams( ));
-    console.log('$scope.newSearch -->', params.city);
     Search.setParams( params );
 
     Search.getResults( ).then( function( data ) {
