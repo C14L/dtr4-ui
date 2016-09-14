@@ -36,6 +36,7 @@ var app = angular.module('dtr4', [
     'pasvaz.bindonce', 
 
     'searchController', 'searchService',
+    'talkController', 'talkService',
 ]);
 
 // --- global ng contants ------------------------------------------------------
