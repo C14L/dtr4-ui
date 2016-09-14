@@ -1,8 +1,8 @@
 
 <div class="search content-wrapper">
   <div class="search-opts box">
-    <form name="searchform" class="search-form" method="get" action="">
-      <button class="btn btn-submit ti-search" ng-click="clearResults();updateResults(1)"></button>
+    <form name="searchform" class="search-form" method="get" ng-submit="newSearch()">
+      <button type="submit" class="btn btn-submit ti-search"></button>
       <div class="icon ti-package"></div>
       <div class="gender"><select ng-model="search.selected.gender" ng-options="opt[0] as opt[1] for opt in search.options.gender"></select></div>
       <!--
@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div class="userlist" ng-show="!statusMsg && userlist.length == 0">
+    <div class="userlist" ng-if="!statusMsg && userlist.length == 0">
 
       <div class="item box placeholder">
         <a class="userpic" href="#" style=""></a>
@@ -77,7 +77,7 @@
     </div><!-- /placeholderlist -->
 
     <div class="load-more">
-      <button class="btn load-more ti-download" ng-click="updateResults(nextPage)" ng-if="!isLoadingMore && userlist.length > 0"></button>
+      <button class="btn load-more ti-download" ng-click="moreSearch()" ng-if="!isLoadingMore && userlist.length > 0"></button>
       <div ng-if="isLoadingMore" class="loading-spinner"><span></span><span></span><span></span></div>
     </div>
     

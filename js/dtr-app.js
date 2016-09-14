@@ -2,7 +2,7 @@
 // 
 //
 
-window.LOG = false;
+window.LOG = true;
 window.BASE_URL = '/app/';
 window.MEDIA_URL = '/pics/';
 window.STATIC_URL = '/static/';
@@ -30,9 +30,13 @@ window.IDLE_SECONDS_SINCE_LAST_ACTIVE = 60 * 10 // Show user as "idle" if they w
 // lr.upload -- https://github.com/leon/angular-upload
 // pasvaz.bindonce -- https://github.com/Pasvaz/bindonce
 //
-var app = angular.module('dtr4', [ 'ngRoute', 'dtrControllers', 'dtrDirectives', 
-                                   'dtrServices', 'dtrFilters', 'lr.upload', 
-                                   'pasvaz.bindonce' ]);
+var app = angular.module('dtr4', [
+    'ngRoute', 'dtrControllers', 'dtrDirectives', 
+    'dtrServices', 'dtrFilters', 'lr.upload', 
+    'pasvaz.bindonce', 
+
+    'searchController', 'searchService',
+]);
 
 // --- global ng contants ------------------------------------------------------
 
