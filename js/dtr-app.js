@@ -121,7 +121,7 @@ app.run(
 
 // --- global values -----------------------------------------------------------
 
-app.value( 'appBarTitle', { 'primary': 'El Ligue', 'secondary': '' } );
+app.value( 'appBarTitle', { 'primary': 'El Ligue', 'secondary': '', 'href': '/' } );
 
 // --- app and routes configuration --------------------------------------------
 
