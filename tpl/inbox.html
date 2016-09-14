@@ -40,6 +40,9 @@
       <div class="text" bo-text="msg.text"></div>
     </div><!-- item -->
   </div>
-  <button ng-if="!isLoadingMore && msgs.length>8" ng-click="loadBefore()" class="load-more ti-download"></button>
-  <div ng-if="isLoadingMore" class="loading-spinner"><span></span><span></span><span></span></div>
+
+  <div class="load-more">
+    <button class="btn load-more ti-download" ng-click="loadBefore()" ng-if="!isLoadingMore && msgs.length > 8"></button>
+    <div ng-if="isLoadingMore" class="loading-spinner"><span></span><span></span><span></span></div>
+  </div>
 </div>
