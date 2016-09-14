@@ -35,6 +35,7 @@ var app = angular.module('dtr4', [
     'dtrServices', 'dtrFilters', 'lr.upload', 
     'pasvaz.bindonce', 
 
+    'inboxController', 'inboxService',
     'searchController', 'searchService',
     'talkController', 'talkService',
 ]);
