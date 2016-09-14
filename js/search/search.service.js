@@ -41,27 +41,46 @@ angular.module( 'searchService', [ ] ).factory(
   };
 
   function setParams( params ){
+    // console.log('top of setParams() - params --> ', params.city);
+    // console.log('top of setParams() - _search_params --> ', _search_params.city);
+    //
     // gets an Object of search params and stores it in both the
     // _search_params and localStorage. This also clears the results
     // buffer, because the search params changed.
 
     // check if relevant params changed
-    var eq = true;
+    //
+    // FIXME: When a new value is chosen in the search form, the `_search_params`
+    // property here in the service is already "magically" set to the newly 
+    // selected value when we get here. No idea why, because this method should 
+    // be the only place that changes the `_search_params` property in any way.
+    //
+    // WORKAROUND: Don't check if `_search_params` and `params` are different. Just
+    // assume that `params` is different from `_search_params` and refresh the 
+    // stored search params in localStorage and do a new search.
+    //
+    // var eq = true;
     var rp = [ 'minage', 'maxage', 'city', 'country', 'dist', 'gender' ];
-    for ( var i=0; i<rp.length; i++) {
-      if ( params[ rp[i] ] !== _search_params[ rp[i] ] )
-        eq = false;
-    }
+    // for ( var i=0; i<rp.length; i++) {
+    //   if ( params[ rp[i] ] !== _search_params[ rp[i] ] ) eq = false;
+    // }
 
-    if ( eq ){
-      log('--- SearchFactory.setParams(): params did not change!');
-    } else {
-      log( '--- SearchFactory.setParams(): params CHANGED, clear _search_results, overwrite _search_params in localStorage.' );
-      if( !params['page_size'] ) params['page_size'] = search_defaults['page_size'];
-      clearResults( );
-      _search_params = params;
-      setLocalStorageObject( '_search_params', params );
+    // if ( eq ) {
+    //   log('--- SearchFactory.setParams(): params did not change!');
+    // } else {
+    //   log( '--- SearchFactory.setParams(): params CHANGED, set _search_params in localStorage.' );
+
+    if( !params['page_size'] ) params['page_size'] = search_defaults['page_size'];
+    clearResults( );
+    for ( var i=0; i<rp.length; i++) {
+      var k = rp[i];
+      _search_params[k] = params[k];
     }
+    setLocalStorageObject( '_search_params', params );
+
+    //}
+    // console.log('end of setParams() - params --> ', params.city);
+    // console.log('end of setParams() - _search_params --> ', _search_params.city);
   };
 
   function getParams( ){

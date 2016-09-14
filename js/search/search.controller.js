@@ -15,14 +15,20 @@ angular.module( 'searchController', [ 'ngSanitize' ] ).controller(
 
   $scope.userlist = [];
   $scope.statusMsg = '';
-  $scope.search = { 'options': Search.getOptions( ), 'selected': Search.getParams( ) };
   $scope.isLoadingMore = false;
+  $scope.search = { 
+    'options': Search.getOptions( ), 
+    'selected': Search.getParams( ),
+  };
 
-  // load city options for given country and set city, if selected.
+  console.log('$scope.search.selected --> ', $scope.search.selected);
+
   $scope.updateCrc = function( city ){
+    // load city options for given country and set city, if selected.
     var idx = get_index( $scope.search['options']['city'], 0, city );
     $scope.search.crc = $scope.search['options']['city'][idx][1];
   };
+
   $scope.updateCities = function( country, city ){
     Cities.inCountry( country ).then( function( data ){
       $scope.search['options']['city'] = data;
@@ -46,11 +52,13 @@ angular.module( 'searchController', [ 'ngSanitize' ] ).controller(
     angular.element(document.querySelector('.search-form .city-opts')).addClass('hidden');
     $scope.userlist = [];
     Search.clearResults( );
-    
     $scope.isLoadingMore = true;
+
     var params = $scope.getParamsFromSearchForm( );
-    log(params);
+    console.log('$scope.newSearch --> calling Search.getParams( ) here --> ', Search.getParams( ));
+    console.log('$scope.newSearch -->', params.city);
     Search.setParams( params );
+
     Search.getResults( ).then( function( data ) {
       $scope.isLoadingMore = false;
       $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
