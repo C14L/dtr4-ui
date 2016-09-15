@@ -39,6 +39,7 @@ var app = angular.module('dtr4', [
     'searchController', 'searchService',
     'talkController', 'talkService',
     'listsController', 'listsService',
+    'profileController', 'profileMsgsController', 'profileService', 'authuserService',
 ]);
 
 // --- global ng contants ------------------------------------------------------
