@@ -4,8 +4,9 @@
     <form name="searchform" class="search-form" method="get" ng-submit="newSearch()">
       <button type="submit" class="btn btn-submit ti-search"></button>
       <div class="icon ti-package"></div>
-      <div class="gender"><select ng-model="search.selected.gender" ng-options="opt[0] as opt[1] for opt in search.options.gender"></select></div>
+      <div class="gender"><select ng-model="search.selected.gender" ng-options="opt[0] as opt[1] for opt in translations['GENDER_PLURAL_CHOICE']"></select></div>
       <!--
+      search.options.gender
       <div class="age">
         age <span class="minage"><input type="number" min="18" max="80" ng-model="search.selected.minage"></span>
         to <span class="maxage"><input type="number" min="19" max="99" ng-model="search.selected.maxage"></span>
