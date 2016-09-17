@@ -82,12 +82,12 @@
             // If pic_id was invalid, then URL is a placeholder image URL.
             var placeholder = '/static/placeholder.jpg';
             var pics_per_subdir = 10000;
-            var sizes = ["small","medium","large"];
-            var szdirs = ["s","m","x"];
-            var urls = { "id":pic_id };
+            var sizes = [ "small", "medium", "large" ];
+            var szdirs = [ "s", "m", "x" ];
+            var urls = { "id": pic_id };
 
             if(!pic_id || pic_id != parseInt(pic_id) || pic_id < 1)
-                return { "id":pic_id, "small":placeholder, "medium":placeholder, "large":placeholder };
+                return { "id": pic_id, "small": placeholder, "medium": placeholder, "large": placeholder };
 
             for(var i=0; i<sizes.length; i++){
                 var size = sizes[i];
