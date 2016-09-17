@@ -4,7 +4,7 @@
     <form name="searchform" class="search-form" method="get" ng-submit="newSearch()">
       <button type="submit" class="btn btn-submit ti-search"></button>
       <div class="icon ti-package"></div>
-      <div class="gender"><select ng-model="search.selected.gender" ng-options="opt[0] as opt[1] for opt in translations['GENDER_PLURAL_CHOICE']"></select></div>
+      <div class="gender"><select ng-model="search.selected.gender" ng-options="opt[0] as opt[1] for opt in gender_plural_choice"></select></div>
       <!--
       search.options.gender
       <div class="age">

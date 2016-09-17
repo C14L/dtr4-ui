@@ -1,97 +1,112 @@
+(function(){ 'use strict';
 
-// Show the searchbar form and search results matching the form values.
+    // Show the searchbar form and search results matching the form values.
 
-angular.module( 'searchController', [ 'ngSanitize' ] ).controller(
-  
-  'SearchController', 
-  
-          [ '$scope', 'Authuser', 'Cities', 'Search', 'appBarTitle',
-  function(  $scope,   Authuser,   Cities,   Search,   appBarTitle 
+    angular.module( 'dtr4' ).controller( 'SearchController', SearchController );
 
-) {
+    SearchController.$inject = [ '$scope', 'Authuser', 'Cities', 'Search', 'appBarTitle', 'SharedFunctions' ];
 
-  appBarTitle.primary = $scope.tr('search');
-  appBarTitle.secondary = '';
+    function SearchController( $scope, Authuser, Cities, Search, appBarTitle, SharedFunctions ) {
 
-  $scope.userlist = [];
-  $scope.statusMsg = '';
-  $scope.isLoadingMore = false;
-  $scope.search = { 
-    'options': Search.getOptions( ), 
-    'selected': Search.getParams( ),
-  };
+        $scope.userlist = [];
+        $scope.statusMsg = '';
+        $scope.isLoadingMore = false;
+        $scope.search = { 'options': Search.getOptions(), 'selected': Search.getParams() };
+        $scope.isLoadingMore = true;  // Load initial user list
+        $scope.gender_plural_choice = SharedFunctions.translations.GENDER_PLURAL_CHOICE;
 
-  $scope.updateCrc = function( city ){
-    // load city options for given country and set city, if selected.
-    var idx = get_index( $scope.search['options']['city'], 0, city );
-    $scope.search.crc = $scope.search['options']['city'][idx][1];
-  };
+        $scope.updateCrc = updateCrc;
+        $scope.updateCities = updateCities;
+        $scope.getParamsFromSearchForm = getParamsFromSearchForm;
+        $scope.newSearch = newSearch;
+        $scope.moreSearch = moreSearch;
 
-  $scope.updateCities = function( country, city ){
-    Cities.inCountry( country ).then( function( data ){
-      $scope.search['options']['city'] = data;
-      $scope.search['selected']['city'] = city;
-      $scope.updateCrc( city );
-    });
-  };
+        activate();
 
-  $scope.getParamsFromSearchForm = function( ){
-    var params = {};
-    params['minage'] = $scope.search['selected']['minage'] || 18;
-    params['maxage'] = $scope.search['selected']['maxage'] || 99;
-    params['gender'] = !!$scope.search['selected']['gender'] ? $scope.search['selected']['gender'] : 4;
-    params['dist'] = !!$scope.search['selected']['dist'] ? $scope.search['selected']['dist'] : 50;
-    params['city'] = !!$scope.search['selected']['city'] ? $scope.search['selected']['city'] : 0;
-    params['country'] = !!$scope.search['selected']['country'] ? $scope.search['selected']['country'] : 0;
-    return params;
-  }
+        ///////////////////////////////////////////////////
 
-  $scope.newSearch = function() {
-    angular.element(document.querySelector('.search-form .city-opts')).addClass('hidden');
-    $scope.userlist = [];
-    Search.clearResults( );
-    $scope.isLoadingMore = true;
+        function activate(){
+            appBarTitle.primary = $scope.tr('search');
+            appBarTitle.secondary = '';
+            loadCountries();
+            loadInitialSearchResults();
+        }
 
-    var params = $scope.getParamsFromSearchForm( );
-    Search.setParams( params );
+        // load initial userlist
+        function loadInitialSearchResults(){
+            Search.getResults( true ).then( function( data ) {
+                $scope.isLoadingMore = false;
+                $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
+                $scope.userlist = data;
+            });
+        }
 
-    Search.getResults( ).then( function( data ) {
-      $scope.isLoadingMore = false;
-      $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
-      $scope.userlist = data;
-    });
-  }
+        // add the city options for country_id and select the selected city, if any.
+        // ...and a list of (localized) country options from the server
+        function loadCountries(){
+            $scope.countriesPromise.then( function( ){
+                $scope.search['options']['country'] = $scope.countries;
+                $scope.updateCities( $scope.search['selected']['country'], $scope.search['selected']['city'] );
+            } );
+        }
 
-  $scope.moreSearch = function( ){
-    // Append one more page of search results to the list of users.
-    angular.element(document.querySelector('.search-form .city-opts')).addClass('hidden');
+        // load city options for given country and set city, if selected.
+        function updateCrc( city ){
+            var idx = get_index( $scope.search['options']['city'], 0, city );
+            $scope.search.crc = $scope.search['options']['city'][idx][1];
+        }
 
-    $scope.isLoadingMore = true;
-    Search.getResults( ).then( function( data ) {
-      $scope.isLoadingMore = false;
-      $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
-      $scope.userlist = data;
-    });
-  };
+        function updateCities( country, city ){
+            Cities.inCountry( country ).then( function( data ){
+                $scope.search['options']['city'] = data;
+                $scope.search['selected']['city'] = city;
+                $scope.updateCrc( city );
+            });
+        }
 
-  // show or hide the geolocation selector in the search bar on click
-  angular.element(document.querySelector('.search-form .city')).on('click', function(e){
-      angular.element(document.querySelector('.search-form .city-opts')).toggleClass('hidden');
-  });
+        function getParamsFromSearchForm(){
+            var params = {};
+            params['minage'] = $scope.search['selected']['minage'] || 18;
+            params['maxage'] = $scope.search['selected']['maxage'] || 99;
+            params['gender'] = !!$scope.search['selected']['gender'] ? $scope.search['selected']['gender'] : 4;
+            params['dist'] = !!$scope.search['selected']['dist'] ? $scope.search['selected']['dist'] : 50;
+            params['city'] = !!$scope.search['selected']['city'] ? $scope.search['selected']['city'] : 0;
+            params['country'] = !!$scope.search['selected']['country'] ? $scope.search['selected']['country'] : 0;
+            return params;
+        }
 
-  // add the city options for country_id and select the selected city, if any.
-  // ...and a list of (localized) country options from the server
-  $scope.countriesPromise.then( function( ){
-      $scope.search['options']['country'] = $scope.countries;
-      $scope.updateCities( $scope.search['selected']['country'], $scope.search['selected']['city'] );
-  } );
+        function newSearch() {
+            angular.element(document.querySelector('.search-form .city-opts')).addClass('hidden');
+            $scope.userlist = [];
+            Search.clearResults( );
+            $scope.isLoadingMore = true;
 
-  // fetch initial userlist
-  $scope.isLoadingMore = true;
-  Search.getResults( true ).then( function( data ) {
-    $scope.isLoadingMore = false;
-    $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
-    $scope.userlist = data;
-  });
+            var params = $scope.getParamsFromSearchForm( );
+            Search.setParams( params );
 
-}]);
+            Search.getResults( ).then( function( data ) {
+            $scope.isLoadingMore = false;
+            $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
+            $scope.userlist = data;
+            });
+        }
+
+        // Append one more page of search results to the list of users.
+        function moreSearch(){
+            angular.element(document.querySelector('.search-form .city-opts')).addClass('hidden');
+
+            $scope.isLoadingMore = true;
+            Search.getResults( ).then( function( data ) {
+            $scope.isLoadingMore = false;
+            $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
+            $scope.userlist = data;
+            });
+        };
+
+        // show or hide the geolocation selector in the search bar on click
+        // TODO: Angularify this!
+        angular.element(document.querySelector('.search-form .city')).on('click', function(e){
+            angular.element(document.querySelector('.search-form .city-opts')).toggleClass('hidden');
+        });
+    }
+})();
