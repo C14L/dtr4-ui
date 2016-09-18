@@ -4,9 +4,11 @@
 
     angular.module( 'dtr4' ).controller( 'ProfileMsgsController', ProfileMsgsController );
 
-    ProfileMsgsController.$inject = [ '$scope', '$http', '$interval', '$q', '$routeParams', 'Inbox' ];
+    ProfileMsgsController.$inject = [ '$scope', '$http', '$interval', '$q', '$routeParams', 
+                                      'Inbox', 'SharedFunctions' ];
 
-    function ProfileMsgsController( $scope, $http, $interval, $q, $routeParams, Inbox ) {
+    function ProfileMsgsController( $scope, $http, $interval, $q, $routeParams, 
+                                    Inbox, SharedFunctions ) {
 
         var url = '/api/v1/msgs/' + $routeParams.username + '.json';
         var params = {};
@@ -19,7 +21,7 @@
             if ( !data || data.length<1 ) return;
 
             for( var i=0; i<data.length; i++ ){
-                data[i]['created_delta'] = get_time_delta( data[i]['created'] );
+                data[i]['created_delta'] = SharedFunctions.get_time_delta( data[i]['created'] );
                 if( data[i]['from_user'] == $scope.profileuser['id'] ) 
                     data[i]['pic_url'] = $scope.profileuser['pic_url'];
                 if( data[i]['from_user'] == $scope.authuser['id'] ) 

@@ -29,11 +29,7 @@ window.IDLE_SECONDS_SINCE_LAST_ACTIVE = 60 * 10; // Show user as "idle" if they 
     // lr.upload -- https://github.com/leon/angular-upload
     // pasvaz.bindonce -- https://github.com/Pasvaz/bindonce
     //
-    var app = angular.module('dtr4', [
-        'ngRoute', 'ngSanitize',
-        'lr.upload', 'pasvaz.bindonce', 
-        'dtrControllers', 'dtrDirectives', 'dtrFilters', 
-    ]);
+    var app = angular.module('dtr4', [ 'ngRoute', 'ngSanitize', 'lr.upload', 'pasvaz.bindonce' ]);
 
     // --- global ng contants ------------------------------------------------------
 
@@ -134,6 +130,10 @@ window.IDLE_SECONDS_SINCE_LAST_ACTIVE = 60 * 10; // Show user as "idle" if they 
             controller: 'SearchController', // search form and results list.
             templateUrl: '/static/app/search/search.html'
         })
+        .when( '/pics', { // list of all recent user uploaded pics for mods to check.
+            controller: 'PicturesController',
+            templateUrl: '/static/app/search/pictures.html',
+        })
 
         .when( '/people/:username', { // profile of user usernamne, editable it authuser's own profile.
             controller: 'ProfileController', // includes a list of search matching users at the top.
@@ -146,27 +146,27 @@ window.IDLE_SECONDS_SINCE_LAST_ACTIVE = 60 * 10; // Show user as "idle" if they 
 
         .when( '/settings/profile', { // form to update pnasl data (Pic Name Age Sex Location)
             controller: 'SettingsProfileController',
-            templateUrl: '/static/tpl/settings-profile.html'
+            templateUrl: '/static/app/settings/settings-profile.html'
         })
         .when( '/settings/details', { // form to update further profile details.
             controller: 'SettingsDetailsController',
-            templateUrl: '/static/tpl/settings-details.html'
+            templateUrl: '/static/app/settings/settings-details.html'
         })
         .when( '/settings/photos', { // form to upload, delete, and set main pics.
             controller: 'SettingsPhotosController',
-            templateUrl: '/static/tpl/settings-photos.html'
+            templateUrl: '/static/app/settings/settings-photos.html'
         })
         .when( '/settings/design', { // edit CSS style for profile page
             controller: 'SettingsDesignController',
-            templateUrl: '/static/tpl/settings-design.html'
+            templateUrl: '/static/app/settings/settings-design.html'
         })
-        .when( '/settings/account', { // form with account settings (receive emails, hide account, etc.)
-            controller: 'SettingsAccountController',
-            templateUrl: '/static/tpl/settings-account.html'
-        })
+        // .when( '/settings/account', { // form with account settings (receive emails, hide account, etc.)
+        //     controller: 'SettingsAccountController',
+        //     templateUrl: '/static/app/settings/settings-account.html'
+        // })
         .when( '/settings/password', { // only links to server-rendered pages to update password and emails.
             controller: 'SettingsPasswordController',
-            templateUrl: '/static/tpl/settings-password.html'
+            templateUrl: '/static/app/settings/settings-password.html'
         })
         
         .when( '/talk/topic/:hashtag', { // all talk messages that mention the #hashtag.
@@ -205,11 +205,6 @@ window.IDLE_SECONDS_SINCE_LAST_ACTIVE = 60 * 10; // Show user as "idle" if they 
         .when( '/lists/:listname', { // list of users who visited authuser's profile page.
             controller: 'ListsController',
             templateUrl: '/static/app/lists/lists.html',
-        })
-
-        .when( '/pics', { // list of all recent user uploaded pics for mods to check.
-            controller: 'PicturesController',
-            templateUrl: '/static/tpl/pictures.html',
         })
 
         .otherwise({

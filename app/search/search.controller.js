@@ -13,7 +13,6 @@
         $scope.isLoadingMore = false;
         $scope.search = { 'options': Search.getOptions(), 'selected': Search.getParams() };
         $scope.isLoadingMore = true;  // Load initial user list
-        $scope.gender_plural_choice = SharedFunctions.translations.GENDER_PLURAL_CHOICE;
 
         $scope.updateCrc = updateCrc;
         $scope.updateCities = updateCities;
@@ -28,9 +27,19 @@
         function activate(){
             appBarTitle.primary = $scope.tr('search');
             appBarTitle.secondary = '';
+
             loadCountries();
+            loadChoicerTranslations();
             loadInitialSearchResults();
         }
+
+        function loadChoicerTranslations(){
+            SharedFunctions.translationsPromise.then(function(){
+                // Only need this one in this view.
+                $scope.gender_plural_choice = SharedFunctions.translations['GENDER_PLURAL_CHOICE'];
+            });
+        }
+
 
         // load initial userlist
         function loadInitialSearchResults(){

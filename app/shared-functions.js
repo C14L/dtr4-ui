@@ -9,6 +9,7 @@
     function SharedFunctions($window) {
         var _this = this;
         _this.translations = {};
+        _this.translationsPromise;
         _this.get_choice_tr = get_choice_tr;
         _this.complete_user_pnasl = complete_user_pnasl;
         _this.get_pics_urls = get_pics_urls;
@@ -31,7 +32,7 @@
         function loadChoiceTranslations() {
             // Get translations data into ng $rootScope, used for example in
             // settings-proile.html template. //window.TR_CHOICES
-            fetch('/static/app/tr-choices-es.json')
+            _this.translationsPromise = fetch('/static/app/tr-choices-es.json')
             .then( function( res ) { return res.json() })
             .then( function( res ) { _this.translations = res });
         }

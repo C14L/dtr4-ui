@@ -17,6 +17,8 @@
         _this.getListQuickie = getListQuickie;
         _this.resetCountTimestamp = resetCountTimestamp;
 
+        ///////////////////////////////////////////////////
+
         // buffer all the lists here
         var buffers = {
             'matches': [], 'like_me': [], 'likes': [], 
