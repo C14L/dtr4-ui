@@ -2,14 +2,17 @@
 
     angular.module( 'dtr4' ).controller( 'SettingsDetailsController', SettingsDetailsController );
 
-    SettingsDetailsController.$inject = [ '$scope', '$http', '$timeout', 'Cities', 'Profile', 'appBarTitle' ];
+    SettingsDetailsController.$inject = [ '$scope', '$http', '$timeout', 
+                                          'Cities', 'Profile', 'appBarTitle', 'SharedFunctions' ];
     
-    function SettingsDetailsController( $scope, $http, $timeout, Cities, Profile, appBarTitle ){
+    function SettingsDetailsController( $scope, $http, $timeout, 
+                                        Cities, Profile, appBarTitle, SharedFunctions ){
         /**
          * Let the user update their detailed profile data.
          */
     
-        // Using template: tpl/settings-details.html
+        $scope.translations = SharedFunctions.translations;
+
         appBarTitle.primary = $scope.tr( 'edit' );
         appBarTitle.secondary = $scope.tr( 'profile details' );
         $scope.currSel = 'details';

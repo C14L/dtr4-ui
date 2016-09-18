@@ -3,10 +3,10 @@
     angular.module( 'dtr4' ).controller( 'SettingsProfileController', SettingsProfileController ); 
     
     SettingsProfileController.$inject = [ '$rootScope', '$scope', '$http', '$timeout', 
-                                          'Cities', 'Profile', 'upload', 'appBarTitle' ];
+                                          'Cities', 'Profile', 'upload', 'appBarTitle', 'SharedFunctions' ];
 
     function SettingsProfileController( $rootScope, $scope, $http, $timeout, 
-                                        Cities, Profile, upload, appBarTitle ){
+                                        Cities, Profile, upload, appBarTitle, SharedFunctions ){
         /**
          * Only PNASL data. The user has to fill out all the fields
          * to be able to use the site.
@@ -22,7 +22,8 @@
                             !!$rootScope.authuser['crc']);
         }
 
-        // Using template: tpl/settings-profile.html
+        $scope.translations = SharedFunctions.translations;
+
         appBarTitle.primary = $scope.tr( 'edit' );
         appBarTitle.secondary = $scope.tr( 'profile basics' );
         $scope.currSel = 'profile';
