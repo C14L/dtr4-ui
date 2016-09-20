@@ -148,42 +148,16 @@
         }
 
         function deletePic(){
-            var pic = this['url'];
-            log('--- $scope.deletePic ---')
-            var url = '/api/v1/authuser/pics/' + pic['id'] + '.json';
-            // remember the current state of the pics lists
-            var pics_url_bak = $scope.authuser['pics_url']
-            var pics_bak = $scope.authuser['pics']
-            // find the array index of the item to remove
-            var pics_url_idx = get_index( $scope.authuser['pics_url'], 'id', pic['id'] );
-            var pics_idx = get_index( $scope.authuser['pics'], 'id', pic['id'] );
-            // remove element from arrays
-            $scope.authuser['pics_url'].splice(pics_url_idx, 1);
-            $scope.authuser['pics'].splice(pics_idx, 1);
-            // send request
-            $http.delete( url ).success( function( data ){
-                Profile.clearFromBuffer( $scope.authuser.username );
-            } ).error( function( err ){
-                // u-oh! restore the previous state of the pics lists
-                $scope.authuser['pics_url'] = pics_url_bak;
-                $scope.authuser['pics'] = pics_bak;
-            } );
+            SettingsProfile.deletePic( this['url'] );
         }
 
-        function setProfilePic(){
-            log('--- SettingsPhotosController.$scope.setProfilePic -- Change profile pic...');
-            var pic = this['url'];
-            var data = { "pic": pic['id'] }
+        function setProfilePic(url){
             var bak = $scope.authuser['pic']; // in case we need to restore on network failure
             $scope.authuser['pic_url'] = this['url'];
-            log('--- SettingsPhotosController.$scope.setProfilePic -- change locally, now sending to server...');
-            $http.post( '/api/v1/authuser.json', data ).success( function( ){
-                log('--- SettingsPhotosController.$scope.setProfilePic -- Pic changed on server.');
-                Profile.clearFromBuffer( $scope.authuser.username );
-            } ).error( function( ){
-                log('Something went wrong while authuser profile pic change')
+            SettingsProfile.setProfilePic( this['url'] ).catch( function(){
                 $scope.authuser['pic_url'] = bak;
-            } );
+                // TODO: Display toast with error message.
+            });
         }
     }
 })();
