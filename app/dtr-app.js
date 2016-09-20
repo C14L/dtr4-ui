@@ -152,18 +152,10 @@ window.IDLE_SECONDS_SINCE_LAST_ACTIVE = 60 * 10; // Show user as "idle" if they 
             controller: 'SettingsDetailsController',
             templateUrl: '/static/app/settings/settings-details.html'
         })
-        .when( '/settings/photos', { // form to upload, delete, and set main pics.
-            controller: 'SettingsPhotosController',
-            templateUrl: '/static/app/settings/settings-photos.html'
-        })
         .when( '/settings/design', { // edit CSS style for profile page
             controller: 'SettingsDesignController',
             templateUrl: '/static/app/settings/settings-design.html'
         })
-        // .when( '/settings/account', { // form with account settings (receive emails, hide account, etc.)
-        //     controller: 'SettingsAccountController',
-        //     templateUrl: '/static/app/settings/settings-account.html'
-        // })
         .when( '/settings/password', { // only links to server-rendered pages to update password and emails.
             controller: 'SettingsPasswordController',
             templateUrl: '/static/app/settings/settings-password.html'
