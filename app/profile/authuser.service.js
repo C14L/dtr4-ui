@@ -1,16 +1,15 @@
 (function(){ 'use strict';
 
-    // get data on authenticated user
+    // get data on authenticated user. Its fetched via ProfileFactory. 
+    // The backend will know that its the authuser's own profile, and
+    // return additional data for it.
 
     angular.module( 'dtr4' ).factory( 'Authuser', AuthuserService );
 
     AuthuserService.$inject = [ '$q', '$http', 'Profile' ];
   
     function AuthuserService( $q, $http, Profile ) {
-
         var deferred = $q.defer();
-        // fetch via ProfileFactory. the backend will know that its the
-        // authuser's own profile, and return addition data for it.
  
         Profile.getByUsername( null ).then(
             function( data ){

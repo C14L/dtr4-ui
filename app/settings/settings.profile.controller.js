@@ -7,11 +7,11 @@
     
     SettingsProfileController.$inject = [ '$rootScope', '$scope', '$http', '$timeout', 
                                           'Cities', 'Profile', 'upload', 'appBarTitle', 
-                                          'SharedFunctions', 'FindCity' ];
+                                          'SharedFunctions', 'FindCity', 'SettingsProfile' ];
 
     function SettingsProfileController( $rootScope, $scope, $http, $timeout, 
                                         Cities, Profile, upload, appBarTitle, 
-                                        SharedFunctions, FindCity ){
+                                        SharedFunctions, FindCity, SettingsProfile ){
 
         $scope.translations = SharedFunctions.translations;
         $scope.showLatLng = ("geolocation" in navigator); // hide button if not supported
@@ -55,39 +55,26 @@
         }
 
         function submitForm(){
-            // submit profile data, same as in "SettingsDetailsController".
-            var data = {};
-            var url = '/api/v1/authuser.json';
-
-            angular.forEach( $scope.settingsProfileForm, function( v, k ){
-                if( k && (k[0] != '$') && v.$dirty ){
-                    if (k == 'dob') {
-                        data[k] = $scope.authuser[k].toISOString().substr(0, 10); // YYYY-MM-DD only.
-                    } else {
-                        data[k] = $scope.authuser[k];
-                    }
-                }
-            } );
-            // TODO: Check if "dob" field has a valid format. 
-            // Expected: "YYYY-MM-DD". Then convert to JS date.
-            if( $scope.settingsProfileForm.$dirty ){
-                $scope.isSubmitting = true;
-                $http.post( url, data ).success( function( data ){
+            if( ! $scope.settingsProfileForm.$dirty ){ return }
+            $scope.isSubmitting = true;
+            $scope.authuserPromise.then( function(){
+                SettingsProfile.submitForm( $scope.settingsProfileForm ).then( function( data ){
                     // Copy the new settings over the the global authuser.
                     $rootScope.authuser = $scope.authuser;
                     setPnaslOk();
                     // remove old vals from Profile buffer
                     Profile.clearFromBuffer( $scope.authuser.username );
                     // set form and fields to "not dirty"
-                    $scope.settingsProfileForm.$setPristine( );
+                    $scope.settingsProfileForm.$setPristine();
                     $scope.isSubmitting = false;
                     $scope.isSubmitSuccess = true;
                     $timeout( function(){ $scope.isSubmitSuccess = false }, 1000 );
-                } ).error( function( err ){
+                })
+                .catch( function( err ){
                     alert( $scope.tr('There was an error, please try again. Are you online?') );
                     $scope.isSubmitting = false;
-                } );
-            }
+                });
+            });
         }
 
         function findCityByLatLng(){
