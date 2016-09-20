@@ -51,7 +51,7 @@
             if ( data['dob'] ) {
                 data['dob'] = new Date( data['dob'] );
             }
-console.log('BEGIN completeProfileHelper: data --> ', data);
+
             data['pic_url'] = SharedFunctions.get_pic_urls( data['pic'] ); // main profile pic
             data['pics_url'] = SharedFunctions.get_pics_urls( data['pics'] );
             
@@ -109,7 +109,7 @@ console.log('BEGIN completeProfileHelper: data --> ', data);
             if( data['friends'].length > 0 )
             for( var i=0; i<data['friends'].length; i++ )
                 data['friends'][i] = SharedFunctions.complete_user_pnasl( data['friends'][i] );
-console.log('END completeProfileHelper: data --> ', data);
+
             return data;
         }
 

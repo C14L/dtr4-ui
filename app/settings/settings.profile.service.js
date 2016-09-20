@@ -9,11 +9,26 @@
         _this.deletePic = deletePic;
         _this.setProfilePic = setProfilePic;
         _this.submitForm = submitForm;
+        _this.submitDesignForm = submitDesignForm;
 
         ///////////////////////////////////////////////////
 
         var authuser; 
         Authuser.then( function( data ){ authuser = data; });
+
+        function submitDesignForm(){
+            var data = { 'style': authuser['style'] };
+            var url = '/api/v1/authuser.json';
+    
+            return new Promise( function( resolve, reject ){
+                $http.post( url, data ).success( function( data ){
+                    Profile.clearFromBuffer( authuser.username );
+                    resolve();
+                }).error( function( err ){
+                    reject();
+                });
+            })
+        }
 
         function submitForm( settingsForm ){
             // submit profile data, same as in "SettingsDetailsController".

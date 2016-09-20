@@ -2,35 +2,38 @@
 
     angular.module( 'dtr4' ).controller( 'SettingsDesignController', SettingsDesignController ); 
 
-    SettingsDesignController.$inject = [ '$rootScope', '$scope', '$http', '$timeout', 'Profile', 'appBarTitle' ];
+    SettingsDesignController.$inject = [ '$rootScope', '$scope', '$http', '$timeout', 
+                                         'Profile', 'appBarTitle', 'SettingsProfile' ];
 
-    function SettingsDesignController( $rootScope, $scope, $http, $timeout, Profile, appBarTitle ){
-        appBarTitle.primary = $scope.tr( 'edit' );
-        appBarTitle.secondary = $scope.tr( 'design' );
+    function SettingsDesignController( $rootScope, $scope, $http, $timeout, 
+                                       Profile, appBarTitle, SettingsProfile ){
         $scope.currSel = 'design';
         $scope.isSubmitSuccess = false;
         $scope.isSubmitError = false;
         $scope.isSubmitting = false;
-        var url = '/api/v1/authuser.json';
-        $scope.submitForm = function( ){
-            // save changes in authuser.style to the backend.
-            log( '--- SettingsDesignController.$scope.submitForm() --- called...');
+        $scope.submitForm = submitForm;
+        activate();
+
+        ///////////////////////////////////////////////////
+
+        function activate(){
+            appBarTitle.primary = $scope.tr( 'edit' );
+            appBarTitle.secondary = $scope.tr( 'design' );
+
+        }
+
+        function submitForm( ){
             $scope.isSubmitting = true;
-            var data = { 'style': $scope.authuser['style'] };
-            $http.post( url, data ).success( function( data ){
-                log( '--- SettingsDesignController.$scope.submitForm() --- success!');
+            SettingsProfile.submitDesignForm().then( function(){ 
                 $scope.isSubmitting = false;
                 $scope.isSubmitSuccess = true;
                 $timeout(function(){ $scope.isSubmitSuccess = false; }, 500);
-                // remove old vals from Profile buffer
-                Profile.clearFromBuffer( $scope.authuser.username );
                 $rootScope.authuser['style'] = $scope.authuser['style'];
-            } ).error( function( err ){
-                log( '--- SettingsDesignController.$scope.submitForm() --- error :(');
+            }).catch( function(){
                 $scope.isSubmitting = false;
                 $scope.isSubmitError = true;
                 $timeout(function(){ $scope.isSubmitError = false; }, 2000);
-            } );
+            });
         }
     }
 })();
