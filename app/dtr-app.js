@@ -1,26 +1,6 @@
 
 window.LOG = true;
-window.BASE_URL = '/app/';
-window.MEDIA_URL = '/pics/';
-window.STATIC_URL = '/static/';
 window.CSRF_COOKIE_NAME = 'csrftoken';
-
-// --increased vals 20160707
-window.CHECK_NEW_MSGS_INTERVAL  =  20 * 1000; // msgs on a user profile
-window.CHECK_NEW_LISTS_INTERVAL = 600 * 1000; // changes to "matches" list
-window.CHECK_NEW_INBOX_INTERVAL = 120 * 1000; // background new inbox msgs:
-window.CHECK_NEW_TALK_INTERVAL  = 300 * 1000; // background newtalk posts:
-
-window.CHECK_NEW_INBOX_LIMIT = 5000; // minimum msecs to pass before re-checking inbox. ???Used???
-
-window.TALK_POST_MAX_LENGTH = 500;
-window.TALK_RE_HASHTAG = /(\s|^)\#(\w{2,50})(?=\W|$)/gi;
-window.TALK_RE_USERNAME = /(\s|^)\@(\w{2,30})(?=\W|$)/gi;
-
-window.PROFILE_MAX_PICS = 100; // max 100 pics per profile
-
-window.ONLINE_SECONDS_SINCE_LAST_ACTIVE = 60 * 3; // Show user as "online" if they were active within this time
-window.IDLE_SECONDS_SINCE_LAST_ACTIVE = 60 * 10; // Show user as "idle" if they were active within this time
 
 (function(){ 'use strict';
 
@@ -32,6 +12,24 @@ window.IDLE_SECONDS_SINCE_LAST_ACTIVE = 60 * 10; // Show user as "idle" if they 
     var app = angular.module('dtr4', [ 'ngRoute', 'ngSanitize', 'lr.upload', 'pasvaz.bindonce' ]);
 
     // --- global ng contants ------------------------------------------------------
+
+    app.constant('BASE_URL', '/app/');
+    app.constant('STATIC_URL', '/static/');
+    app.constant('MEDIA_URL', '/pics/');
+
+    app.constant('CHECK_NEW_MSGS_INTERVAL', 20 * 1000); // msgs on a user profile
+    app.constant('CHECK_NEW_LISTS_INTERVAL', 600 * 1000); // changes to "matches" list
+    app.constant('CHECK_NEW_INBOX_INTERVAL', 120 * 1000); // background new inbox msgs:
+    app.constant('CHECK_NEW_TALK_INTERVAL', 300 * 1000); // background newtalk posts:
+
+    app.constant('ONLINE_SECONDS_SINCE_LAST_ACTIVE', 60 * 3); // Show user as "online" if they were active within this time
+    app.constant('IDLE_SECONDS_SINCE_LAST_ACTIVE', 60 * 10); // Show user as "idle" if they were active within this time
+    app.constant('PROFILE_MAX_PICS', 100); // max 100 pics per profile
+
+    // app.constant('TALK_POST_MAX_LENGTH', 500);
+    // app.constant('TALK_RE_HASHTAG', /(\s|^)\#(\w{2,50})(?=\W|$)/gi);
+    // app.constant('TALK_RE_USERNAME', /(\s|^)\@(\w{2,30})(?=\W|$)/gi);
+    // app.constant('CHECK_NEW_INBOX_LIMIT', 5000); // minimum msecs to pass before re-checking inbox. ???Used???
 
     app.constant( 'talk_post_max_length', 500 ); //var MAX_POST_LENGTH = 500;
     app.constant( 'talk_hashtag_re', new RegExp( /([\s^])\#(\w{2,50})(?=[\W$])/gi ) );
@@ -49,18 +47,21 @@ window.IDLE_SECONDS_SINCE_LAST_ACTIVE = 60 * 10; // Show user as "idle" if they 
 
     // --- run ---------------------------------------------------------------------
 
-    app.run([ '$rootScope', '$window', '$location', '$http', 
+    app.run([ 'BASE_URL', 'MEDIA_URL', 'STATIC_URL', 
+              '$rootScope', '$window', '$location', '$http', 
               'Authuser', 'Countries', 'Talk', appRun ]);
 
-    function appRun( $rootScope, $window, $location, $http, Authuser, Countries, Talk ){
+    function appRun( BASE_URL, MEDIA_URL, STATIC_URL, 
+                     $rootScope, $window, $location, $http, Authuser, Countries, Talk ){
+
         $http.defaults.headers.post['X-CSRFToken'] = get_cookie('csrftoken');
         $http.defaults.headers.put['X-CSRFToken'] = get_cookie('csrftoken');
         $http.defaults.headers.delete = { 'X-CSRFToken': get_cookie('csrftoken') };
 
         $rootScope.URLS = {
-            'BASE': window.BASE_URL,
-            'MEDIA': window.MEDIA_URL,
-            'STATIC': window.STATIC_URL,
+            'BASE': BASE_URL,
+            'MEDIA':MEDIA_URL,
+            'STATIC': STATIC_URL,
         };
 
         // Set Authuser data on $rootScope

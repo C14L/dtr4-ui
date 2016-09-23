@@ -4,9 +4,9 @@
   
     angular.module( 'dtr4' ).factory('Profile', ProfileService);
 
-    ProfileService.$inject = ['$q', '$http', '$sce', 'SharedFunctions', '$window'];
+    ProfileService.$inject = ['$q', '$http', '$sce', 'SharedFunctions', 'ONLINE_SECONDS_SINCE_LAST_ACTIVE', 'IDLE_SECONDS_SINCE_LAST_ACTIVE'];
 
-    function ProfileService( $q, $http, $sce, SharedFunctions, $window) {
+    function ProfileService( $q, $http, $sce, SharedFunctions, ONLINE_SECONDS_SINCE_LAST_ACTIVE, IDLE_SECONDS_SINCE_LAST_ACTIVE) {
 
         this.completeProfile = completeProfile;
         this.getByUsername = getByUsername;
@@ -69,8 +69,8 @@
             });
             
             // time deltas in seconds to see if user was active recently
-            data['is_online'] = ( SharedFunctions.get_time_delta_seconds( data['last_active'] ) < $window.ONLINE_SECONDS_SINCE_LAST_ACTIVE );
-            data['is_idle'] = ( !data['is_online'] && ( SharedFunctions.get_time_delta_seconds( data['last_active'] ) < $window.IDLE_SECONDS_SINCE_LAST_ACTIVE ) );
+            data['is_online'] = ( SharedFunctions.get_time_delta_seconds( data['last_active'] ) < ONLINE_SECONDS_SINCE_LAST_ACTIVE );
+            data['is_idle'] = ( !data['is_online'] && ( SharedFunctions.get_time_delta_seconds( data['last_active'] ) < IDLE_SECONDS_SINCE_LAST_ACTIVE ) );
             data['is_offline'] = ( !data['is_online'] && !data['is_idle'] );
 
             /* "flags": {

@@ -2,9 +2,13 @@
 
     angular.module( 'dtr4' ).controller( 'HeaderController', HeaderController );
 
-    HeaderController.$inject = [ '$scope', '$location', 'Inbox', 'Lists', 'Talk', '$interval', 'appBarTitle' ];
+    HeaderController.$inject = [ '$scope', '$location', 'Inbox', 'Lists', 'Talk', 
+                                 '$interval', 'appBarTitle', 'CHECK_NEW_LISTS_INTERVAL',
+                                 'CHECK_NEW_INBOX_INTERVAL', 'CHECK_NEW_TALK_INTERVAL' ];
 
-    function HeaderController( $scope, $location, Inbox, Lists, Talk, $interval, appBarTitle ){
+    function HeaderController( $scope, $location, Inbox, Lists, Talk, 
+                               $interval, appBarTitle, CHECK_NEW_LISTS_INTERVAL,
+                               CHECK_NEW_INBOX_INTERVAL, CHECK_NEW_TALK_INTERVAL ){
 
         $scope.inboxUnreadCounter = 0;
         $scope.talkItemCounter = 0;
@@ -28,19 +32,19 @@
             // once authuser is available, check "unread" inbox msgs regularly.
             $scope.authuserPromise.then( function(){
                 $scope.inboxCheckUnreadIntervalPromise = $interval( 
-                    $scope.inboxCheckUnread, window.CHECK_NEW_INBOX_INTERVAL );
+                    $scope.inboxCheckUnread, CHECK_NEW_INBOX_INTERVAL );
                 $scope.inboxCheckUnread();
             });
 
             // once authuser is available, check for unread inbox messages regularly.
             //Talk.resetNewPostsTimestamp( );
             $scope.authuserPromise.then( function(){
-                $scope.talkCheckNewIntervalPromise = $interval( $scope.talkCheckNew, window.CHECK_NEW_TALK_INTERVAL );
+                $scope.talkCheckNewIntervalPromise = $interval( $scope.talkCheckNew, CHECK_NEW_TALK_INTERVAL );
                 $scope.talkCheckNew();
             });
 
             $scope.listsCheckViewedMeIntervalPromise = $interval( 
-                $scope.listsGetViewedMe, window.CHECK_NEW_LISTS_INTERVAL );
+                $scope.listsGetViewedMe, CHECK_NEW_LISTS_INTERVAL );
         }
 
         // Inbox

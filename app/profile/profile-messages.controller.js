@@ -5,10 +5,10 @@
     angular.module( 'dtr4' ).controller( 'ProfileMsgsController', ProfileMsgsController );
 
     ProfileMsgsController.$inject = [ '$scope', '$http', '$interval', '$q', '$routeParams', 
-                                      'Inbox', 'SharedFunctions' ];
+                                      'Inbox', 'SharedFunctions', 'CHECK_NEW_MSGS_INTERVAL' ];
 
     function ProfileMsgsController( $scope, $http, $interval, $q, $routeParams, 
-                                    Inbox, SharedFunctions ) {
+                                    Inbox, SharedFunctions, CHECK_NEW_MSGS_INTERVAL ) {
 
         var url = '/api/v1/msgs/' + $routeParams.username + '.json';
         var params = {};
@@ -77,7 +77,7 @@
                 addToMsgs( data );
                 document.querySelector('.profile.messages textarea').focus();
                 // startup message checking again.
-                $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, window.CHECK_NEW_MSGS_INTERVAL );
+                $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, CHECK_NEW_MSGS_INTERVAL );
             }).error( function( err ){
                 $scope.isSendingNewMsg = false;
                 $scope.statusMsg = 'send-error';
@@ -86,7 +86,7 @@
 
         $scope.checkMsgRegularly = function( ){
             $scope.getMsgs(); // initial call, and then every x seconds:
-            $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, window.CHECK_NEW_MSGS_INTERVAL );
+            $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, CHECK_NEW_MSGS_INTERVAL );
         }
 
         $scope.checkMsgRegularly();

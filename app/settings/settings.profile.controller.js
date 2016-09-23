@@ -7,16 +7,18 @@
     
     SettingsProfileController.$inject = [ '$rootScope', '$scope', '$http', '$timeout', 
                                           'Cities', 'Profile', 'upload', 'appBarTitle', 
-                                          'SharedFunctions', 'FindCity', 'SettingsProfile' ];
+                                          'SharedFunctions', 'FindCity', 'SettingsProfile', 
+                                          'PROFILE_MAX_PICS' ];
 
     function SettingsProfileController( $rootScope, $scope, $http, $timeout, 
                                         Cities, Profile, upload, appBarTitle, 
-                                        SharedFunctions, FindCity, SettingsProfile ){
+                                        SharedFunctions, FindCity, SettingsProfile,
+                                        PROFILE_MAX_PICS ){
 
         $scope.translations = SharedFunctions.translations;
         $scope.showLatLng = ("geolocation" in navigator); // hide button if not supported
         $scope.currSel = 'profile';
-        $scope.maxPics = window.PROFILE_MAX_PICS;
+        $scope.maxPics = PROFILE_MAX_PICS;
         $scope.crcByLatLngLoading = false;
         $scope.crcByLatLng = '';
 

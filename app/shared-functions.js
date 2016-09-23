@@ -4,9 +4,12 @@
 
     angular.module('dtr4').factory('SharedFunctions', SharedFunctions);
 
-    SharedFunctions.$inject = ['$window'];
+    SharedFunctions.$inject = [ 'ONLINE_SECONDS_SINCE_LAST_ACTIVE', 'IDLE_SECONDS_SINCE_LAST_ACTIVE', 
+                                'BASE_URL', 'MEDIA_URL' ];
 
-    function SharedFunctions($window) {
+    function SharedFunctions( ONLINE_SECONDS_SINCE_LAST_ACTIVE, IDLE_SECONDS_SINCE_LAST_ACTIVE, 
+                              BASE_URL, MEDIA_URL ) {
+
         var _this = this;
         _this.translations = {};
         _this.translationsPromise;
@@ -64,8 +67,8 @@
             if( pnasl['last_active'] ){
                 var delta_secs = get_time_delta_seconds( pnasl['last_active'] );
                 pnasl['last_active_delta'] = get_time_delta( pnasl['last_active'] );
-                pnasl['is_online'] = delta_secs < $window.ONLINE_SECONDS_SINCE_LAST_ACTIVE;
-                pnasl['is_idle'] = !pnasl['is_online'] && delta_secs < $window.IDLE_SECONDS_SINCE_LAST_ACTIVE;
+                pnasl['is_online'] = delta_secs < ONLINE_SECONDS_SINCE_LAST_ACTIVE;
+                pnasl['is_idle'] = !pnasl['is_online'] && delta_secs < IDLE_SECONDS_SINCE_LAST_ACTIVE;
                 pnasl['is_offline'] = !pnasl['is_online'] && !pnasl['is_idle'];
             }
             return pnasl;
@@ -94,7 +97,7 @@
                 var size = sizes[i];
                 var szdir = szdirs[i];
                 var subdir = Math.floor(pic_id / pics_per_subdir);
-                urls[size] = $window.MEDIA_URL + szdir + '/' + subdir + '/' + pic_id + '.jpg';
+                urls[size] = MEDIA_URL + szdir + '/' + subdir + '/' + pic_id + '.jpg';
             };
 
             return urls;
@@ -114,7 +117,7 @@
 
             var getUrl = function(n){
                 var subdir = Math.floor(n / pics_per_subdir);
-                return $window.MEDIA_URL + szdir + '/' + subdir + '/' + n + '.jpg';
+                return MEDIA_URL + szdir + '/' + subdir + '/' + n + '.jpg';
             }
 
             if (typeof(pic_id) == 'object') {
@@ -128,7 +131,7 @@
         }
 
         function get_profile_url(username){
-            return  $window.BASE_URL + 'profile/' + username;
+            return  BASE_URL + 'profile/' + username;
         }
 
         function get_city_name_from_crc(crc){
