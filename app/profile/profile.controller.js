@@ -4,11 +4,11 @@
 
     angular.module( 'dtr4' ).controller( 'ProfileController', ProfileController );
 
-    ProfileController.$inject = [ '$scope', '$location', '$http', '$routeParams', 
-                                  'Profile', 'Search', 'appBarTitle', 'Lists', 'Inbox' ];
+    ProfileController.$inject = [ '$scope', '$location', '$routeParams', 'appBarTitle',
+                                  'Search', 'Profile', 'ProfileFlag' ];
   
-    function ProfileController( $scope, $location, $http, $routeParams,  
-                                Profile, Search, appBarTitle, Lists, Inbox ) {
+    function ProfileController( $scope, $location, $routeParams, appBarTitle,
+                                Search, Profile, ProfileFlag ) {
 
         $scope.deleteUser = deleteUser;
         $scope.open_picviewer = open_picviewer;
@@ -38,16 +38,12 @@
 
         // load the user profie
         function loadUserProfile() {
-            $scope.profileuserPromise = Profile
-            .getByUsername( $routeParams.username )
-            .then(resolve, reject);
+            $scope.profileuserPromise = Profile.getByUsername( $routeParams.username ).then(resolve, reject);
 
             function resolve( data ) {
                 $scope.profileuser = data;
                 appBarTitle.secondary = data.username;
-
-                if ( $scope.profileuser['style'] )
-                    $scope.profileuser['style_active'] = true;
+                if ( $scope.profileuser['style'] ) $scope.profileuser['style_active'] = true;
             }
 
             function reject( err ){
@@ -67,48 +63,19 @@
 
         // Let authuser set a flag on profileuser.
         function addFlag( flag_name ){
-            // ignore if flag is alread set, to remove use explicit
-            // removeFlag() method.
-
-            if ( !$scope.profileuser['flags'][flag_name] ){
-                //log( 'Adding flag "' + flag_name + '".' );
-                $scope.profileuser['flags'][flag_name] = new Date( ).toISOString( ).replace( 'T', ' ' );
-                var url = '/api/v1/flag/' + flag_name + '/' + $scope.profileuser.username + '.json';
-
-                $http.post( url )
-                .success( function( data ){
-                    // if a user was blocked, force buffered lists to reaload
-                    if( flag_name == 'block' ){ 
-                        Lists.clearBuffer( );
-                        Inbox.clearBox( 'inbox' );
-                        Inbox.clearBox( 'unread' );
-                    }
-                })
-                .error( function( err ){
-                    delete( $scope.profileuser['flags'][flag_name] );
-                });
-            };
+            // ignore if flag is alread set (remove with explicit removeFlag() method)
+            if ( $scope.profileuser['flags'][flag_name] ) return;
+            $scope.profileuser['flags'][flag_name] = new Date( ).toISOString( ).replace( 'T', ' ' );
+            ProfileFlag.addFlag( flag_name, $scope.profileuser.username ).catch( function( err ){
+                delete( $scope.profileuser['flags'][flag_name] );
+            });
         }
 
         function deleteFlag( flag_name ) {
-            log( 'Deleting flag "' + flag_name + '".');
-
-            var bak = $scope.profileuser['flags'][flag_name]; // remember state in case of network failure.
-            var url = '/api/v1/flag/' + flag_name + '/' + $scope.profileuser.username + '.json';
-
+            var bak = $scope.profileuser['flags'][flag_name];
             $scope.profileuser['flags'][flag_name] = false;
-
-            $http.delete( url )
-            .success( function( data ){
-                // if a user was un-blocked, force buffered lists to reaload
-                if ( flag_name == 'block' ){
-                    Lists.clearBuffer( );
-                    Inbox.clearBox( 'inbox' );
-                    Inbox.clearBox( 'unread' );
-                }
-            })
-            .error( function( err ){
-                $scope.profileuser['flags'][flag_name] = bak; // restore state on error.
+            ProfileFlag.deleteFlag( flag_name, $scope.profileuser.username ).catch( function( err ){
+                $scope.profileuser['flags'][flag_name] = bak;
             });
         }
 
@@ -129,14 +96,10 @@
         function deleteUser() {
             if( $scope.authuser['is_staff'] || $scope.authuser['id']==$scope.profileuser['id'] ){
                 if ( confirm( $scope.tr('Delete user account?') ) ){
-                    var url = '/api/v1/profile/'+$scope.profileuser['username']+'.json';
-
-                    $http.delete( url )
-                    .success( function( data ){
-                        Profile.clearFromBuffer( $scope.profileuser['username'] );
+                    Profile.deleteUser( $scope.profileuser['username'] ).then( function(){
                         alert( $scope.tr('Account deleted!') );
                     })
-                    .error( function( err ){
+                    .catch( function( err ){
                         alert( $scope.tr('ERROR: Account not deleted!') );
                     });
                 }
@@ -144,5 +107,6 @@
                 alert( $scope.tr('You can only delete your own profile.') );
             }
         }
+        
     }
 })();

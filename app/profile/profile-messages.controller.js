@@ -4,101 +4,78 @@
 
     angular.module( 'dtr4' ).controller( 'ProfileMsgsController', ProfileMsgsController );
 
-    ProfileMsgsController.$inject = [ '$scope', '$http', '$interval', '$q', '$routeParams', 
-                                      'Inbox', 'SharedFunctions', 'CHECK_NEW_MSGS_INTERVAL' ];
+    ProfileMsgsController.$inject = [ '$scope', '$interval', '$q', '$routeParams', 
+                                      'ProfileMsgs', 'Inbox', 'CHECK_NEW_MSGS_INTERVAL' ];
 
-    function ProfileMsgsController( $scope, $http, $interval, $q, $routeParams, 
-                                    Inbox, SharedFunctions, CHECK_NEW_MSGS_INTERVAL ) {
+    function ProfileMsgsController( $scope, $interval, $q, $routeParams, 
+                                    ProfileMsgs, Inbox, CHECK_NEW_MSGS_INTERVAL ) {
 
-        var url = '/api/v1/msgs/' + $routeParams.username + '.json';
-        var params = {};
         $scope.msgs = [];
         $scope.isSendingNewMsg = false;
 
-        var addToMsgs = function( data ){
-            // adds a list off messages to the $scope.msgs buffer, removes
-            // duplicates, and sorts by "created", newest first.
-            if ( !data || data.length<1 ) return;
+        $scope.getMsgs = getMsgs;
+        $scope.sendMsg = sendMsg;
+        $scope.checkMsgRegularly = checkMsgRegularly;
 
-            for( var i=0; i<data.length; i++ ){
-                data[i]['created_delta'] = SharedFunctions.get_time_delta( data[i]['created'] );
-                if( data[i]['from_user'] == $scope.profileuser['id'] ) 
-                    data[i]['pic_url'] = $scope.profileuser['pic_url'];
-                if( data[i]['from_user'] == $scope.authuser['id'] ) 
-                    data[i]['pic_url'] = $scope.authuser['pic_url'];
-            }
+        activate();
 
-            $scope.msgs = combine_unique_by_id( data, $scope.msgs );
+        ///////////////////////////////////////////////////
 
-            $scope.msgs.sort( function( a, b ){
-                if( a['created'] > b['created'] ) return -1;
-                if( a['created'] < b['created'] ) return 1;
-                return 0;
-            } );
+        function activate(){
+            checkMsgRegularly();
+            // fix the Inbox buffers. set any messages received from this user
+            // to is_read in "inbox" and remove them from "unread", because we
+            // are looking at them right now
+            Inbox.setBufferIsReadForUsername( $routeParams.username );
         }
 
-        $scope.getMsgs = function(){
-            log( '$scope.getMsgs(): checking for new messages...' );
-            params['after'] = get_latest_created( $scope.msgs );
-            log( '$scope.getMsgs(): params[after] == '+params['after'] );
-
+        function getMsgs(){
+            var after = get_latest_created( $scope.msgs );
             $scope.statusMsg = '';
-            $http.get( url, { 'params': params } ).success( function ( data ){
 
-                if( data.length > 0 ){ 
+            ProfileMsgs.getMsgs( $routeParams.username, after ).then( function( data ){
+                if ( data.length > 0 ){ 
                     // wait for both user's data promises to resolve
-                    $q.all( [$scope.profileuserPromise, $scope.authuserPromise] ).then(
-                        function( ){ addToMsgs( data ) });
+                    var promises = [$scope.profileuserPromise, $scope.authuserPromise];
+                    $q.all( promises ).then( function( ){
+                        $scope.msgs = ProfileMsgs.addToMsgs( data, $scope.msgs, $scope.authuser, $scope.profileuser );
+                    });
                 }
-
-            }).error( function( err ){
+            })
+            .catch( function( err ){
                 // on error, stop checking for msgs and require the user to
                 // click a button to start msg checking again.
                 $interval.cancel( $scope.checkMsgIntervalPromise )
                 $scope.statusMsg = 'offline';
             });
-        };
+        }
 
-        $scope.sendMsg = function(){
-            log( 'ProfileMsgsController.sendMsg() called.' );
+        function sendMsg(){
+            var after = get_latest_created( $scope.msgs );
+            var msgtext = $scope.msgtext;
 
             // stop checking for new messages, we will get them back with the POST anyway.
             $interval.cancel( $scope.checkMsgIntervalPromise )
-
-            var latest = get_latest_created( $scope.msgs );
-            var data = { 'text': $scope.msgtext, 'after': latest };
-
             $scope.isSendingNewMsg = true;
             $scope.statusMsg = '';
             $scope.msgtext = '';
-            
-            $http.post( url, data ).success( function ( data ){
+
+            ProfileMsgs.sendMsg( $routeParams.username, after, msgtext ).then( function( data ){
                 $scope.isSendingNewMsg = false;
-                addToMsgs( data );
+                $scope.msgs = ProfileMsgs.addToMsgs( data, $scope.msgs, $scope.authuser, $scope.profileuser );                
+                $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, CHECK_NEW_MSGS_INTERVAL ); // re-start message checking
                 document.querySelector('.profile.messages textarea').focus();
-                // startup message checking again.
-                $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, CHECK_NEW_MSGS_INTERVAL );
-            }).error( function( err ){
+            })
+            .catch( function( err ){
                 $scope.isSendingNewMsg = false;
                 $scope.statusMsg = 'send-error';
             });
-        };
-
-        $scope.checkMsgRegularly = function( ){
-            $scope.getMsgs(); // initial call, and then every x seconds:
-            $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, CHECK_NEW_MSGS_INTERVAL );
         }
 
-        $scope.checkMsgRegularly();
-        $scope.$on( '$destroy', function( ){ // Remove the "check message" interval.
-            if( $scope.checkMsgIntervalPromise ){
-                $interval.cancel( $scope.checkMsgIntervalPromise );
-            }
-        });
-
-        // fix the Inbox buffers. set any messages received from this user
-        // to is_read in "inbox" and remove them from "unread", because we
-        // are looking at them right now
-        Inbox.setBufferIsReadForUsername( $routeParams.username );
+        function checkMsgRegularly(){
+            $scope.getMsgs(); // initial call, and then every x seconds:
+            $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, CHECK_NEW_MSGS_INTERVAL );
+            $scope.$on( '$destroy', function( ){ $interval.cancel( $scope.checkMsgIntervalPromise ); });
+        }
     }
 })();

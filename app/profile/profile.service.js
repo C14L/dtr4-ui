@@ -4,17 +4,22 @@
   
     angular.module( 'dtr4' ).factory('Profile', ProfileService);
 
-    ProfileService.$inject = ['$q', '$http', '$sce', 'SharedFunctions', 'ONLINE_SECONDS_SINCE_LAST_ACTIVE', 'IDLE_SECONDS_SINCE_LAST_ACTIVE'];
+    ProfileService.$inject = [ '$q', '$http', '$sce', 'SharedFunctions', 
+                               'ONLINE_SECONDS_SINCE_LAST_ACTIVE', 'IDLE_SECONDS_SINCE_LAST_ACTIVE' ];
 
-    function ProfileService( $q, $http, $sce, SharedFunctions, ONLINE_SECONDS_SINCE_LAST_ACTIVE, IDLE_SECONDS_SINCE_LAST_ACTIVE) {
-
-        this.completeProfile = completeProfile;
-        this.getByUsername = getByUsername;
-        this.clearFromBuffer = clearFromBuffer;
-
-        ///////////////////////////////////////////////////
+    function ProfileService( $q, $http, $sce, SharedFunctions, 
+                             ONLINE_SECONDS_SINCE_LAST_ACTIVE, IDLE_SECONDS_SINCE_LAST_ACTIVE ) {
 
         var profileBuffer = {}; // keep the last 20 or so profiles here.
+
+        return {
+            completeProfile: completeProfile,
+            getByUsername: getByUsername,
+            clearFromBuffer: clearFromBuffer,
+            deleteUser: deleteUser,
+        };
+
+        ///////////////////////////////////////////////////
 
         function clearFromBuffer( username ){
             delete profileBuffer[username];
@@ -22,7 +27,7 @@
         }
 
         function completeProfile( data ){
-            // data mey be either an Array of Objects, or just a single 
+            // data may be either an Array of Objects, or just a single 
             // Object. make it work in both cases.
             if ( angular.isArray( data ) ){
                 angular.forEach( data, function( row, i ){
@@ -121,15 +126,12 @@
                 deferred.resolve( profileBuffer[username] );
             } else {
 
-                $http.get( url )
-                .success( function( data, status ){
+                $http.get( url ).success( function( data, status ){
 
                     if ( status == 200 && data['id'] ){
-
                         data = completeProfile( data );
                         profileBuffer[ data['username'] ] = data;
                         deferred.resolve( data );
-
                     } else {
                         deferred.reject( 'Could not load user profile.' );
                     }
@@ -140,9 +142,23 @@
                 });
             }
 
-            return deferred.promise
+            return deferred.promise;
         }
 
-        return this;
+        // moderator: delete profileuser
+        function deleteUser( username ) {
+            var url = '/api/v1/profile/' + username + '.json';
+            var deferred = $q.defer();
+
+            $http.delete( url ).success( function( data ){
+                Profile.clearFromBuffer( username );
+                deferred.resolve();
+            })
+            .error( function( err ){
+                deferred.reject();
+            });
+
+            return deferred.promise
+        }
     }
 })();
