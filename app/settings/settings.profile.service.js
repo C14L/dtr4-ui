@@ -2,9 +2,9 @@
 
     angular.module( 'dtr4' ).factory( 'SettingsProfile', SettingsProfileService );
 
-    SettingsProfileService.$inject = [ '$http', 'Authuser', 'Profile' ];
+    SettingsProfileService.$inject = [ '$http', '$q', 'Authuser', 'Profile' ];
 
-    function SettingsProfileService( $http, Authuser, Profile ){
+    function SettingsProfileService( $http, $q, Authuser, Profile ){
         var _this = this;
         _this.deletePic = deletePic;
         _this.setProfilePic = setProfilePic;
@@ -17,23 +17,25 @@
         Authuser.then( function( data ){ authuser = data; });
 
         function submitDesignForm(){
+            var deferred = $q.defer();
             var data = { 'style': authuser['style'] };
             var url = '/api/v1/authuser.json';
     
-            return new Promise( function( resolve, reject ){
-                $http.post( url, data ).success( function( data ){
-                    Profile.clearFromBuffer( authuser.username );
-                    resolve();
-                }).error( function( err ){
-                    reject();
-                });
-            })
+            $http.post( url, data ).success( function( data ){
+                Profile.clearFromBuffer( authuser.username );
+                deferred.resolve();
+            }).error( function( err ){
+                deferred.reject();
+            });
+
+            return deferred.promise;
         }
 
         function submitForm( settingsForm ){
             // submit profile data, same as in "SettingsDetailsController".
             var data = {};
             var url = '/api/v1/authuser.json';
+            var deferred = $q.defer();
 
             angular.forEach( settingsForm, function( v, k ){
                 if ( k && (k[0] != '$') && v.$dirty ){
@@ -45,18 +47,18 @@
                 }
             });
 
-            return new Promise( function( resolve, reject ){
-                $http.post( url, data ).success( function( data ){
-                    resolve( data );
-                }).error( function( err ){
-                    alert( $scope.tr('There was an error, please try again. Are you online?') );
-                    $scope.isSubmitting = false;
-                });
+            $http.post( url, data ).success( function( data ){
+                deferred.resolve( data );
+            }).error( function( err ){
+                deferred.reject( err );
             });
+
+            return deferred.promise;
         }
 
         function deletePic( pic ){
             var url = '/api/v1/authuser/pics/' + pic['id'] + '.json';
+            var deferred = $q.defer();
  
             // remember the current state of the pics lists
             var pics_url_bak = authuser['pics_url'];
@@ -71,31 +73,32 @@
             authuser['pics'].splice(pics_idx, 1);
 
             // send request
-            return new Promise( function( resolve, reject ){
-                $http.delete( url ).success( function( data ){
-                    Profile.clearFromBuffer( authuser.username );
-                    resolve();
-                }).error( function( err ){
-                    // u-oh! restore the previous state of the pics lists
-                    authuser['pics_url'] = pics_url_bak;
-                    authuser['pics'] = pics_bak;
-                    reject();
-                });
+            $http.delete( url ).success( function( data ){
+                Profile.clearFromBuffer( authuser.username );
+                deferred.resolve();
+            }).error( function( err ){
+                // u-oh! restore the previous state of the pics lists
+                authuser['pics_url'] = pics_url_bak;
+                authuser['pics'] = pics_bak;
+                deferred.reject();
             });
+
+            return deferred.promise;
         }
 
         function setProfilePic( pic ){
             var data = { "pic": pic['id'] };
+            var deferred = $q.defer();
 
-            return new Promise( function( resolve, reject ){
-                $http.post( '/api/v1/authuser.json', data ).success( function(){
-                    Profile.clearFromBuffer( authuser.username );
-                    resolve();
-                })
-                .catch( function(){
-                    reject();
-                });
+            $http.post( '/api/v1/authuser.json', data ).success( function(){
+                Profile.clearFromBuffer( authuser.username );
+                deferred.resolve();
+            })
+            .catch( function(){
+                deferred.reject();
             });
+
+            return deferred.promise;
         }
 
         return _this;
