@@ -7,16 +7,17 @@
     <base href="/app/">
     <title>El Ligue</title>
 
-    <!--build:css css/main.css -->
-    <link href="/static/themify-icons/themify-icons.css" type="text/css" rel="stylesheet">
-    <link href="/static/libs/picviewer.css" type="text/css" rel="stylesheet">
-    <link href="/static/css/dtr-base.css" type="text/css" rel="stylesheet">
-    <link href="/static/css/dtr-inbox.css" type="text/css" rel="stylesheet">
-    <link href="/static/css/dtr-lists.css" type="text/css" rel="stylesheet">
-    <link href="/static/css/dtr-profile.css" type="text/css" rel="stylesheet">
-    <link href="/static/css/dtr-search.css" type="text/css" rel="stylesheet">
-    <link href="/static/css/dtr-settings.css" type="text/css" rel="stylesheet">
-    <link href="/static/css/dtr-talk.css" type="text/css" rel="stylesheet">
+    <!--build:css app.css -->
+    <link href="./utils/themify-icons/themify-icons.css" type="text/css" rel="stylesheet">
+    <link href="./utils/picviewer.css" type="text/css" rel="stylesheet">
+
+    <link href="./app.css" type="text/css" rel="stylesheet">
+    <link href="./inbox/inbox.css" type="text/css" rel="stylesheet">
+    <link href="./lists/lists.css" type="text/css" rel="stylesheet">
+    <link href="./profile/profile.css" type="text/css" rel="stylesheet">
+    <link href="./search/search.css" type="text/css" rel="stylesheet">
+    <link href="./settings/settings.css" type="text/css" rel="stylesheet">
+    <link href="./talk/talk.css" type="text/css" rel="stylesheet">
     <!--endbuild-->
 
     <script>
@@ -31,58 +32,50 @@ ga('create', 'UA-273063-2', 'elligue.com'); /* DO IN NG__ga('send','pageview') *
 
     <!-- <scXXript>var lg = get_cookie('lg') || 'es';</scriXXpt> -->
 
-    <!--build:js app/libs.js-->
-    <!-- <sXXcript src="/static/app/tr-choices-es.js"></script> -->
-    <script src="/static/app/tr-language-es.js"></script>
+    <!--build:js app.js-->
+    <!-- <sXXcript src="./tr-choices-es.js"></script> -->
+    <script src="../node_modules/angular/angular.min.js"></script>
+    <script src="../node_modules/angular-route/angular-route.min.js"></script>
+    <script src="../node_modules/angular-resource/angular-resource.min.js"></script>
+    <script src="../node_modules/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="../node_modules/angular-upload/angular-upload.min.js"></script>
+    <script src="../node_modules/angular-bindonce/bindonce.min.js"></script>
 
-    <script src="/static/libs/utils.js"></script>
-    <script src="/static/libs/markdownjs.min.js"></script>
-    <script src="/static/libs/textfilter.js"></script>
-    <script src="/static/libs/picviewer.js"></script>
+    <script src="./utils/utils.js"></script>
+    <script src="./utils/markdownjs.min.js"></script>
+    <script src="./utils/textfilter.js"></script>
+    <script src="./utils/picviewer.js"></script>
 
-    <script src="/static/node_modules/angular/angular.min.js"></script>
-    <script src="/static/node_modules/angular-route/angular-route.min.js"></script>
-    <script src="/static/node_modules/angular-resource/angular-resource.min.js"></script>
-    <script src="/static/node_modules/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="/static/node_modules/angular-upload/angular-upload.min.js"></script>
-    <script src="/static/node_modules/angular-bindonce/bindonce.min.js"></script>
+    <script src="./lang/tr-language-es.js"></script>
 
-    <script src="/static/app/dtr-app.js"></script>
-
-    <script src="/static/app/shared-directives.js"></script>
-    <script src="/static/app/shared-functions.js"></script>
-
-    <script src="/static/app/site/header.controller.js"></script>
-    <script src="/static/app/site/footer.controller.js"></script>
-
-    <script src="/static/app/search/cities.service.js"></script>
-    <script src="/static/app/search/countries.service.js"></script>
-    <script src="/static/app/search/search.service.js"></script>
-    <script src="/static/app/search/pictures.controller.js"></script>
-    <script src="/static/app/search/search.controller.js"></script>
-
-    <script src="/static/app/talk/talk.controller.js"></script>
-    <script src="/static/app/talk/talk.service.js"></script>
-
-    <script src="/static/app/inbox/inbox.controller.js"></script>
-    <script src="/static/app/inbox/inbox.service.js"></script>
-
-    <script src="/static/app/lists/lists.controller.js"></script>
-    <script src="/static/app/lists/lists.service.js"></script>
-
-    <script src="/static/app/profile/authuser.service.js"></script>
-    <script src="/static/app/profile/profile.controller.js"></script>
-    <script src="/static/app/profile/profile-messages.controller.js"></script>
-    <script src="/static/app/profile/profile.service.js"></script>
-    <script src="/static/app/profile/profile-flag.service.js"></script>
-    <script src="/static/app/profile/profile-messages.service.js"></script>
-
-    <script src="/static/app/settings/settings.design.controller.js"></script>
-    <script src="/static/app/settings/settings.details.controller.js"></script>
-    <script src="/static/app/settings/settings.password.controller.js"></script>
-    <script src="/static/app/settings/settings.profile.controller.js"></script>
-    <script src="/static/app/settings/settings.findcity.service.js"></script>
-    <script src="/static/app/settings/settings.profile.service.js"></script>
+    <script src="./app.js"></script>
+    <script src="./shared-directives.js"></script>
+    <script src="./shared-functions.js"></script>
+    <script src="./site/header.controller.js"></script>
+    <script src="./site/footer.controller.js"></script>
+    <script src="./search/cities.service.js"></script>
+    <script src="./search/countries.service.js"></script>
+    <script src="./search/search.service.js"></script>
+    <script src="./search/pictures.controller.js"></script>
+    <script src="./search/search.controller.js"></script>
+    <script src="./talk/talk.controller.js"></script>
+    <script src="./talk/talk.service.js"></script>
+    <script src="./inbox/inbox.controller.js"></script>
+    <script src="./inbox/inbox.service.js"></script>
+    <script src="./lists/lists.controller.js"></script>
+    <script src="./lists/lists.service.js"></script>
+    <script src="./profile/authuser.service.js"></script>
+    <script src="./profile/profile.controller.js"></script>
+    <script src="./profile/profile-messages.controller.js"></script>
+    <script src="./profile/profile.service.js"></script>
+    <script src="./profile/profile-flag.service.js"></script>
+    <script src="./profile/profile-messages.service.js"></script>
+    <script src="./settings/settings.design.controller.js"></script>
+    <script src="./settings/settings.details.controller.js"></script>
+    <script src="./settings/settings.password.controller.js"></script>
+    <script src="./settings/settings.profile.controller.js"></script>
+    <script src="./settings/settings.findcity.service.js"></script>
+    <script src="./settings/settings.profile.service.js"></script>
     <!--endbuild-->
     
   </head>
