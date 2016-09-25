@@ -103,20 +103,21 @@
         };
 
         // Fetch next search results page from server and return a Promise.
-        function fetchResults(  ){
+        function fetchResults(){
             var deferred = $q.defer();
             var url = '/api/v1/search.json';
             var params = { 'params': getParams( ) };
 
-            $http.get( url, params ).success( function( data ) {
+            $http.get( url, params ).success( function( data ){
                 if ( data.length > 0 ){
-                    log( '--- SearchFactory.fetchResults() --- received a list of '+data.length+' items.' );
                     data.forEach( function( row, i ){
                         data[i] = SharedFunctions.complete_user_pnasl( data[i] );
                     });
                 }
-
                 deferred.resolve( data );
+            })
+            .error( function(){
+                deferred.reject();
             });
 
             return deferred.promise;
@@ -124,26 +125,20 @@
 
         function getResults( fromCacheOnly ){
             var deferred = $q.defer();
-
             // No results? Then try to load fresh ones always.
             if ( _search_results.length == 0 ) fromCacheOnly = false;
 
             if ( fromCacheOnly ) {
-                log( '--- SearchFactory.getResults(): fromCacheOnly "'+_search_results.length+'" items');
                 deferred.resolve( _search_results );
             } else {
                 _setPage( _getNextPage() );
-                log( '--- SearchFactory.getResults(): Fetch more results from server');
-
-                fetchResults().then(
-                    function( data ) {
-                        for ( var i=0; i<data.length; i++ ) _search_results.push( data[i] );
-                        deferred.resolve( _search_results );
-                    },
-                    function( err ) {
-                        deferred.reject( err );
-                    }
-                );
+                fetchResults().then( function( data ) {
+                    for ( var i=0; i<data.length; i++ ) _search_results.push( data[i] );
+                    deferred.resolve( _search_results );
+                })
+                .catch( function( err ) {
+                    deferred.reject( err );
+                });
             }
 
             return deferred.promise;

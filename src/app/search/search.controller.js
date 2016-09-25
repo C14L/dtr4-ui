@@ -92,11 +92,10 @@
 
             var params = $scope.getParamsFromSearchForm( );
             Search.setParams( params );
-
             Search.getResults( ).then( function( data ) {
-            $scope.isLoadingMore = false;
-            $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
-            $scope.userlist = data;
+                $scope.isLoadingMore = false;
+                $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
+                $scope.userlist = data;
             });
         }
 

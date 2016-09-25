@@ -14,7 +14,7 @@ window.CSRF_COOKIE_NAME = 'csrftoken';
     // --- global ng contants ------------------------------------------------------
 
     app.constant('BASE_URL', '/app/');
-    app.constant('STATIC_URL', '/static/');
+    app.constant('STATIC_URL', '/app/');
     app.constant('MEDIA_URL', '/pics/');
 
     app.constant('CHECK_NEW_MSGS_INTERVAL', 20 * 1000); // msgs on a user profile
@@ -129,50 +129,50 @@ window.CSRF_COOKIE_NAME = 'csrftoken';
 
         .when( '/search', {
             controller: 'SearchController', // search form and results list.
-            templateUrl: '/static/app/search/search.html'
+            templateUrl: 'search/search.html'
         })
         .when( '/pics', { // list of all recent user uploaded pics for mods to check.
             controller: 'PicturesController',
-            templateUrl: '/static/app/search/pictures.html',
+            templateUrl: 'search/pictures.html',
         })
 
         .when( '/people/:username', { // profile of user usernamne, editable it authuser's own profile.
             controller: 'ProfileController', // includes a list of search matching users at the top.
-            templateUrl: '/static/app/profile/profile.html'
+            templateUrl: 'profile/profile.html'
         })
         .when( '/profile/:username', { // profile of user usernamne, editable it authuser's own profile.
             controller: 'ProfileController', // includes a list of search matching users at the top.
-            templateUrl: '/static/app/profile/profile.html'
+            templateUrl: 'profile/profile.html'
         })
 
         .when( '/settings/profile', { // form to update pnasl data (Pic Name Age Sex Location)
             controller: 'SettingsProfileController',
-            templateUrl: '/static/app/settings/settings-profile.html'
+            templateUrl: 'settings/settings-profile.html'
         })
         .when( '/settings/details', { // form to update further profile details.
             controller: 'SettingsDetailsController',
-            templateUrl: '/static/app/settings/settings-details.html'
+            templateUrl: 'settings/settings-details.html'
         })
         .when( '/settings/design', { // edit CSS style for profile page
             controller: 'SettingsDesignController',
-            templateUrl: '/static/app/settings/settings-design.html'
+            templateUrl: 'settings/settings-design.html'
         })
         .when( '/settings/password', { // only links to server-rendered pages to update password and emails.
             controller: 'SettingsPasswordController',
-            templateUrl: '/static/app/settings/settings-password.html'
+            templateUrl: 'settings/settings-password.html'
         })
         
         .when( '/talk/topic/:hashtag', { // all talk messages that mention the #hashtag.
             controller: 'TalkController',
-            templateUrl: '/static/app/talk/talk.html'
+            templateUrl: 'talk/talk.html'
         })
         .when( '/talk/people/:username', { // all talk messages than mention a user or are sent by the user.
             controller: 'TalkController',
-            templateUrl: '/static/app/talk/talk.html'
+            templateUrl: 'talk/talk.html'
         })
         .when( '/talk/:group', { // all talk messages, newest first.
             controller: 'TalkController',
-            templateUrl: '/static/app/talk/talk.html'
+            templateUrl: 'talk/talk.html'
         })
         .when( '/talk', {
             redirectTo: '/talk/all'
@@ -180,24 +180,24 @@ window.CSRF_COOKIE_NAME = 'csrftoken';
 
         .when( '/inbox', {       // all received messages, newest first. 
             controller: 'InboxController', // mark messages that are 'unread' and 'replied'.
-            templateUrl: '/static/app/inbox/inbox.html'
+            templateUrl: 'inbox/inbox.html'
         })
         .when( '/inbox/unread', { // only unread messages.
             controller: 'InboxController',
-            templateUrl: '/static/app/inbox/inbox.html'
+            templateUrl: 'inbox/inbox.html'
         })
         .when( '/inbox/unreplied', { // only messages the authuser has not yet repied to.
             controller: 'InboxController',
-            templateUrl: '/static/app/inbox/inbox.html'
+            templateUrl: 'inbox/inbox.html'
         })
         .when( '/inbox/sent', { // all messages sent by authuser, newest first.
             controller: 'InboxController',
-            templateUrl: '/static/app/inbox/inbox.html'
+            templateUrl: 'inbox/inbox.html'
         })
 
         .when( '/lists/:listname', { // list of users who visited authuser's profile page.
             controller: 'ListsController',
-            templateUrl: '/static/app/lists/lists.html',
+            templateUrl: 'lists/lists.html',
         })
 
         .otherwise({
