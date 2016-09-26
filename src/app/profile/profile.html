@@ -280,7 +280,7 @@
   <div class="profile right">
 
     <nav class="profile edit-options" ng-if="profileuser.id == authuser.id">
-      <ul class="opts" ng-include src="'/static/app/settings/settings-nav.html'"></ul>
+      <ul class="opts" ng-include src="'settings/settings-nav.html'"></ul>
     </nav>
 
     <div ng-if="profileuser.flags.block && profileuser.id != authuser.id" class="profile is-blocked" ng-click="deleteFlag('block')">
