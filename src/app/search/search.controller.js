@@ -14,7 +14,6 @@
         $scope.statusMsg = '';
         $scope.isLoadingMore = false;
         $scope.search = { 'options': Search.getOptions(), 'selected': Search.getParams() };
-        $scope.isLoadingMore = true;  // Load initial user list
 
         $scope.updateCrc = updateCrc;
         $scope.updateCities = updateCities;
@@ -66,6 +65,7 @@
 
         // load initial userlist
         function loadInitialSearchResults(){
+            $scope.isLoadingMore = true;
             Search.getResults( true ).then( function( data ) {
                 $scope.isLoadingMore = false;
                 $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
@@ -75,6 +75,8 @@
                     var y = Search.getScrollY();
                     $window.scroll(x, y);
                 }, 100);
+            }).catch( function(){
+                $scope.isLoadingMore = false;
             });
         }
 
@@ -119,9 +121,8 @@
             Search.clearResults( );
             $scope.isLoadingMore = true;
 
-            var params = $scope.getParamsFromSearchForm( );
-            Search.setParams( params );
-            Search.getResults( ).then( function( data ) {
+            Search.setParams( $scope.getParamsFromSearchForm() );
+            Search.getResults().then( function( data ) {
                 $scope.isLoadingMore = false;
                 $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
                 $scope.userlist = data;
@@ -132,11 +133,12 @@
         function moreSearch(){
             angular.element(document.querySelector('.search-form .city-opts')).addClass('hidden');
             $scope.isLoadingMore = true;
-            Search.getResults( ).then( function( data ) {
+            Search.getResults().then( function( data ){
                 $scope.isLoadingMore = false;
                 $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
                 $scope.userlist = data;
             }).catch( function( err ){
+                $scope.isLoadingMore = false;
             });
         }
     }

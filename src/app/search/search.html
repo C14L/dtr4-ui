@@ -78,7 +78,8 @@
     </div><!-- /placeholderlist -->
 
     <div class="load-more">
-      <button class="btn load-more ti-download" ng-click="moreSearch()" ng-if="!isLoadingMore && userlist.length > 0"></button>
+      <button class="btn load-more ti-download" ng-click="moreSearch()" 
+              ng-if="!noMoreResults && !isLoadingMore && userlist.length > 0"></button>
       <div ng-if="isLoadingMore" class="loading-spinner"><span></span><span></span><span></span></div>
     </div>
     

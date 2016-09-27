@@ -14,7 +14,6 @@
         var _search_params;
         var _is_loading = false;  // Only load one set at a time.
         var _scroll_y = 0;  // remember the scrolled y offset.
-        var _this = this;
 
         activate();
 
@@ -120,24 +119,20 @@
 
         // Fetch next search results page from server and return a Promise.
         function fetchResults(){
-            if ( _is_loading ) return $q.reject();  // Block when already loading.
-            _is_loading = true;
-
             var deferred = $q.defer();
             var url = '/api/v1/search.json';
             var params = { 'params': getParams( ) };
 
             $http.get( url, params ).success( function( data ){
+                console.log('--> fetchResults() --> data.length -->', data.length);
                 if ( data.length > 0 ){
                     data.forEach( function( row, i ){
                         data[i] = SharedFunctions.complete_user_pnasl( data[i] );
                     });
                 }
-                _is_loading = false;
                 deferred.resolve( data );
             })
             .error( function(){
-                _is_loading = false;
                 deferred.reject();
             });
 
@@ -145,6 +140,9 @@
         };
 
         function getResults( fromCacheOnly ){
+            if ( _is_loading ) return $q.reject();  // Block when already loading.
+            _is_loading = true;
+
             var deferred = $q.defer();
             // No results? Then try to load fresh ones always.
             if ( _search_results.length == 0 ) fromCacheOnly = false;
@@ -156,9 +154,11 @@
                 fetchResults().then( function( data ) {
                     for ( var i=0; i<data.length; i++ ) _search_results.push( data[i] );
                     deferred.resolve( _search_results );
+                    _is_loading = false;
                 })
                 .catch( function( err ) {
                     deferred.reject( err );
+                    _is_loading = false;
                 });
             }
 
