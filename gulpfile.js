@@ -1,11 +1,12 @@
 
+var cssnano = require('gulp-cssnano');
 var del = require('del');
 var gulp = require('gulp');
 var gulpIf = require('gulp-if');
-var uglify = require('gulp-uglify');
-var cssnano = require('gulp-cssnano');
-var useref = require('gulp-useref');
 var runSequence = require('run-sequence');
+var uglify = require('gulp-uglify');
+var useref = require('gulp-useref');
+var watch = require('gulp-watch');
 
 gulp.task('clean:dist', function(){
     return del.sync('dist');
@@ -38,3 +39,9 @@ gulp.task('copy_font', function(){
 gulp.task('default', function(callback){
     runSequence('clean:dist', 'copy_font', 'copy_tpls', 'collect_assets', callback);
 });
+
+// gulp.task('default2', function(callback) {
+//     return watch('src/app/**/*.[html|js|css]', function(){
+//         runSequence('copy_tpls', 'collect_assets', callback);
+//     });
+// });
