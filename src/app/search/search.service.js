@@ -124,8 +124,8 @@
             var params = { 'params': getParams( ) };
 
             $http.get( url, params ).success( function( data ){
-                console.log('--> fetchResults() --> data.length -->', data.length);
                 if ( data.length > 0 ){
+                    // Complete each results item with some extra data.
                     data.forEach( function( row, i ){
                         data[i] = SharedFunctions.complete_user_pnasl( data[i] );
                     });
@@ -140,25 +140,35 @@
         };
 
         function getResults( fromCacheOnly ){
-            if ( _is_loading ) return $q.reject();  // Block when already loading.
-            _is_loading = true;
+            if ( _is_loading ) {
+                return $q.reject( 'already loading' );  // Block when already loading.
+            }
 
             var deferred = $q.defer();
-            // No results? Then try to load fresh ones always.
+
+            // Cache empty? Then try to load fresh ones always.
             if ( _search_results.length == 0 ) fromCacheOnly = false;
 
+            // Set lock.
+            _is_loading = true;
+
             if ( fromCacheOnly ) {
+                // The caller only asked for cached results.
+                _is_loading = false;
                 deferred.resolve( _search_results );
             } else {
+                // Get the "next page" and append to the already cached results.
                 _setPage( _getNextPage() );
                 fetchResults().then( function( data ) {
-                    for ( var i=0; i<data.length; i++ ) _search_results.push( data[i] );
-                    deferred.resolve( _search_results );
                     _is_loading = false;
+                    // Append each result otem to results cache.
+                    for ( var i=0; i<data.length; i++ ) _search_results.push( data[i] );
+                    // Resolve with the entire results cache.
+                    deferred.resolve( _search_results );
                 })
                 .catch( function( err ) {
-                    deferred.reject( err );
                     _is_loading = false;
+                    deferred.reject( err );
                 });
             }
 

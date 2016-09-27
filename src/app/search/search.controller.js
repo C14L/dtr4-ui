@@ -126,6 +126,8 @@
                 $scope.isLoadingMore = false;
                 $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
                 $scope.userlist = data;
+            }).catch( function(){
+                $scope.isLoadingMore = false;
             });
         }
 
@@ -137,7 +139,7 @@
                 $scope.isLoadingMore = false;
                 $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
                 $scope.userlist = data;
-            }).catch( function( err ){
+            }).catch( function(){
                 $scope.isLoadingMore = false;
             });
         }
