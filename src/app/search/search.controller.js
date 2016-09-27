@@ -4,9 +4,11 @@
 
     angular.module( 'dtr4' ).controller( 'SearchController', SearchController );
 
-    SearchController.$inject = [ '$scope', 'Authuser', 'Cities', 'Search', 'appBarTitle', 'SharedFunctions' ];
+    SearchController.$inject = [ '$scope', '$window', '$timeout', 
+                                 'Authuser', 'Cities', 'Search', 'appBarTitle', 'SharedFunctions' ];
 
-    function SearchController( $scope, Authuser, Cities, Search, appBarTitle, SharedFunctions ) {
+    function SearchController( $scope, $window, $timeout,
+                               Authuser, Cities, Search, appBarTitle, SharedFunctions ) {
 
         $scope.userlist = [];
         $scope.statusMsg = '';
@@ -31,6 +33,28 @@
             loadCountries();
             loadChoicerTranslations();
             loadInitialSearchResults();
+
+            // show or hide the geolocation selector in the search bar on click
+            // TODO: Angularify this!
+            angular.element(document.querySelector('.search-form .city')).on('click', function(e){
+                angular.element(document.querySelector('.search-form .city-opts')).toggleClass('hidden');
+            });
+
+            function onScrollEventHandler( ev ){
+                var y = $window.pageYOffset;
+                var wh = $window.innerHeight;
+                var bh = $window.document.body.clientHeight;
+                var distFromBottom = bh - wh - y;
+                if (distFromBottom < 50) moreSearch();  // load more if close to end
+                Search.setScrollY( y );  // remember position
+            }
+
+            // scrolling to near the end of page, triggers load more items
+            $window.addEventListener( 'scroll', onScrollEventHandler );
+
+            $scope.$on( '$destroy', function(){
+                $window.removeEventListener( 'scroll', onScrollEventHandler );
+            });
         }
 
         function loadChoicerTranslations(){
@@ -40,13 +64,17 @@
             });
         }
 
-
         // load initial userlist
         function loadInitialSearchResults(){
             Search.getResults( true ).then( function( data ) {
                 $scope.isLoadingMore = false;
                 $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
                 $scope.userlist = data;
+                $timeout( function(){
+                    var x = $window.pageXOffset;
+                    var y = Search.getScrollY();
+                    $window.scroll(x, y);
+                }, 100);
             });
         }
 
@@ -84,6 +112,7 @@
             return params;
         }
 
+        // Remove old results and load new results, starting from page 1
         function newSearch() {
             angular.element(document.querySelector('.search-form .city-opts')).addClass('hidden');
             $scope.userlist = [];
@@ -102,19 +131,13 @@
         // Append one more page of search results to the list of users.
         function moreSearch(){
             angular.element(document.querySelector('.search-form .city-opts')).addClass('hidden');
-
             $scope.isLoadingMore = true;
             Search.getResults( ).then( function( data ) {
-            $scope.isLoadingMore = false;
-            $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
-            $scope.userlist = data;
+                $scope.isLoadingMore = false;
+                $scope.statusMsg = ( data.length < 1 ) ? 'empty' : '';
+                $scope.userlist = data;
+            }).catch( function( err ){
             });
-        };
-
-        // show or hide the geolocation selector in the search bar on click
-        // TODO: Angularify this!
-        angular.element(document.querySelector('.search-form .city')).on('click', function(e){
-            angular.element(document.querySelector('.search-form .city-opts')).toggleClass('hidden');
-        });
+        }
     }
 })();

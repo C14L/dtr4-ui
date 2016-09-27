@@ -4,22 +4,30 @@
 
     angular.module( 'dtr4' ).factory( 'Search', SearchService );
 
-    SearchService.$inject = [ '$q', '$http', 'Authuser', 'search_defaults', 'search_options', 'SharedFunctions' ];
+    SearchService.$inject = [ '$q', '$http', 'Authuser', 
+                              'search_defaults', 'search_options', 'SharedFunctions' ];
 
-    function SearchService( $q, $http, Authuser, search_defaults, search_options, SharedFunctions ){
-
-        var _this = this;
-        _this.getResults = getResults;
-        _this.clearResults = clearResults;
-        _this.getParams = getParams;
-        _this.setParams = setParams;
-        _this.getOptions = getOptions;
-        _this.getRandomResults = getRandomResults;
+    function SearchService( $q, $http, Authuser,
+                            search_defaults, search_options, SharedFunctions ){
 
         var _search_results;
         var _search_params;
+        var _is_loading = false;  // Only load one set at a time.
+        var _scroll_y = 0;  // remember the scrolled y offset.
+        var _this = this;
 
         activate();
+
+        return {
+            getResults: getResults,
+            clearResults: clearResults,
+            getParams: getParams,
+            setParams: setParams,
+            getOptions: getOptions,
+            getRandomResults: getRandomResults,
+            setScrollY: setScrollY,
+            getScrollY: getScrollY,
+        };
 
         ///////////////////////////////////////////////////
 
@@ -31,6 +39,14 @@
             _search_params = getLocalStorageObject( '_search_params' ) || search_defaults;
             clearResults( );
         };
+
+        function setScrollY( y ){
+            _scroll_y = y;
+        }
+
+        function getScrollY(){
+            return _scroll_y;
+        }
 
         function clearResults( ){
             _search_results = [];
@@ -104,6 +120,9 @@
 
         // Fetch next search results page from server and return a Promise.
         function fetchResults(){
+            if ( _is_loading ) return $q.reject();  // Block when already loading.
+            _is_loading = true;
+
             var deferred = $q.defer();
             var url = '/api/v1/search.json';
             var params = { 'params': getParams( ) };
@@ -114,9 +133,11 @@
                         data[i] = SharedFunctions.complete_user_pnasl( data[i] );
                     });
                 }
+                _is_loading = false;
                 deferred.resolve( data );
             })
             .error( function(){
+                _is_loading = false;
                 deferred.reject();
             });
 
@@ -167,7 +188,5 @@
 
             return deferred.promise;
         }
-
-        return _this;
     }
 })();
