@@ -8,9 +8,6 @@
     function TalkController( $scope, $http, $interval, $sce, $sanitize, 
                              $routeParams, Talk, appBarTitle ) {
 
-        appBarTitle.primary = $scope.tr( 'talk' );
-        appBarTitle.secondary = '';
-
         $scope.isLoadingMore = true;
         $scope.statusMsg = '';
         $scope.posttext = '';
@@ -28,8 +25,69 @@
             'own': $scope.tr('about me'),
         };
 
+        $scope.delPost = delPost;
+        $scope.addPost = addPost;
+        $scope.getOlderPosts = getOlderPosts;
+        $scope.getPosts = getPosts;
+        $scope.getPostsByHashtag = getPostsByHashtag;
+        $scope.getPostsByUsername = getPostsByUsername;
+
+        activate();
+
+        ///////////////////////////////////////////////////
+
+        function activate(){
+            appBarTitle.primary = $scope.tr( 'talk' );
+            appBarTitle.secondary = '';
+
+            setInitValsForActiveSection();
+            $scope.posttext = $scope.init_posttext;
+            getPosts();
+            setGetPostInterval();
+
+            // sidebar: get the most popular usernames and hashtags for the sidebar
+            $scope.popularUsernames = ['...','...','...','...','...'];
+            $scope.popularHashtags = ['...','...','...','...','...'];
+            Talk.getUsernamesList().then( function( data ){ $scope.popularUsernames = data });
+            Talk.getHashtagsList().then( function( data ){ $scope.popularHashtags = data });
+        }
+
+        // Initialize and cancel interval that checks for new posts regularly.
+        function setGetPostInterval(){
+            $scope.checkTalkIntervalPromise = $interval( $scope.getPosts, 10000 ); // 10s
+            $scope.$on( '$destroy', function(){
+                if ( $scope.checkTalkIntervalPromise ) $interval.cancel( $scope.checkTalkIntervalPromise );
+            });
+        }
+
+        // set some initial values, depending what we are looking at
+        function setInitValsForActiveSection(){
+            if ( $scope.username ){
+                appBarTitle.secondary = '@' + $scope.username;
+                $scope.init_posttext = ' @' + $scope.username + ' ';
+                $scope.posts = [];
+                //...
+            } else if ( $scope.hashtag ){
+                appBarTitle.secondary = '#' + $scope.hashtag;
+                $scope.init_posttext = ' #' + $scope.hashtag + ' ';
+                $scope.posts = [];
+                //...
+            } else {
+                Talk.resetNewPostsTimestamp( );
+                getGroup( 'all' );
+                $scope.init_posttext = '';
+            }
+        }
+
+        // set some initial stuff on view load
+        function getGroup(){
+            $scope.posts = [];
+            $scope.getPosts( );
+            appBarTitle.secondary = $scope.groupNames[$scope.group];
+        }
+
         // delete a post the authuser owns
-        $scope.delPost = function( post_id ){
+        function delPost( post_id ){
             var url = '/api/v1/talk/post/' + post_id + '.json';
             var idx = get_index( $scope.posts, 'id', post_id );
 
@@ -46,7 +104,7 @@
         }
 
         // add a new post
-        $scope.addPost = function(){ 
+        function addPost(){ 
             // add a post and update the posts list, including the new post.
             $scope.statusMsg = 'submitting';
 
@@ -69,7 +127,7 @@
         // use all currently set filters (group, hashtag, username) and get
         // posts older (before) than the ones currently shown / buffered for
         // the actuve group filter.
-        $scope.getOlderPosts = function( ) {
+        function getOlderPosts() {
             $scope.isLoadingMore = true;
 
             if( $scope.username ) {
@@ -94,7 +152,7 @@
         }
 
         // look for more posts and load them into the ui
-        $scope.getPosts = function( ){
+        function getPosts(){
             $scope.isLoadingMore = true;
 
             if( $scope.username ){
@@ -122,8 +180,7 @@
 
         // load posts for the hashtag in "$scope.hashtag". 
         // no buffering. no group'ing. no nothing.
-        $scope.getPostsByHashtag = function( before ){
-            log( '--- TalkController.$scope.getPostsByHashtag(): called with before=="'+!!before+'".');
+        function getPostsByHashtag( before ){
             if( !$scope.hashtag ) return; // ignore if no hashtag set
 
             $scope.isLoadingMore = true;
@@ -143,8 +200,7 @@
 
         // load posts for the hashtag in "$scope.hashtag". 
         // no buffering. no group'ing. no nothing.
-        $scope.getPostsByUsername = function( before ){
-            log( '--- TalkController.$scope.getPostsByUsername(): called...');
+        function getPostsByUsername( before ){
             if( !$scope.username ) return; // ignore if no hashtag set
 
             $scope.isLoadingMore = true;
@@ -161,46 +217,5 @@
                 }
             );
         }
-
-        // set some initial stuff on view load
-        $scope.getGroup = function( ){
-            $scope.posts = [];
-            $scope.getPosts( );
-            appBarTitle.secondary = $scope.groupNames[$scope.group];
-        }
-
-        // set some initial values, depending what we are looking at
-        if( $scope.username ){
-            appBarTitle.secondary = '@' + $scope.username;
-            $scope.init_posttext = ' @' + $scope.username + ' ';
-            $scope.posts = [];
-            //...
-        } else if( $scope.hashtag ){
-            appBarTitle.secondary = '#' + $scope.hashtag;
-            $scope.init_posttext = ' #' + $scope.hashtag + ' ';
-            $scope.posts = [];
-            //...
-        } else {
-            Talk.resetNewPostsTimestamp( );
-            $scope.getGroup( 'all' );
-            $scope.init_posttext = '';
-        }
-
-        $scope.posttext = $scope.init_posttext;
-        $scope.getPosts( );
-        $scope.checkTalkIntervalPromise = $interval( $scope.getPosts, 10000 ); // 10s
-
-        $scope.$on( '$destroy', function(){
-            if ( $scope.checkTalkIntervalPromise ){
-                $interval.cancel( $scope.checkTalkIntervalPromise );
-            }
-        });
-
-        // --- sidebar -----------------------------------------------------
-        // get the most popular usernames and hashtags for the sidebar
-        $scope.popularUsernames = ['...','...','...','...','...'];
-        $scope.popularHashtags = ['...','...','...','...','...'];
-        Talk.getUsernamesList().then( function( data ){ $scope.popularUsernames = data });
-        Talk.getHashtagsList().then( function( data ){ $scope.popularHashtags = data });
     }
 })();
