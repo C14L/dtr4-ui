@@ -5,11 +5,12 @@
     angular.module( 'dtr4' ).controller( 'SearchController', SearchController );
 
     SearchController.$inject = [ '$scope', '$window', '$timeout', 
-                                 'Authuser', 'Cities', 'Search', 'appBarTitle', 'SharedFunctions' ];
+                                 'Authuser', 'Cities', 'Search', 'appBarTitle', 'SharedFunctions', 'Translate' ];
 
     function SearchController( $scope, $window, $timeout,
-                               Authuser, Cities, Search, appBarTitle, SharedFunctions ) {
+                               Authuser, Cities, Search, appBarTitle, SharedFunctions, Translate ) {
 
+        $scope.tr = Translate.tr;
         $scope.userlist = [];
         $scope.statusMsg = '';
         $scope.isLoadingMore = false;

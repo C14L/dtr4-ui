@@ -3,11 +3,12 @@
     angular.module( 'dtr4' ).controller( 'TalkController', TalkController);
 
     TalkController.$inject = [ '$scope', '$http', '$interval', '$sce', '$sanitize', 
-                               '$routeParams', 'Talk', 'appBarTitle' ];
+                               '$routeParams', 'Talk', 'appBarTitle', 'Translate' ];
 
     function TalkController( $scope, $http, $interval, $sce, $sanitize, 
-                             $routeParams, Talk, appBarTitle ) {
+                             $routeParams, Talk, appBarTitle, Translate ) {
 
+        $scope.tr = Translate.tr;
         $scope.isLoadingMore = true;
         $scope.statusMsg = '';
         $scope.posttext = '';

@@ -4,10 +4,11 @@
 
     angular.module( 'dtr4' ).controller( 'ListsController', ListsController );
   
-    ListsController.$inject = [ '$scope', '$routeParams', 'Lists', 'appBarTitle' ];
+    ListsController.$inject = [ '$scope', '$routeParams', 'Lists', 'appBarTitle', 'Translate' ];
 
-    function ListsController( $scope, $routeParams, Lists, appBarTitle ) {
+    function ListsController( $scope, $routeParams, Lists, appBarTitle, Translate ) {
 
+        $scope.tr = Translate.tr;
         $scope.showList = showList;
         $scope.listname = $routeParams.listname.toLowerCase();
         $scope.statusMsg = '';

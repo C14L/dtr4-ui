@@ -5,11 +5,12 @@
     angular.module( 'dtr4' ).controller( 'ProfileMsgsController', ProfileMsgsController );
 
     ProfileMsgsController.$inject = [ '$scope', '$interval', '$q', '$routeParams', 
-                                      'ProfileMsgs', 'Inbox', 'CHECK_NEW_MSGS_INTERVAL' ];
+                                      'ProfileMsgs', 'Inbox', 'CHECK_NEW_MSGS_INTERVAL', 'Translate' ];
 
     function ProfileMsgsController( $scope, $interval, $q, $routeParams, 
-                                    ProfileMsgs, Inbox, CHECK_NEW_MSGS_INTERVAL ) {
+                                    ProfileMsgs, Inbox, CHECK_NEW_MSGS_INTERVAL, Translate ) {
 
+        $scope.tr = Translate.tr;
         $scope.msgs = [];
         $scope.isSendingNewMsg = false;
 

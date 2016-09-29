@@ -5,11 +5,12 @@
     angular.module( 'dtr4' ).controller( 'ProfileController', ProfileController );
 
     ProfileController.$inject = [ '$scope', '$location', '$routeParams', 'appBarTitle',
-                                  'Search', 'Profile', 'ProfileFlag' ];
+                                  'Search', 'Profile', 'ProfileFlag', 'Translate' ];
   
     function ProfileController( $scope, $location, $routeParams, appBarTitle,
-                                Search, Profile, ProfileFlag ) {
+                                Search, Profile, ProfileFlag, Translate ) {
 
+        $scope.tr = Translate.tr;
         $scope.deleteUser = deleteUser;
         $scope.open_picviewer = open_picviewer;
         $scope.deleteFlag = deleteFlag;

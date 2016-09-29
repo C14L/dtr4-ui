@@ -4,10 +4,11 @@
 
     angular.module( 'dtr4' ).controller( 'PicturesController', PicturesController );
 
-    PicturesController.$inject = [ '$scope', '$http', 'appBarTitle', 'SharedFunctions' ];
+    PicturesController.$inject = [ '$scope', '$http', 'appBarTitle', 'SharedFunctions', 'Translate' ];
 
-    function PicturesController( $scope, $http, appBarTitle, SharedFunctions ){
+    function PicturesController( $scope, $http, appBarTitle, SharedFunctions, Translate ){
 
+        $scope.tr = Translate.tr;
         $scope.picslist = [];
         $scope.statusMsg = '';
         $scope.loadMore = loadMore;

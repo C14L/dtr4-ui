@@ -5,11 +5,12 @@
     angular.module( 'dtr4' ).controller( 'SettingsDetailsController', SettingsDetailsController );
 
     SettingsDetailsController.$inject = [ '$scope', '$http', '$timeout', 'SettingsProfile',
-                                          'Cities', 'Profile', 'appBarTitle', 'SharedFunctions' ];
+                                          'Cities', 'Profile', 'appBarTitle', 'SharedFunctions', 'Translate' ];
     
     function SettingsDetailsController( $scope, $http, $timeout, SettingsProfile,
-                                        Cities, Profile, appBarTitle, SharedFunctions ){
+                                        Cities, Profile, appBarTitle, SharedFunctions, Translate ){
     
+        $scope.tr = Translate.tr;
         $scope.translations = SharedFunctions.translations;
         $scope.currSel = 'details';
         $scope.submitForm = submitForm;

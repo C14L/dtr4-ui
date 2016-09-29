@@ -4,10 +4,11 @@
 
     angular.module( 'dtr4' ).controller( 'InboxController', InboxController );
 
-    InboxController.$inject = [ '$scope', '$location', 'Inbox', 'appBarTitle', 'Lists' ];
+    InboxController.$inject = [ '$scope', '$location', 'Inbox', 'appBarTitle', 'Lists', 'Translate' ];
 
-    function InboxController( $scope, $location, Inbox, appBarTitle, Lists ) {
+    function InboxController( $scope, $location, Inbox, appBarTitle, Lists, Translate ) {
   
+        $scope.tr = Translate.tr;
         appBarTitle.primary = 'inbox';
         appBarTitle.secondary = '';
 
