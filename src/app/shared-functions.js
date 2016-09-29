@@ -5,10 +5,10 @@
     angular.module('dtr4').factory('SharedFunctions', SharedFunctions);
 
     SharedFunctions.$inject = [ 'ONLINE_SECONDS_SINCE_LAST_ACTIVE', 'IDLE_SECONDS_SINCE_LAST_ACTIVE', 
-                                'BASE_URL', 'MEDIA_URL' ];
+                                'BASE_URL', 'MEDIA_URL', '$q' ];
 
     function SharedFunctions( ONLINE_SECONDS_SINCE_LAST_ACTIVE, IDLE_SECONDS_SINCE_LAST_ACTIVE, 
-                              BASE_URL, MEDIA_URL ) {
+                              BASE_URL, MEDIA_URL, $q ) {
 
         var _this = this;
         _this.translations = {};
@@ -35,9 +35,23 @@
         function loadChoiceTranslations() {
             // Get translations data into ng $rootScope, used for example in
             // settings-proile.html template. //window.TR_CHOICES
-            _this.translationsPromise = fetch('lang/tr-choices-es.json')
-            .then( function( res ) { return res.json() })
-            .then( function( res ) { _this.translations = res });
+            // var deferred = $q.defer();
+            _this.translationsPromise = new Promise( function( resolve, reject ){
+
+                var req = new XMLHttpRequest();
+                req.open( 'GET', 'lang/tr-choices-es.json' );
+                req.addEventListener( 'load', loadCallback );
+                req.send();
+                
+                function loadCallback( event ){
+                    if ( event.target.status == 200 ){
+                        _this.translations = JSON.parse( event.target.responseText );
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                }
+            });
         }
 
         function get_choice_tr( key, sel ){
