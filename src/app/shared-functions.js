@@ -35,9 +35,9 @@
         function loadChoiceTranslations() {
             // Get translations data into ng $rootScope, used for example in
             // settings-proile.html template. //window.TR_CHOICES
-            // _this.translationsPromise = fetch('lang/tr-choices-es.json')
-            // .then( function( res ) { return res.json() })
-            // .then( function( res ) { _this.translations = res });
+            _this.translationsPromise = fetch('lang/tr-choices-es.json')
+            .then( function( res ) { return res.json() })
+            .then( function( res ) { _this.translations = res });
         }
 
         function get_choice_tr( key, sel ){
