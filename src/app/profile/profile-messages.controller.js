@@ -28,6 +28,14 @@
             // to is_read in "inbox" and remove them from "unread", because we
             // are looking at them right now
             Inbox.setBufferIsReadForUsername( $routeParams.username );
+
+            // Begin listening to the "usermsg.receive" event, if we are using Channels.
+            if ($scope.USE_CHANNELS){
+                $scope.$on('usermsg.receive', function(event, data){
+                    $scope.msgs = ProfileMsgs.addToMsgs( data, $scope.msgs, $scope.authuser, $scope.profileuser );
+                    $scope.$apply();
+                });
+            }
         }
 
         function getMsgs(){
@@ -46,7 +54,7 @@
             .catch( function( err ){
                 // on error, stop checking for msgs and require the user to
                 // click a button to start msg checking again.
-                $interval.cancel( $scope.checkMsgIntervalPromise )
+                stopCheckMsgInterval();
                 $scope.statusMsg = 'offline';
             });
         }
@@ -56,15 +64,16 @@
             var msgtext = $scope.msgtext;
 
             // stop checking for new messages, we will get them back with the POST anyway.
-            $interval.cancel( $scope.checkMsgIntervalPromise )
             $scope.isSendingNewMsg = true;
             $scope.statusMsg = '';
             $scope.msgtext = '';
 
+            stopCheckMsgInterval();
+
             ProfileMsgs.sendMsg( $routeParams.username, after, msgtext ).then( function( data ){
                 $scope.isSendingNewMsg = false;
                 $scope.msgs = ProfileMsgs.addToMsgs( data, $scope.msgs, $scope.authuser, $scope.profileuser );                
-                $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, CHECK_NEW_MSGS_INTERVAL ); // re-start message checking
+                startCheckMsgInterval();
                 document.querySelector('.profile.messages textarea').focus();
             })
             .catch( function( err ){
@@ -75,8 +84,19 @@
 
         function checkMsgRegularly(){
             $scope.getMsgs(); // initial call, and then every x seconds:
-            $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, CHECK_NEW_MSGS_INTERVAL );
-            $scope.$on( '$destroy', function( ){ $interval.cancel( $scope.checkMsgIntervalPromise ); });
+            startCheckMsgInterval();
+        }
+
+        function startCheckMsgInterval(){
+            if ( ! $scope.USE_CHANNELS){ // Only if we don't' use WebSockets.
+                $scope.checkMsgIntervalPromise = $interval( $scope.getMsgs, CHECK_NEW_MSGS_INTERVAL );
+            }
+        }
+
+        function stopCheckMsgInterval(){
+            if ( ! $scope.USE_CHANNELS){ // Only if we don't' use WebSockets.
+                $interval.cancel( $scope.checkMsgIntervalPromise );
+            }
         }
     }
 })();

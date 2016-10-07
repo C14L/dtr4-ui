@@ -79,6 +79,31 @@ window.CSRF_COOKIE_NAME = 'csrftoken';
         });
     }
 
+    // --- run ---------------------------------------------------------------------
+
+    app.run([ '$rootScope', '$window', connectWebSocketEvents ]);
+
+    function connectWebSocketEvents($rootScope, $window){
+        var ws_prot = 'ws' + ($window.location.protocol === 'https' ? 's' : '') + '://';
+        var ws_url = ws_prot + $window.location.host + '/api/v1/ws';
+        var socket = new WebSocket( ws_url );
+        socket.onopen = _onOpen;
+        socket.onmessage = _onMessage;
+
+        function _onOpen(event){
+            $rootScope.USE_CHANNELS = true;
+        }
+
+        function _onMessage(event){
+            // Unpack the message and emit the appropriate event on rootScope.
+            var data = JSON.parse(event.data);
+            if (data['action'] == 'usermsg.receive'){
+                $rootScope.$broadcast(data['action'], data['msg_list']);
+            }
+        }
+
+    }
+
     // --- global values -----------------------------------------------------------
 
     app.value( 'appBarTitle', { 'primary': 'El Ligue', 'secondary': '', 'href': '/' } );
