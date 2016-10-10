@@ -30,12 +30,10 @@
             Inbox.setBufferIsReadForUsername( $routeParams.username );
 
             // Begin listening to the "usermsg.receive" event, if we are using Channels.
-            if ($scope.USE_CHANNELS){
-                $scope.$on('usermsg.receive', function(event, data){
-                    $scope.msgs = ProfileMsgs.addToMsgs( data, $scope.msgs, $scope.authuser, $scope.profileuser );
-                    $scope.$apply();
-                });
-            }
+            $scope.$on('usermsg.receive', function(event, data){
+                $scope.msgs = ProfileMsgs.addToMsgs( data, $scope.msgs, $scope.authuser, $scope.profileuser );
+                $scope.$digest();
+            });
         }
 
         function getMsgs(){

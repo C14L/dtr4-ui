@@ -88,15 +88,25 @@ window.CSRF_COOKIE_NAME = 'csrftoken';
         var ws_url = ws_prot + $window.location.host + '/api/v1/ws';
         var socket = new WebSocket( ws_url );
         socket.onopen = _onOpen;
+        socket.onclose = _onClose;
         socket.onmessage = _onMessage;
 
         function _onOpen(event){
             $rootScope.USE_CHANNELS = true;
+            $rootScope.$broadcast('websocketstatechange', $rootScope.USE_CHANNELS);
+            console.log('WebSocket connected.');
+        }
+
+        function _onClose(event){
+            $rootScope.USE_CHANNELS = false;
+            $rootScope.$broadcast('websocketstatechange', $rootScope.USE_CHANNELS);
+            console.log('WebSocket closed.');
         }
 
         function _onMessage(event){
             // Unpack the message and emit the appropriate event on rootScope.
             var data = JSON.parse(event.data);
+
             if (data['action'] == 'usermsg.receive'){
                 $rootScope.$broadcast(data['action'], data['msg_list']);
             }
