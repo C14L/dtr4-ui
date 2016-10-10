@@ -84,7 +84,7 @@ window.CSRF_COOKIE_NAME = 'csrftoken';
     app.run([ '$rootScope', '$window', connectWebSocketEvents ]);
 
     function connectWebSocketEvents($rootScope, $window){
-        var ws_prot = 'ws' + ($window.location.protocol === 'https' ? 's' : '') + '://';
+        var ws_prot = 'ws' + ($window.location.protocol === 'https:' ? 's' : '') + '://';
         var ws_url = ws_prot + $window.location.host + '/api/v1/ws';
         var socket = new WebSocket( ws_url );
         socket.onopen = _onOpen;
